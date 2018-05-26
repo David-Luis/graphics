@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\repos\graphics\glfw\build\include;C:\repos\graphics\glad\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\repos\graphics\glfw\build\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\glfw\build\include;$(SolutionDir)\..\glad\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\glfw\build\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
