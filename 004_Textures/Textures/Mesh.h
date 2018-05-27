@@ -9,6 +9,9 @@ class Mesh
 public:
 	Mesh();
 	Mesh(std::vector<float>& vertices, std::vector<GLuint>& indices);
+	virtual ~Mesh() {}
+	Mesh(const Mesh&) = delete;
+	Mesh& operator=(Mesh const&) = delete;
 
 	void Use();
 

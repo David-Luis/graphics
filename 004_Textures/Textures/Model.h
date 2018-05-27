@@ -4,13 +4,14 @@
 
 class Texture;
 class Mesh;
+class Shader;
 
 class Model
 {
 public:
 
 	Model();
-	Model(GLuint shaderProgram, Texture* texture, Mesh* mesh);
+	Model(Shader* shader, Texture* texture, Mesh* mesh);
 	virtual ~Model() {}
 	Model(const Model&) = delete;
 	Model& operator=(Model const&) = delete;
@@ -21,7 +22,7 @@ public:
 protected:
 	virtual void BindUniforms() {}
 
-	GLuint m_shaderProgram;
+	Shader* m_shader;
 	Texture* m_texture;
 	Mesh* m_mesh;
 };

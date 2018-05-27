@@ -1,5 +1,3 @@
-#include "ShaderUtils.h"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -8,13 +6,11 @@
 
 #include "Mesh.h"
 #include "Texture.h"
+#include "Shader.h"
 #include "Model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-GLuint CreateVertexShader(std::string shaderPath);
-GLuint CreateFragmentShader(std::string shaderPath);
-GLuint LinkShaders(int vertexShader, int fragmentShader);
 std::vector<Model*> LoadModels();
 Model* LoadModel1();
 Model* LoadModel2();
@@ -90,72 +86,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-
-GLuint CreateVertexShader(std::string shaderPath)
-{
-	std::string shader = ShaderUtils::LoadShaderFile(shaderPath);
-	const GLchar* const shaderChar = shader.c_str();
-
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &shaderChar, NULL);
-	glCompileShader(vertexShader);
-
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-		assert(false);
-	}
-
-	return vertexShader;
-}
-
-GLuint CreateFragmentShader(std::string shaderPath)
-{
-	std::string shader = ShaderUtils::LoadShaderFile(shaderPath);
-	const GLchar* const shaderChar = shader.c_str();
-
-	int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &shaderChar, NULL);
-	glCompileShader(fragmentShader);
-
-	int success;
-	char infoLog[512];
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		assert(false);
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	return fragmentShader;
-}
-
-GLuint LinkShaders(int vertexShader, int fragmentShader)
-{
-	int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	// check for linking errors
-	int success;
-	char infoLog[512];
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-
-	return shaderProgram;
-}
-
 std::vector<Model*> LoadModels()
 {
 	std::vector<Model*> models;
@@ -181,15 +111,11 @@ Model* LoadModel1()
 		1, 2, 3   // second Triangle
 	};
 
+	Shader* shader = new Shader("vertex_shader.vert", "fragment_shader.frag");
 	Mesh* mesh = new Mesh(vertices, indices);
-
-	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
-	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
-	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-
 	Texture* texture = new Texture("wall.jpg");
 
-	return new Model(shaderProgram, texture, mesh);
+	return new Model(shader, texture, mesh);
 }
 
 Model* LoadModel2()
@@ -207,15 +133,11 @@ Model* LoadModel2()
 		1, 2, 3   // second Triangle
 	};
 
+	Shader* shader = new Shader("vertex_shader.vert", "fragment_shader.frag");
 	Mesh* mesh = new Mesh(vertices, indices);
-
-	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
-	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
-	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-
 	Texture* texture = new Texture("wall.jpg");
 
-	return new Model(shaderProgram, texture, mesh);
+	return new Model(shader, texture, mesh);
 }
 
 void DrawModels(const std::vector<Model*>& models)
