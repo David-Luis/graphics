@@ -6,75 +6,9 @@
 #include <assert.h>
 #include <vector>
 
-class Model
-{
-public:
-	Model() : m_shaderProgram(0), m_VAO(0), m_VBO(0), m_EBO(0)
-	{
-
-	}
-
-	Model(GLuint shaderProgram, GLuint VAO, GLuint VBO, GLuint EBO) : m_shaderProgram(shaderProgram), m_VAO(VAO), m_VBO(VBO), m_EBO(EBO)
-	{
-
-	}
-
-	GLuint m_shaderProgram;
-	GLuint m_VAO;
-	GLuint m_VBO;
-	GLuint m_EBO;
-
-	virtual void Update()
-	{
-
-	}
-
-	virtual void BindUniforms()
-	{
-
-	}
-
-	void Draw()
-	{
-		GLenum error = glGetError();
-		glUseProgram(m_shaderProgram);
-		error = glGetError();
-		glBindVertexArray(m_VAO);
-		error = glGetError();
-		BindUniforms();
-		error = glGetError();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-	}
-};
-
-class Model1 : public Model
-{
-public:
-	Model1(GLuint shaderProgram, GLuint VAO, GLuint VBO, GLuint EBO) : Model(shaderProgram, VAO, VBO, EBO)
-	{
-
-	}
-
-	Model1(const Model1&) = delete;
-	Model1& operator= (const Model1&) = delete;
-
-	void BindUniforms() override
-	{
-		glUniform4f(m_vertexColorLocation, 0.0f, m_greenValue, 0.0f, 1.0f);
-	}
-
-	void Update() override
-	{
-		float timeValue = static_cast<float>(glfwGetTime());
-		m_greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		m_vertexColorLocation = glGetUniformLocation(m_shaderProgram, "ourColor");
-	}
-
-private:
-	float m_greenValue;
-	GLuint m_vertexColorLocation;
-};
+#include "Mesh.h"
+#include "Texture.h"
+#include "Model.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -229,108 +163,59 @@ std::vector<Model*> LoadModels()
 	models.push_back(LoadModel1());
 	models.push_back(LoadModel2());
 
-	GLenum error = glGetError();
-
 	return models;
 }
 
 Model* LoadModel1()
 {
-	float vertices[] = {
-		-0.25f,  0.25f, 0.0f,  // top right
-		-0.25f, -0.25f, 0.0f,  // bottom right
-		-0.75f, -0.25f, 0.0f,  // bottom left
-		-0.75f,  0.25f, 0.0f   // top left 
+	std::vector<float> vertices = {
+		// positions		 // colors		   // texture coords
+		-0.25f,  0.25f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, // top right
+		-0.25f, -0.25f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, // bottom right
+		-0.75f, -0.25f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // bottom left
+		-0.75f,  0.25f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f // top left 
 	};
 
-	unsigned int indices[] = {  // note that we start from 0!
+	std::vector<unsigned int> indices = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
 		1, 2, 3   // second Triangle
 	};
+
+	Mesh* mesh = new Mesh(vertices, indices);
 
 	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
 	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
 	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-	GLenum error = glGetError();
 
-	GLuint VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	error = glGetError();
-	glGenBuffers(1, &VBO);
-	error = glGetError();
-	glGenBuffers(1, &EBO);
-	error = glGetError();
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
-	error = glGetError();
+	Texture* texture = new Texture("wall.jpg");
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	error = glGetError();
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	error = glGetError();
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	error = glGetError();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	error = glGetError();
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	error = glGetError();
-	glEnableVertexAttribArray(0);
-	error = glGetError();
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	error = glGetError();
-
-	glBindVertexArray(0);
-	error = glGetError();
-
-	return new Model1(shaderProgram, VAO, VBO, EBO);
+	return new Model(shaderProgram, texture, mesh);
 }
 
 Model* LoadModel2()
 {
-	float vertices[] = {
-		// positions		  // colors
-		0.25f,  0.25f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
-		0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f,  // bottom right
-		0.75f, -0.25f, 0.0f, 0.0f, 0.0f, 1.0f,  // bottom left
-		0.75f,  0.25f, 0.0f, 1.0f, 1.0f, 0.0f   // top left 
+	std::vector<float> vertices = {
+		// positions		 // colors		   // texture coords
+		0.25f,  0.25f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+		0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+		0.75f, -0.25f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+		0.75f,  0.25f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f // top left 
 	};
 
-	unsigned int indices[] = {  // note that we start from 0!
+	std::vector<unsigned int> indices = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
 		1, 2, 3   // second Triangle
 	};
 
-	GLuint vertexShader = CreateVertexShader("vertex_shader_2.vert");
-	GLuint fragmentShader = CreateFragmentShader("fragment_shader_2.frag");
+	Mesh* mesh = new Mesh(vertices, indices);
+
+	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
+	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
 	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
 
-	GLuint VBO, VAO, EBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
+	Texture* texture = new Texture("wall.jpg");
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
-	return new Model(shaderProgram, VAO, VBO, EBO);
+	return new Model(shaderProgram, texture, mesh);
 }
 
 void DrawModels(const std::vector<Model*>& models)
