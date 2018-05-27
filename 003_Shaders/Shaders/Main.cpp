@@ -36,10 +36,15 @@ public:
 
 	void Draw()
 	{
+		GLenum error = glGetError();
 		glUseProgram(m_shaderProgram);
-		BindUniforms();
+		error = glGetError();
 		glBindVertexArray(m_VAO);
+		error = glGetError();
+		BindUniforms();
+		error = glGetError();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 	}
 };
 
@@ -50,6 +55,9 @@ public:
 	{
 
 	}
+
+	Model1(const Model1&) = delete;
+	Model1& operator= (const Model1&) = delete;
 
 	void BindUniforms() override
 	{
@@ -221,66 +229,85 @@ std::vector<Model*> LoadModels()
 	models.push_back(LoadModel1());
 	models.push_back(LoadModel2());
 
+	GLenum error = glGetError();
+
 	return models;
 }
 
 Model* LoadModel1()
 {
-	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
-	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
-	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-
 	float vertices[] = {
 		-0.25f,  0.25f, 0.0f,  // top right
 		-0.25f, -0.25f, 0.0f,  // bottom right
 		-0.75f, -0.25f, 0.0f,  // bottom left
 		-0.75f,  0.25f, 0.0f   // top left 
 	};
+
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
 		1, 2, 3   // second Triangle
 	};
-	unsigned int VBO, VAO, EBO;
+
+	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
+	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
+	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
+	GLenum error = glGetError();
+
+	GLuint VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
+	error = glGetError();
 	glGenBuffers(1, &VBO);
+	error = glGetError();
 	glGenBuffers(1, &EBO);
+	error = glGetError();
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
+	error = glGetError();
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	error = glGetError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	error = glGetError();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	error = glGetError();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	error = glGetError();
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	error = glGetError();
 	glEnableVertexAttribArray(0);
+	error = glGetError();
 
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	error = glGetError();
 
-	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+	glBindVertexArray(0);
+	error = glGetError();
 
-	return new Model1(shaderProgram, VBO, VAO, EBO);
+	return new Model1(shaderProgram, VAO, VBO, EBO);
 }
 
 Model* LoadModel2()
 {
-	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
-	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
-	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-
 	float vertices[] = {
-		0.25f,  0.25f, 0.0f,  // top right
-		0.25f, -0.25f, 0.0f,  // bottom right
-		0.75f, -0.25f, 0.0f,  // bottom left
-		0.75f,  0.25f, 0.0f   // top left 
+		// positions		  // colors
+		0.25f,  0.25f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
+		0.25f, -0.25f, 0.0f, 0.0f, 1.0f, 0.0f,  // bottom right
+		0.75f, -0.25f, 0.0f, 0.0f, 0.0f, 1.0f,  // bottom left
+		0.75f,  0.25f, 0.0f, 1.0f, 1.0f, 0.0f   // top left 
 	};
+
 	unsigned int indices[] = {  // note that we start from 0!
 		0, 1, 3,  // first Triangle
 		1, 2, 3   // second Triangle
 	};
-	unsigned int VBO, VAO, EBO;
+
+	GLuint vertexShader = CreateVertexShader("vertex_shader_2.vert");
+	GLuint fragmentShader = CreateFragmentShader("fragment_shader_2.frag");
+	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
+
+	GLuint VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -293,15 +320,17 @@ Model* LoadModel2()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	// note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+	glBindVertexArray(0);
 
-	return new Model1(shaderProgram, VBO, VAO, EBO);
+	return new Model(shaderProgram, VAO, VBO, EBO);
 }
 
 void DrawModels(const std::vector<Model*>& models)
