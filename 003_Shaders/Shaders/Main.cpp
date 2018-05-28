@@ -36,13 +36,9 @@ public:
 
 	void Draw()
 	{
-		GLenum error = glGetError();
 		glUseProgram(m_shaderProgram);
-		error = glGetError();
 		glBindVertexArray(m_VAO);
-		error = glGetError();
 		BindUniforms();
-		error = glGetError();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}
@@ -101,7 +97,7 @@ int main()
 
 	// glfw window creation
 	// --------------------
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Hello Triangle", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Shaders", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -229,8 +225,6 @@ std::vector<Model*> LoadModels()
 	models.push_back(LoadModel1());
 	models.push_back(LoadModel2());
 
-	GLenum error = glGetError();
-
 	return models;
 }
 
@@ -251,39 +245,26 @@ Model* LoadModel1()
 	GLuint vertexShader = CreateVertexShader("vertex_shader.vert");
 	GLuint fragmentShader = CreateFragmentShader("fragment_shader.frag");
 	GLuint shaderProgram = LinkShaders(vertexShader, fragmentShader);
-	GLenum error = glGetError();
 
 	GLuint VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
-	error = glGetError();
 	glGenBuffers(1, &VBO);
-	error = glGetError();
 	glGenBuffers(1, &EBO);
-	error = glGetError();
 	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
-	error = glGetError();
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	error = glGetError();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	error = glGetError();
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	error = glGetError();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	error = glGetError();
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	error = glGetError();
 	glEnableVertexAttribArray(0);
-	error = glGetError();
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	error = glGetError();
 
 	glBindVertexArray(0);
-	error = glGetError();
 
 	return new Model1(shaderProgram, VAO, VBO, EBO);
 }
