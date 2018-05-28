@@ -40,3 +40,8 @@ void Mesh::Use()
 {
 	glBindVertexArray(m_VAO);
 }
+
+int Mesh::VertexCount()
+{
+	return m_indices.size();
+}

@@ -2,10 +2,17 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <Lib/imgui/imgui.h>
+#include <Lib/imgui/imgui_impl_glfw_gl3.h>
 
 #include <iostream>
 #include <assert.h>
 #include <vector>
+
+static void glfw_error_callback(int error, const char* description)
+{
+	std::cerr << "ERROR " << description;
+}
 
 OpenGLApplication::OpenGLApplication(unsigned int windowsWidth, unsigned int windowsHeight, std::string windowTitle)
 	: m_windowsWidth(windowsWidth)
@@ -19,6 +26,7 @@ void OpenGLApplication::Init()
 {
 	// glfw: initialize and configure
 	// ------------------------------
+	glfwSetErrorCallback(glfw_error_callback);
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -50,6 +58,10 @@ void OpenGLApplication::Init()
 		return;
 	}
 
+	glEnable(GL_DEPTH_TEST);
+
+	InitImgui();
+
 	OnInit();
 
 	while (!glfwWindowShouldClose(m_window))
@@ -57,16 +69,41 @@ void OpenGLApplication::Init()
 		GameLoop();
 	}
 
+	// Cleanup
+	ImGui_ImplGlfwGL3_Shutdown();
+	ImGui::DestroyContext();
+
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
+	glfwDestroyWindow(m_window);
 	glfwTerminate();
+}
+
+void OpenGLApplication::InitImgui()
+{
+	//check https://github.com/ocornut/imgui/blob/master/examples/opengl3_example/main.cpp
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;   // Enable Gamepad Controls
+	ImGui_ImplGlfwGL3_Init(m_window, true);
+
+	// Setup style
+	//ImGui::StyleColorsDark();
+	ImGui::StyleColorsClassic();
 }
 
 void OpenGLApplication::Draw()
 {
+	ImGui_ImplGlfwGL3_NewFrame();
+
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	OnDraw();
+	ImGui::Render();
+	ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
 	glfwSwapBuffers(m_window);
 	glfwPollEvents();
 }

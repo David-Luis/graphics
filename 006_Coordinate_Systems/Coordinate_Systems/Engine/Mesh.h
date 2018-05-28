@@ -14,6 +14,7 @@ public:
 	Mesh& operator=(Mesh const&) = delete;
 
 	void Use();
+	int VertexCount();
 
 private:
 	std::vector<float> m_vertices;

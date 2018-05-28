@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\..\glfw\build\include;$(SolutionDir)\..\glad\include;C:\repos\graphics\glm;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\glfw\build\include;$(SolutionDir)\..\glad\include;$(SolutionDir)\..\glm;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\glfw\build\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,8 +128,11 @@
     <ClCompile Include="Engine\Shader.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Lib\glad.c" />
+    <ClCompile Include="Lib\imgui\imgui.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="RotatingModel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CoordinateSystemsApplication.h" />
@@ -138,8 +141,14 @@
     <ClInclude Include="Engine\OpenGLApplication.h" />
     <ClInclude Include="Engine\Shader.h" />
     <ClInclude Include="Engine\Texture.h" />
+    <ClInclude Include="Lib\imgui\imconfig.h" />
+    <ClInclude Include="Lib\imgui\imgui.h" />
+    <ClInclude Include="Lib\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="Lib\imgui\imgui_internal.h" />
+    <ClInclude Include="Lib\imgui\stb_rect_pack.h" />
+    <ClInclude Include="Lib\imgui\stb_textedit.h" />
+    <ClInclude Include="Lib\imgui\stb_truetype.h" />
     <ClInclude Include="Lib\stb_image.h" />
-    <ClInclude Include="RotatingModel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
