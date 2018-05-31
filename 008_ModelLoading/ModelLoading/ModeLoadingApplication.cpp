@@ -32,7 +32,7 @@ ModeLoadingApplication::ModeLoadingApplication() : OpenGLApplication(1500, 720, 
 
 void ModeLoadingApplication::OnInit()
 {
-	m_camera.Position = glm::vec3(0.0f, 0.0f, 1.0f);
+	m_camera.Position = glm::vec3(0.0f, 8.0f, 12.0f);
 	m_cameraController.SetCamera(&m_camera);
 
 	LoadModels();
