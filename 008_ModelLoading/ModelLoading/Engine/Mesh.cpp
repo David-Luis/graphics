@@ -16,14 +16,14 @@ void Mesh::Draw(const Shader& shader)
 		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
 										  // retrieve texture number (the N in diffuse_textureN)
 		std::string number;
-		std::string name = m_textures[i]->type;
+		std::string name = m_textures[i]->GetType();
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
 		else if (name == "texture_specular")
 			number = std::to_string(specularNr++);
 
 		shader.SetFloat(("material." + name + number).c_str(), static_cast<float>(i));
-		glBindTexture(GL_TEXTURE_2D, m_textures[i]->id);
+		glBindTexture(GL_TEXTURE_2D, m_textures[i]->GetId());
 	}
 
 	glBindVertexArray(m_VAO);

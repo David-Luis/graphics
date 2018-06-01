@@ -5,7 +5,6 @@
     <ClCompile Include="ModeLoadingApplication.cpp" />
     <ClCompile Include="Engine\Camera.cpp" />
     <ClCompile Include="Engine\Mesh.cpp" />
-    <ClCompile Include="Engine\Model.cpp" />
     <ClCompile Include="Engine\OpenGLApplication.cpp" />
     <ClCompile Include="Engine\Shader.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
@@ -15,13 +14,14 @@
     <ClCompile Include="Lib\imgui\imgui_draw.cpp" />
     <ClCompile Include="Lib\imgui\imgui_impl_glfw_gl3.cpp" />
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="Engine\AssimpModel.cpp" />
+    <ClCompile Include="Engine\AssetsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
     <ClInclude Include="ModeLoadingApplication.h" />
     <ClInclude Include="Engine\Camera.h" />
     <ClInclude Include="Engine\Mesh.h" />
-    <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\OpenGLApplication.h" />
     <ClInclude Include="Engine\Shader.h" />
     <ClInclude Include="Engine\Texture.h" />
@@ -33,5 +33,9 @@
     <ClInclude Include="Lib\imgui\stb_textedit.h" />
     <ClInclude Include="Lib\imgui\stb_truetype.h" />
     <ClInclude Include="Lib\stb_image.h" />
+    <ClInclude Include="Engine\AssimpModel.h" />
+    <ClInclude Include="Engine\IModel.h" />
+    <ClInclude Include="Engine\AssetsManager.h" />
+    <ClInclude Include="Engine\Engine.h" />
   </ItemGroup>
 </Project>

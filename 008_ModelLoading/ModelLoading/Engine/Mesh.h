@@ -6,7 +6,7 @@
 #include <vector>
 
 class Shader;
-struct Texture;
+class Texture;
 
 struct Vertex {
 	glm::vec3 Position;

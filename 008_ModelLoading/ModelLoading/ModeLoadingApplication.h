@@ -6,7 +6,7 @@
 
 #include <vector>
 
-class Model;
+class AssimpModel;
 class Shader;
 
 class ModeLoadingApplication : public OpenGLApplication
@@ -26,7 +26,7 @@ private:
 	void DrawModels();
 
 	Shader* m_shader;
-	std::vector<Model*> m_models;
+	std::vector<AssimpModel*> m_models;
 
 	CameraController m_cameraController;
 };

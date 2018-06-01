@@ -1,29 +1,28 @@
-#include <Engine/Model.h>
+#include <Engine/AssimpModel.h>
 
 #include <Engine/Texture.h>
 #include <Engine/Mesh.h>
 #include <Engine/Shader.h>
 #include <Engine/Camera.h>
+#include <Engine/Engine.h>
+#include <Engine/AssetsManager.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <Lib/stb_image.h>
-
 #include <iostream>
 
-Model::Model(std::string path)
+AssimpModel::AssimpModel(std::string path)
 {
 	LoadModel(path);
 }
 
-Model::Model(std::vector<Mesh*>& meshes)
+AssimpModel::AssimpModel(std::vector<Mesh*>& meshes)
 {
 	m_meshes = meshes;
 }
 
-Model::~Model()
+AssimpModel::~AssimpModel()
 {
 	for (size_t i = 0; i < m_meshes.size(); i++)
 		delete m_meshes[i];
@@ -31,7 +30,7 @@ Model::~Model()
 	m_meshes.clear();
 }
 
-void Model::Draw(Shader& shader, Camera& m_camera)
+void AssimpModel::Draw(Shader& shader, Camera& m_camera)
 {
 	shader.Use();
 	BindUniforms(shader, m_camera);
@@ -40,7 +39,7 @@ void Model::Draw(Shader& shader, Camera& m_camera)
 		m_meshes[i]->Draw(shader);
 }
 
-void Model::LoadModel(std::string path)
+void AssimpModel::LoadModel(std::string path)
 {
 	Assimp::Importer import;
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -56,7 +55,7 @@ void Model::LoadModel(std::string path)
 	ProcessNode(scene->mRootNode, scene);
 }
 
-void Model::ProcessNode(aiNode *node, const aiScene *scene)
+void AssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
 {
 	for (size_t i = 0; i < node->mNumMeshes; i++)
 	{
@@ -70,7 +69,7 @@ void Model::ProcessNode(aiNode *node, const aiScene *scene)
 	}
 }
 
-Mesh* Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
+Mesh* AssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
@@ -98,7 +97,7 @@ Mesh* Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 		{
 			glm::vec2 vec;
 			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-			// use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+			// use AssimpModels where a vertex can have multiple texture coordinates so we always take the first set (0).
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
 			vertex.TexCoords = vec;
@@ -160,63 +159,24 @@ Mesh* Model::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	return new Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture*> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture*> AssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture*> textures;
 	for (size_t i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);
-		
-		Texture* texture = new Texture();
-		texture->id = TextureFromFile(str.C_Str(), m_directory);
-		texture->type = typeName;
+	
+		std::string filename = m_directory + '/' + std::string(str.C_Str());
+		Engine::assetsManager->LoadTexture(filename);
+		Texture* texture = Engine::assetsManager->GetTexture(filename);
+		texture->SetType(typeName);
 		textures.push_back(texture);
 	}
 	return textures;
 }
 
-GLuint Model::TextureFromFile(const char *path, const std::string &directory)
-{
-	std::string filename = std::string(path);
-	filename = directory + '/' + filename;
-
-	GLuint textureID;
-	glGenTextures(1, &textureID);
-
-	int width, height, nrComponents;
-	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-	if (data)
-	{
-		GLenum format;
-		if (nrComponents == 1)
-			format = GL_RED;
-		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		stbi_image_free(data);
-	}
-	else
-	{
-		std::cout << "Texture failed to load at path: " << path << std::endl;
-		stbi_image_free(data);
-	}
-
-	return textureID;
-}
-
-void Model::BindUniforms(const Shader& shader, const Camera& camera)
+void AssimpModel::BindUniforms(const Shader& shader, const Camera& camera)
 {
 	GLuint transformLoc = glGetUniformLocation(shader.GetId(), "model");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(m_trans));

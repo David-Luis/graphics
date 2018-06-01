@@ -1,5 +1,8 @@
 #include <Engine/OpenGLApplication.h>
 
+#include <Engine/Engine.h>
+#include <Engine/AssetsManager.h>
+
 #include <GLFW/glfw3.h>
 #include <Lib/imgui/imgui.h>
 #include <Lib/imgui/imgui_impl_glfw_gl3.h>

@@ -3,7 +3,7 @@
 #include <Engine/Mesh.h>
 #include <Engine/Texture.h>
 #include <Engine/Shader.h>
-#include <Engine/Model.h>
+#include <Engine/AssimpModel.h>
 
 #include <GLFW/glfw3.h>
 #include <Lib/imgui/imgui.h>
@@ -25,7 +25,7 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-ModeLoadingApplication::ModeLoadingApplication() : OpenGLApplication(1500, 720, "Camera")
+ModeLoadingApplication::ModeLoadingApplication() : OpenGLApplication(1500, 720, "Model Loading")
 {
 
 }
@@ -45,13 +45,14 @@ void ModeLoadingApplication::OnDraw()
 
 void ModeLoadingApplication::ProcessInput()
 {
+	OpenGLApplication::ProcessInput();
 	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
 }
 
 void ModeLoadingApplication::LoadModels()
 {
 	
-	Model* model = new Model("Data/Models/nanosuit/nanosuit.obj");
+	AssimpModel* model = new AssimpModel("Data/Models/nanosuit/nanosuit.obj");
 	model->m_trans = glm::translate(model->m_trans, {0.0f, 0.0f, -10.0f});
 	m_models.push_back(model);
 	
@@ -109,4 +110,14 @@ void ModeLoadingApplication::DrawModels()
 		model->Update();
 		model->Draw(*m_shader, m_camera);
 	}	
+
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		style.WindowBorderSize = 0.0f;
+		ImGui::SetNextWindowBgAlpha(0);
+		ImGui::SetNextWindowPos({ 5,5 });
+		ImGui::Begin("Example Title", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoResize);
+		ImGui::Text("CAMERA");
+		ImGui::End();
+	}
 }

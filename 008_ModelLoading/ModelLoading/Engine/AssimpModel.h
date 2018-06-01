@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glad/glad.h>
+#include <Engine/IModel.h>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -14,26 +14,26 @@
 class Mesh;
 class Shader;
 class Camera;
+class Texture;
 
 struct aiMaterial;
 struct aiMesh;
 struct aiNode;
 struct aiScene;
-struct Texture;
 
-class Model
+class AssimpModel : public IModel
 {
 public:
 
-	Model(std::string path);
-	Model(std::vector<Mesh*>& meshes);
+	AssimpModel(std::string path);
+	AssimpModel(std::vector<Mesh*>& meshes);
 	
-	virtual ~Model();
-	Model(const Model&) = delete;
-	Model& operator=(Model const&) = delete;
+	virtual ~AssimpModel();
+	AssimpModel(const AssimpModel&) = delete;
+	AssimpModel& operator=(AssimpModel const&) = delete;
 
-	virtual void Update() {}
-	virtual void Draw(Shader& shader, Camera& camera);
+	void Update() override {}
+	void Draw(Shader& shader, Camera& camera) override;
 
 	glm::mat4 m_trans;
 
@@ -45,7 +45,6 @@ private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh* ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
-	GLuint TextureFromFile(const char *path, const std::string &directory);
 
 	std::vector<Mesh*> m_meshes;
 	std::string m_directory;
