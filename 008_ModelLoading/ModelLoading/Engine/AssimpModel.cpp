@@ -17,26 +17,12 @@ AssimpModel::AssimpModel(std::string path)
 	LoadModel(path);
 }
 
-AssimpModel::AssimpModel(std::vector<Mesh*>& meshes)
-{
-	m_meshes = meshes;
-}
-
 AssimpModel::~AssimpModel()
 {
 	for (size_t i = 0; i < m_meshes.size(); i++)
 		delete m_meshes[i];
 
 	m_meshes.clear();
-}
-
-void AssimpModel::Draw(Shader& shader, Camera& m_camera)
-{
-	shader.Use();
-	BindUniforms(shader, m_camera);
-	
-	for (size_t i = 0; i < m_meshes.size(); i++)
-		m_meshes[i]->Draw(shader);
 }
 
 void AssimpModel::LoadModel(std::string path)
@@ -174,16 +160,4 @@ std::vector<Texture*> AssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextu
 		textures.push_back(texture);
 	}
 	return textures;
-}
-
-void AssimpModel::BindUniforms(const Shader& shader, const Camera& camera)
-{
-	GLuint transformLoc = glGetUniformLocation(shader.GetId(), "model");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(m_trans));
-
-	GLuint viewLoc = glGetUniformLocation(shader.GetId(), "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
-
-	GLuint projecttionLoc = glGetUniformLocation(shader.GetId(), "projection");
-	glUniformMatrix4fv(projecttionLoc, 1, GL_FALSE, glm::value_ptr(camera.GetProjectionMatrix()));
 }

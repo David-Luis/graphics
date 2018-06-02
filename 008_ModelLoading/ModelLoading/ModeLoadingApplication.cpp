@@ -4,6 +4,8 @@
 #include <Engine/Texture.h>
 #include <Engine/Shader.h>
 #include <Engine/AssimpModel.h>
+#include <Engine/Engine.h>
+#include <Engine/AssetsManager.h>
 
 #include <GLFW/glfw3.h>
 #include <Lib/imgui/imgui.h>
@@ -51,26 +53,37 @@ void ModeLoadingApplication::ProcessInput()
 
 void ModeLoadingApplication::LoadModels()
 {
-	
-	AssimpModel* model = new AssimpModel("Data/Models/nanosuit/nanosuit.obj");
-	model->m_trans = glm::translate(model->m_trans, {0.0f, 0.0f, -10.0f});
-	m_models.push_back(model);
-	
+	LoadModel1();
+	LoadModel2();
 
-	/*
+	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+}
+
+void ModeLoadingApplication::LoadModel1()
+{
+	AssimpModel* model = new AssimpModel("Data/Models/nanosuit/nanosuit.obj");
+	model->SetTransform(glm::translate(model->GetTransform(), { -5.0f, 0.0f, -10.0f }));
+	m_models.push_back(model);
+}
+
+void ModeLoadingApplication::LoadModel2()
+{
+	float width = 2.5f;
+	float height = 2.5f;
+	float depth = 2.5f;
 	std::vector<Vertex> vertices = {
-		{-0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f},
-		{0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f },
-		{0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
-		{-0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f },
-		// back
-		{-0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f },
-		{0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f },
-		{0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
-		{-0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f },
+		{ -width, -height,  depth, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f },
+		{  width, -height,  depth, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f },
+		{  width,  height,  depth, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+		{ -width,  height,  depth, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f },
+	// back
+		{ -width, -height, -depth, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f },
+		{  width, -height, -depth, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f },
+		{  width,  height, -depth, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f },
+		{ -width,  height, -depth, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f }
 	};
 
-	std::vector<unsigned int> indices = {
+	std::vector<GLuint> indices = {
 		// front
 		0, 1, 2,
 		2, 3, 0,
@@ -91,16 +104,15 @@ void ModeLoadingApplication::LoadModels()
 		6, 7, 3,
 	};
 
-	std::vector<Texture*> textures;
-
-	std::vector<Mesh*> meshes = { new Mesh(vertices, indices, textures) };
+	std::string texturePath = "Data/Textures/wall.jpg";
+	Engine::assetsManager->LoadTexture(texturePath);
+	std::vector<Texture*> textures = { Engine::assetsManager->GetTexture(texturePath) };
+	Mesh* mesh = new Mesh(vertices, indices, textures);
+	std::vector<Mesh*> meshes = { mesh };
 
 	Model* model = new Model(meshes);
-	model->m_trans = glm::translate(model->m_trans, { 0.0f, 0.0f, -10.0f });
+	model->SetTransform(glm::translate(model->GetTransform(), { 5.0f, 5.0f, -10.0f }));
 	m_models.push_back(model);
-	*/
-
-	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
 }
 
 void ModeLoadingApplication::DrawModels()
