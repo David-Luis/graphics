@@ -5,13 +5,13 @@
 class Shader;
 class Camera;
 class Light;
-class PointLight;
+class ILight;
 
 class IModel
 {
 public:
 
 	virtual void Update() = 0;
-	virtual void Draw(Shader& shader, Camera& camera, std::vector<PointLight*> lights) = 0;
+	virtual void Draw(Shader& shader, Camera& camera, std::vector<ILight*> lights) = 0;
 };
 

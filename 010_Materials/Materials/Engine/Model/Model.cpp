@@ -1,12 +1,11 @@
-#include <Engine/Model.h>
+#include <Engine/Model/Model.h>
 
-#include <Engine/Texture.h>
-#include <Engine/Mesh.h>
-#include <Engine/Shader.h>
-#include <Engine/Camera.h>
+#include <Engine/Texture/Texture.h>
+#include <Engine/Model/Mesh.h>
+#include <Engine/Shader/Shader.h>
+#include <Engine/Camera/Camera.h>
 #include <Engine/Engine.h>
-#include <Engine/AssetsManager.h>
-#include <Engine/Light/PointLight.h>
+#include <Engine/Light/ILight.h>
 
 #include <iostream>
 
@@ -28,7 +27,7 @@ Model::~Model()
 	m_meshes.clear();
 }
 
-void Model::Draw(Shader& shader, Camera& m_camera, std::vector<PointLight*> lights)
+void Model::Draw(Shader& shader, Camera& m_camera, std::vector<ILight*> lights)
 {
 	shader.Use();
 	BindUniforms(shader);
@@ -37,9 +36,11 @@ void Model::Draw(Shader& shader, Camera& m_camera, std::vector<PointLight*> ligh
 	{
 		light->Use(shader);
 	}
-	
-	for (size_t i = 0; i < m_meshes.size(); i++)
-		m_meshes[i]->Draw(shader);
+
+	for (const auto& mesh : m_meshes)
+	{
+		mesh->Draw(shader);
+	}
 }
 
 void Model::BindUniforms(const Shader& shader)

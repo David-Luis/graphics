@@ -1,8 +1,8 @@
 #include <Engine/Light/PointLight.h>
 
-#include <Engine/Mesh.h>
-#include <Engine/Shader.h>
-#include <Engine/Camera.h>
+#include <Engine/Model/Mesh.h>
+#include <Engine/Shader/Shader.h>
+#include <Engine/Camera/Camera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>

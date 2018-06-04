@@ -1,11 +1,10 @@
-#include <BasicLightingApplication.h>
+#include <MaterialsApplication.h>
 
-#include <Engine/Mesh.h>
-#include <Engine/Texture.h>
-#include <Engine/Shader.h>
-#include <Engine/AssimpModel.h>
+#include <Engine/Model/Mesh.h>
+#include <Engine/Texture/Texture.h>
+#include <Engine/Shader/Shader.h>
+#include <Engine/Model/AssimpModel.h>
 #include <Engine/Engine.h>
-#include <Engine/AssetsManager.h>
 #include <Engine/Light/PointLight.h>
 
 #include <GLFW/glfw3.h>
@@ -28,12 +27,12 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-BasicLightingApplication::BasicLightingApplication() : OpenGLApplication(1500, 720, "Model Loading")
+MaterialsApplication::MaterialsApplication() : OpenGLApplication(1500, 720, "Model Loading")
 {
 
 }
 
-void BasicLightingApplication::OnInit()
+void MaterialsApplication::OnInit()
 {
 	m_camera.Position = glm::vec3(0.0f, 0.0f, 5.0f);
 	m_cameraController.SetCamera(&m_camera);
@@ -41,19 +40,22 @@ void BasicLightingApplication::OnInit()
 	LoadModels();
 }
 
-void BasicLightingApplication::OnDraw()
+void MaterialsApplication::OnDraw()
 {
 	DrawModels();
-	m_pointLight->DebugDraw(m_camera);
+	for (const auto& light : m_lights)
+	{
+		light->DebugDraw(m_camera);
+	}
 }
 
-void BasicLightingApplication::ProcessInput()
+void MaterialsApplication::ProcessInput()
 {
 	OpenGLApplication::ProcessInput();
 	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
 }
 
-void BasicLightingApplication::LoadModels()
+void MaterialsApplication::LoadModels()
 {
 	LoadModel({ -2.0f, -2.0f, -3.0f }, "Data/models/sphere.obj");
 	LoadModel({ 2.0f, -2.0f, -3.0f }, "Data/models/cube.obj");
@@ -62,11 +64,12 @@ void BasicLightingApplication::LoadModels()
 
 	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
 
-	m_pointLight = new PointLight();
-	m_pointLight->SetColor({ 0.6f, 0.1f, 0.1f });
+	PointLight* light = new PointLight();
+	light->SetColor({ 0.6f, 0.1f, 0.1f });
+	m_lights.push_back(light);
 }
 
-void BasicLightingApplication::LoadModel(glm::vec3 position, std::string modelPath)
+void MaterialsApplication::LoadModel(glm::vec3 position, std::string modelPath)
 {
 	AssimpModel* model = new AssimpModel(modelPath);
 	model->SetTransform(glm::translate(model->GetTransform(), position));
@@ -76,13 +79,12 @@ void BasicLightingApplication::LoadModel(glm::vec3 position, std::string modelPa
 	m_models.push_back(model);
 }
 
-void BasicLightingApplication::DrawModels()
+void MaterialsApplication::DrawModels()
 {
-	std::vector<PointLight*> lights = { m_pointLight };
 	for (const auto& model : m_models)
 	{
 		model->Update();
-		model->Draw(*m_shader, m_camera, lights);
+		model->Draw(*m_shader, m_camera, m_lights);
 	}	
 
 	{

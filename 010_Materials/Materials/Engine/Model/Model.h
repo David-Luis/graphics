@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/IModel.h>
+#include <Engine/Model/IModel.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -10,7 +10,7 @@
 class Mesh;
 class Shader;
 class Camera;
-class PointLight;
+class ILight;
 
 class Model : public IModel
 {
@@ -23,7 +23,7 @@ public:
 	Model& operator=(Model const&) = delete;
 
 	void Update() override {}
-	void Draw(Shader& shader, Camera& camera, std::vector<PointLight*> lights) override;
+	void Draw(Shader& shader, Camera& camera, std::vector<ILight*> lights) override;
 
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }

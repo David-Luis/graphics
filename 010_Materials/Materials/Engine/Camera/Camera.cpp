@@ -1,6 +1,6 @@
-#include <Engine/Camera.h>
+#include <Engine/Camera/Camera.h>
 
-#include <Engine/Shader.h>
+#include <Engine/Shader/Shader.h>
 
 // Constructor with vectors
 Camera::Camera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec3 up, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
