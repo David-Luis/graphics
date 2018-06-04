@@ -73,6 +73,10 @@
     <IncludePath>$(SolutionDir)\..\glfw\build\include;$(SolutionDir)\..\glad\include;$(SolutionDir)\..\glm;$(SolutionDir)\..\Assimp\include;$(ProjectDir);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\glfw\build\lib;$(SolutionDir)\..\Assimp\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)\..\glfw\build\include;$(SolutionDir)\..\glad\include;$(SolutionDir)\..\glm;$(SolutionDir)\..\Assimp\include;$(ProjectDir);$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\glfw\build\lib;$(SolutionDir)\..\Assimp\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -91,6 +95,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,7 +130,9 @@
   <ItemGroup>
     <ClCompile Include="Engine\Assets\AssetsManager.cpp" />
     <ClCompile Include="Engine\Camera\Camera.cpp" />
+    <ClCompile Include="Engine\Light\Light.cpp" />
     <ClCompile Include="Engine\Model\AssimpModel.cpp" />
+    <ClCompile Include="Engine\Model\Material.cpp" />
     <ClCompile Include="Engine\Model\Mesh.cpp" />
     <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Shader\Shader.cpp" />
@@ -142,9 +151,10 @@
   <ItemGroup>
     <ClInclude Include="Engine\Assets\AssetsManager.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
-    <ClInclude Include="Engine\Light\ILight.h" />
+    <ClInclude Include="Engine\Light\Light.h" />
     <ClInclude Include="Engine\Model\AssimpModel.h" />
     <ClInclude Include="Engine\Model\IModel.h" />
+    <ClInclude Include="Engine\Model\Material.h" />
     <ClInclude Include="Engine\Model\Mesh.h" />
     <ClInclude Include="Engine\Model\Model.h" />
     <ClInclude Include="Engine\Shader\Shader.h" />

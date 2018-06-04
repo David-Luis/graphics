@@ -3,12 +3,13 @@
 #include <CameraController.h>
 
 #include <Engine/OpenGLApplication.h>
+#include <Engine/Model/Material.h>
 
 #include <vector>
 
 class Model;
 class Shader;
-class ILight;
+class Light;
 
 class MaterialsApplication : public OpenGLApplication
 {
@@ -23,14 +24,16 @@ private:
 	void OnDraw() override;
 	void ProcessInput() override;
 
+	void LoadMaterials();
 	void LoadModels();
-	void LoadModel(glm::vec3 position, std::string modelPath);
+	void LoadModel(glm::vec3 position, std::string modelPath, Material& material);
 
 	void DrawModels();
 
 	Shader* m_shader;
 	std::vector<Model*> m_models;
-	std::vector<ILight*> m_lights;
+	std::vector<Material> m_materials;
+	std::vector<Light*> m_lights;
 
 	CameraController m_cameraController;
 };

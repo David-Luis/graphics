@@ -7,21 +7,33 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-PointLight::PointLight() : m_color(1.0f, 1.0f, 1.0f)
+PointLight::PointLight()
+{
+	CreateDebugDrawData();
+}
+
+void PointLight::DebugDraw(Camera& camera)
+{
+	m_debugShader->Use();
+	BindUniformsDebug(*m_debugShader, camera);
+	m_debugMesh->Draw(*m_debugShader);
+}
+
+void PointLight::CreateDebugDrawData()
 {
 	float width = 0.25f;
 	float height = 0.25f;
 	float depth = 0.25f;
 
 	std::vector<Vertex> vertices = {
-	{ -width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
-	{  width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
-	{  width,  height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
+		{ -width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
+	{ width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
+	{ width,  height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ -width,  height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	// back
 	{ -width, -height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f },
-	{  width, -height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f },
-	{  width,  height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f },
+	{ width, -height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f },
+	{ width,  height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ -width,  height, -depth, 0.f, 0.f, 0.f, 0.f, 0.f }
 	};
 
@@ -50,22 +62,6 @@ PointLight::PointLight() : m_color(1.0f, 1.0f, 1.0f)
 	m_debugMesh = new Mesh(vertices, indices, textures);
 
 	m_debugShader = new Shader("Data/Shaders/shader_debug_point_light.vert", "Data/Shaders/shader_debug_point_light.frag");
-}
-
-void PointLight::Use(Shader& shader)
-{
-	glm::vec3 translation = Utils::GetTranslation(GetTransform());
-	shader.SetVec3("lightPos", translation);
-
-	glm::vec3 color = GetColor();
-	shader.SetVec3("lightColor", color);
-}
-
-void PointLight::DebugDraw(Camera& camera)
-{
-	m_debugShader->Use();
-	BindUniformsDebug(*m_debugShader, camera);
-	m_debugMesh->Draw(*m_debugShader);
 }
 
 void PointLight::BindUniformsDebug(const Shader& shader, const Camera& camera)

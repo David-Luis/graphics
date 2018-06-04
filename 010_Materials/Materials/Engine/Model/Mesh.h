@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Engine/Model/Material.h>
+
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -33,12 +35,15 @@ public:
 
 	void Draw(const Shader& shader);
 
+	void SetMaterial(const Material& material) { m_material = material; }
+
 private:
 	void SetupMesh();
 
 	std::vector<Vertex> m_vertices;
 	std::vector<GLuint> m_indices;
 	std::vector<Texture*> m_textures;
+	Material m_material;
 
 	GLuint m_VAO;
 	GLuint m_VBO;

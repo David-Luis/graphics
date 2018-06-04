@@ -10,7 +10,7 @@
 class Mesh;
 class Shader;
 class Camera;
-class ILight;
+class Light;
 
 class Model : public IModel
 {
@@ -22,20 +22,19 @@ public:
 	Model(const Model&) = delete;
 	Model& operator=(Model const&) = delete;
 
+	std::vector<Mesh*>& GetMeshes() { return m_meshes; }
+
 	void Update() override {}
-	void Draw(Shader& shader, Camera& camera, std::vector<ILight*> lights) override;
+	void Draw(Shader& shader, Camera& camera, std::vector<Light*> lights) override;
 
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }
-
-	void SetColor(const glm::vec3& color) { m_color = color; }
-	glm::vec3 GetColor() { return m_color; }
 
 protected:
 	virtual void BindUniforms(const Shader& shader);
 
 	std::vector<Mesh*> m_meshes; 
+	
 	glm::mat4 m_trans;
-	glm::vec3 m_color;
 };
 

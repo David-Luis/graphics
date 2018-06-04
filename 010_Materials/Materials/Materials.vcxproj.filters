@@ -18,6 +18,8 @@
     <ClCompile Include="Engine\Model\Model.cpp" />
     <ClCompile Include="Engine\Assets\AssetsManager.cpp" />
     <ClCompile Include="Engine\Shader\Shader.cpp" />
+    <ClCompile Include="Engine\Light\Light.cpp" />
+    <ClCompile Include="Engine\Model\Material.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
@@ -34,7 +36,6 @@
     <ClInclude Include="Lib\imgui\stb_truetype.h" />
     <ClInclude Include="Lib\stb_image.h" />
     <ClInclude Include="MaterialsApplication.h" />
-    <ClInclude Include="Engine\Light\ILight.h" />
     <ClInclude Include="Engine\Camera\Camera.h" />
     <ClInclude Include="Engine\Texture\Texture.h" />
     <ClInclude Include="Engine\Model\AssimpModel.h" />
@@ -43,5 +44,7 @@
     <ClInclude Include="Engine\Model\Model.h" />
     <ClInclude Include="Engine\Assets\AssetsManager.h" />
     <ClInclude Include="Engine\Shader\Shader.h" />
+    <ClInclude Include="Engine\Light\Light.h" />
+    <ClInclude Include="Engine\Model\Material.h" />
   </ItemGroup>
 </Project>

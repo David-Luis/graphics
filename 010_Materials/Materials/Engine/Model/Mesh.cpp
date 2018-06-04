@@ -9,6 +9,8 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vec
 
 void Mesh::Draw(const Shader& shader)
 {
+	m_material.Use(shader);
+
 	GLuint diffuseNr = 1;
 	GLuint specularNr = 1;
 	for (size_t i = 0; i < m_textures.size(); i++)

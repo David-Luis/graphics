@@ -5,16 +5,16 @@
 #include <Engine/Shader/Shader.h>
 #include <Engine/Camera/Camera.h>
 #include <Engine/Engine.h>
-#include <Engine/Light/ILight.h>
+#include <Engine/Light/Light.h>
 
 #include <iostream>
 
-Model::Model() : m_color(1.0f, 1.0f, 1.0f)
+Model::Model()
 {
 
 }
 
-Model::Model(std::vector<Mesh*>& meshes) : m_color(1.0f, 1.0f, 1.0f)
+Model::Model(std::vector<Mesh*>& meshes) 
 {
 	m_meshes = meshes;
 }
@@ -27,7 +27,7 @@ Model::~Model()
 	m_meshes.clear();
 }
 
-void Model::Draw(Shader& shader, Camera& m_camera, std::vector<ILight*> lights)
+void Model::Draw(Shader& shader, Camera& m_camera, std::vector<Light*> lights)
 {
 	shader.Use();
 	BindUniforms(shader);
@@ -47,7 +47,4 @@ void Model::BindUniforms(const Shader& shader)
 {
 	glm::mat4 model = m_trans;
 	shader.SetMat4("model", model);
-
-	glm::vec3 color = GetColor();
-	shader.SetVec3("objectColor", color);
 }
