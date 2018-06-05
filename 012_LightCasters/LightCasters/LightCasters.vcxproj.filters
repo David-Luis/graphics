@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Engine\Assets\AssetsManager.cpp" />
+    <ClCompile Include="Engine\Camera\Camera.cpp" />
+    <ClCompile Include="Engine\Light\Light.cpp" />
+    <ClCompile Include="Engine\Light\PointLight.cpp" />
+    <ClCompile Include="Engine\Model\AssimpModel.cpp" />
+    <ClCompile Include="Engine\Model\Material.cpp" />
+    <ClCompile Include="Engine\Model\Mesh.cpp" />
+    <ClCompile Include="Engine\Model\Model.cpp" />
+    <ClCompile Include="Engine\OpenGLApplication.cpp" />
+    <ClCompile Include="Engine\Shader\Shader.cpp" />
+    <ClCompile Include="Engine\Texture\Texture.cpp" />
+    <ClCompile Include="Lib\glad.c" />
+    <ClCompile Include="Lib\imgui\imgui.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Lib\imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="LightCastersApplication.cpp" />
+    <ClCompile Include="Engine\Light\DirectionalLight.cpp" />
+    <ClCompile Include="Engine\Light\LightsSet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Assets\AssetsManager.h" />
+    <ClInclude Include="Engine\Camera\Camera.h" />
+    <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\Light\Light.h" />
+    <ClInclude Include="Engine\Light\PointLight.h" />
+    <ClInclude Include="Engine\Model\AssimpModel.h" />
+    <ClInclude Include="Engine\Model\IModel.h" />
+    <ClInclude Include="Engine\Model\Material.h" />
+    <ClInclude Include="Engine\Model\Mesh.h" />
+    <ClInclude Include="Engine\Model\Model.h" />
+    <ClInclude Include="Engine\OpenGLApplication.h" />
+    <ClInclude Include="Engine\Shader\Shader.h" />
+    <ClInclude Include="Engine\Texture\Texture.h" />
+    <ClInclude Include="Engine\Utils.h" />
+    <ClInclude Include="Lib\imgui\imconfig.h" />
+    <ClInclude Include="Lib\imgui\imgui.h" />
+    <ClInclude Include="Lib\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="Lib\imgui\imgui_internal.h" />
+    <ClInclude Include="Lib\imgui\stb_rect_pack.h" />
+    <ClInclude Include="Lib\imgui\stb_textedit.h" />
+    <ClInclude Include="Lib\imgui\stb_truetype.h" />
+    <ClInclude Include="Lib\stb_image.h" />
+    <ClInclude Include="CameraController.h" />
+    <ClInclude Include="LightCastersApplication.h" />
+    <ClInclude Include="Engine\Light\DirectionalLight.h" />
+    <ClInclude Include="Engine\Light\LightsSet.h" />
+  </ItemGroup>
+</Project>
