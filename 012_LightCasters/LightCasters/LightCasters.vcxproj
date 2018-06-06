@@ -128,6 +128,7 @@
     <ClCompile Include="Engine\Light\Light.cpp" />
     <ClCompile Include="Engine\Light\LightsSet.cpp" />
     <ClCompile Include="Engine\Light\PointLight.cpp" />
+    <ClCompile Include="Engine\Light\SpotLight.cpp" />
     <ClCompile Include="Engine\Model\AssimpModel.cpp" />
     <ClCompile Include="Engine\Model\Material.cpp" />
     <ClCompile Include="Engine\Model\Mesh.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Engine\Light\Light.h" />
     <ClInclude Include="Engine\Light\LightsSet.h" />
     <ClInclude Include="Engine\Light\PointLight.h" />
+    <ClInclude Include="Engine\Light\SpotLight.h" />
     <ClInclude Include="Engine\Model\AssimpModel.h" />
     <ClInclude Include="Engine\Model\IModel.h" />
     <ClInclude Include="Engine\Model\Material.h" />

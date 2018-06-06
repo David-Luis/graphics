@@ -5,8 +5,9 @@
 #include <Engine/Shader/Shader.h>
 #include <Engine/Model/AssimpModel.h>
 #include <Engine/Engine.h>
-#include <Engine/Light/PointLight.h>
 #include <Engine/Light/DirectionalLight.h>
+#include <Engine/Light/PointLight.h>
+#include <Engine/Light/SpotLight.h>
 
 #include <GLFW/glfw3.h>
 #include <Lib/imgui/imgui.h>
@@ -57,14 +58,16 @@ void LightCastersApplication::ProcessInput()
 
 void LightCastersApplication::LoadLights()
 {
+	/*
 	PointLight* light1 = new PointLight();
 
 	light1->SetPosition({ 1.0f, 0.0f, 10.f });
 	light1->SetAmbient({ 1.0f, 1.0f, 1.0f });
 	light1->SetDiffuse({ 1.0f, 1.0f, 1.0f });
 	light1->SetSpecular({ 1.0f, 1.0f, 1.0f });
-	light1->SetAttenuation(0.01f, 0.01f, 0.01f);
-
+	//light1->SetAttenuation(0.01f, 0.01f, 0.01f);
+	//m_lightsSet.AddPointLight(light1);
+	
 	PointLight* light2 = new PointLight();
 
 	light2->SetPosition({ 6.0f, 2.0f, -10.f });
@@ -76,7 +79,7 @@ void LightCastersApplication::LoadLights()
 	m_lightsSet.AddPointLight(light1);
 	m_lightsSet.AddPointLight(light2);
 
-	/*
+	
 	DirectionalLight* dirLight1 = new DirectionalLight();
 	dirLight1->SetDirection({ 1.0f, 0.0f, 0.f });
 	dirLight1->SetAmbient({ 1.0f, 1.0f, 1.0f });
@@ -85,6 +88,36 @@ void LightCastersApplication::LoadLights()
 
 	m_lightsSet.AddDirectionalLight(dirLight1);
 	*/
+	SpotLight* spotLight1 = new SpotLight();
+
+	spotLight1->SetPosition({ 0.0f, 0.0f, 2.f });
+	spotLight1->SetAmbient({ 0.0f, 0.0f, 0.0f });
+	spotLight1->SetDiffuse({ 0.1f, 0.1f, 0.1f });
+	spotLight1->SetSpecular({ 1.0f, 1.0f, 1.0f });
+	spotLight1->SetAttenuation(0.01f, 0.01f, 0.01f);
+	spotLight1->SetCutoff(4.f, 12.f);
+
+	m_lightsSet.AddSpotLight(spotLight1);
+
+	SpotLight* spotLight2 = new SpotLight();
+
+	spotLight2->SetPosition({ 4.0f, 3.f, -6.f });
+	spotLight2->SetDirection({ -1.0f, -1.f, 0.f });
+	spotLight2->SetAmbient({ 0.0f, 0.0f, 0.0f });
+	spotLight2->SetDiffuse({ 0.1f, 0.1f, 0.1f });
+	spotLight2->SetSpecular({ 1.0f, 1.0f, 1.0f });
+	spotLight2->SetAttenuation(0.01f, 0.01f, 0.01f);
+	spotLight2->SetCutoff(3.f, 5.f);
+
+	m_lightsSet.AddSpotLight(spotLight2);
+
+	DirectionalLight* dirLight1 = new DirectionalLight();
+	dirLight1->SetDirection({ 1.0f, -1.0f, -1.f });
+	dirLight1->SetAmbient({ 0.0f, 0.0f, 0.0f });
+	dirLight1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
+	dirLight1->SetSpecular({ 1.0f, 1.0f, 1.0f });
+
+	m_lightsSet.AddDirectionalLight(dirLight1);
 }
 
 void LightCastersApplication::LoadMaterials()

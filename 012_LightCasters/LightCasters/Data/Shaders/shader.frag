@@ -32,6 +32,24 @@ struct PointLight {
 uniform int numPointLights;
 uniform PointLight pointLights[MAX_POINT_LIGHTS];
 
+#define MAX_SPOT_LIGHTS 8
+struct SpotLight {
+    vec3 position;
+	vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+	
+	float constantAttenuation;
+	float linearAttenuation;
+	float quadraticAttenuation;
+	
+	float cutOff;
+    float outerCutOff;
+};
+uniform int numSpotLights;
+uniform SpotLight spotLights[MAX_SPOT_LIGHTS];
+
 struct Material {
 	sampler2D texture_diffuse_1;
 	sampler2D texture_specular_1;
@@ -90,6 +108,36 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return(ambient + diffuse + specular);
 }
 
+vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+	vec3 lightDir = normalize(light.position - FragPos);
+	float diff = max(dot(normal, lightDir), 0.0);
+	vec3 reflectDir = reflect(-lightDir, normal);  
+	
+	// ambient
+    vec3 ambient = light.ambient * material.ambient * vec3(texture(material.texture_diffuse_1, TexCoord));
+  	
+    // diffuse 
+	vec3 diffuse = light.diffuse * diff * material.diffuse * vec3(texture(material.texture_diffuse_1, TexCoord));  
+    
+    // specular
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+	vec3 specular = spec * light.specular * material.specular * vec3(texture(material.texture_specular_1, TexCoord));  
+	
+	float distance    = length(light.position - FragPos);
+	float attenuation = 1.0 / (light.constantAttenuation + light.linearAttenuation * distance + light.quadraticAttenuation * (distance * distance));    
+	
+	float theta = dot(lightDir, normalize(-light.direction)); 
+    float epsilon = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);	
+	
+	ambient  *= attenuation; 
+	diffuse  *= attenuation * intensity;
+	specular *= attenuation * intensity;  
+        
+    return(ambient + diffuse + specular);
+}
+
 void main()
 {
 	vec3 norm = normalize(Normal);
@@ -105,6 +153,11 @@ void main()
 	for(int i = 0; i < numPointLights; i++)
 	{
 		result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+	}
+	
+	for(int i = 0; i < numSpotLights; i++)
+	{
+		result += CalcSpotLight(spotLights[i], norm, FragPos, viewDir);
 	}
 	
 	FragColor = vec4(result, 1.0);

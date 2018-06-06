@@ -22,6 +22,7 @@
     <ClCompile Include="LightCastersApplication.cpp" />
     <ClCompile Include="Engine\Light\DirectionalLight.cpp" />
     <ClCompile Include="Engine\Light\LightsSet.cpp" />
+    <ClCompile Include="Engine\Light\SpotLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Assets\AssetsManager.h" />
@@ -50,5 +51,6 @@
     <ClInclude Include="LightCastersApplication.h" />
     <ClInclude Include="Engine\Light\DirectionalLight.h" />
     <ClInclude Include="Engine\Light\LightsSet.h" />
+    <ClInclude Include="Engine\Light\SpotLight.h" />
   </ItemGroup>
 </Project>

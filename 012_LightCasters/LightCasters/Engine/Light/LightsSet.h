@@ -4,8 +4,9 @@
 
 #include <Engine/Light/Light.h>
 
-class PointLight;
 class DirectionalLight;
+class PointLight;
+class SpotLight;
 
 class LightsSet
 {
@@ -16,14 +17,16 @@ public:
 	LightsSet& operator=(LightsSet const&) = delete;
 
 	void Use(const Shader& shader) const;
-	void AddPointLight(PointLight* pointLight);
 	void AddDirectionalLight(DirectionalLight* directionalLight);
+	void AddPointLight(PointLight* pointLight);
+	void AddSpotLight(SpotLight* pointLight);
 
 	void DebugDraw(Camera& camera);
 
 protected:
-	std::vector<Light*> m_pointLights;
 	std::vector<Light*> m_directionalLights;
+	std::vector<Light*> m_pointLights;
+	std::vector<Light*> m_spotLights;
 
 };
 
