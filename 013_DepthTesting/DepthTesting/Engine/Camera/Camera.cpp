@@ -23,14 +23,10 @@ Camera::Camera(int windowsWidth, int windowsHeight, float posX, float posY, floa
 
 void Camera::Use(Shader& shader) const
 {
-	glm::mat4 view = GetViewMatrix();
-	shader.SetMat4("view", view);
+	shader.SetMat4("view", GetViewMatrix());
+	shader.SetMat4("projection", GetProjectionMatrix());
 
-	glm::mat4 projection = GetProjectionMatrix();
-	shader.SetMat4("projection", projection);
-
-	glm::vec3 viewPos = GetPosition();
-	shader.SetVec3("viewPos", viewPos);
+	shader.SetVec3("viewPos", GetPosition());
 }
 
 glm::mat4 Camera::GetViewMatrix() const

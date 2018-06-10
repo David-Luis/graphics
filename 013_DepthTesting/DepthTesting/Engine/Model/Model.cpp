@@ -42,6 +42,5 @@ void Model::Draw(Shader& shader, Camera& m_camera, LightsSet& lights)
 
 void Model::BindUniforms(const Shader& shader)
 {
-	glm::mat4 model = m_trans;
-	shader.SetMat4("model", model);
+	shader.SetMat4("model", std::move(m_trans));
 }

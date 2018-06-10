@@ -29,7 +29,7 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-DepthTestingApplication::DepthTestingApplication() : OpenGLApplication(1500, 720, "Materials")
+DepthTestingApplication::DepthTestingApplication() : OpenGLApplication(1500, 720, "DEPTH TESTING")
 {
 
 }
@@ -57,13 +57,13 @@ void DepthTestingApplication::ProcessInput()
 
 void DepthTestingApplication::LoadLights()
 {
-	DirectionalLight* dirLight1 = new DirectionalLight();
-	dirLight1->SetDirection({ -1.0f, -1.0f, -1.f });
-	dirLight1->SetAmbient({ 0.3f, 0.3f, 0.3f });
-	dirLight1->SetDiffuse({ 1.0f, 1.0f, 1.0f });
-	dirLight1->SetSpecular({ 1.0f, 1.0f, 1.0f });
+	PointLight* pointLight1 = new PointLight();
+	pointLight1->SetPosition({ 5.0f, 1.0f, 5.f });
+	pointLight1->SetAmbient({ 0.1f, 0.1f, 0.1f });
+	pointLight1->SetDiffuse({ 0.5f, 0.0f, 0.0f });
+	pointLight1->SetSpecular({ 1.0f, 1.0f, 1.0f });
 
-	m_lightsSet.AddDirectionalLight(dirLight1);
+	m_lightsSet.AddPointLight(pointLight1);
 }
 
 void DepthTestingApplication::LoadMaterials()

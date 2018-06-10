@@ -46,21 +46,11 @@ void SpotLight::DebugDraw(Camera& camera)
 void SpotLight::Use(const Shader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
-
-	glm::vec3 position = m_position;
-	shader.SetVec3("spotLights[" + countStr + "].position", position);
-
-	glm::vec3 direction = m_direction;
-	shader.SetVec3("spotLights[" + countStr + "].direction", direction);
-
-	glm::vec3 ambient = GetAmbient();
-	shader.SetVec3("spotLights[" + countStr + "].ambient", ambient);
-
-	glm::vec3 diffuse = GetDiffuse();
-	shader.SetVec3("spotLights[" + countStr + "].diffuse", diffuse);
-
-	glm::vec3 specular = GetSpecular();
-	shader.SetVec3("spotLights[" + countStr + "].specular", specular);
+	shader.SetVec3("spotLights[" + countStr + "].position", GetPosition());
+	shader.SetVec3("spotLights[" + countStr + "].direction", GetDirection());
+	shader.SetVec3("spotLights[" + countStr + "].ambient", GetAmbient());
+	shader.SetVec3("spotLights[" + countStr + "].diffuse", GetDiffuse());
+	shader.SetVec3("spotLights[" + countStr + "].specular", GetSpecular());
 
 	shader.SetFloat("spotLights[" + countStr + "].constantAttenuation", m_constantAttenuation);
 	shader.SetFloat("spotLights[" + countStr + "].linearAttenuation", m_linearAttenuation);
@@ -112,7 +102,7 @@ void SpotLight::CreateDebugDrawData()
 	std::vector<Texture*> textures = {};
 	m_debugMesh = new Mesh(vertices, indices, textures);
 
-	m_debugShader = new Shader("Data/Shaders/shader_debug_point_light.vert", "Data/Shaders/shader_debug_point_light.frag");
+	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
 void SpotLight::BindUniformsDebug(const Shader& shader, const Camera& camera)

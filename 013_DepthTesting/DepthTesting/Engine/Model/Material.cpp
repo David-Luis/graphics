@@ -14,17 +14,10 @@ Material::Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, flo
 
 void Material::Use(const Shader& shader)
 {
-	glm::vec3 ambient = GetAmbient();
-	shader.SetVec3("material.ambient", ambient);
-
-	glm::vec3 diffuse = GetDiffuse();
-	shader.SetVec3("material.diffuse", diffuse);
-
-	glm::vec3 specular = GetSpecular();
-	shader.SetVec3("material.specular", specular);
-
-	float shininess = GetShininess();
-	shader.SetFloat("material.shininess", shininess);
+	shader.SetVec3("material.ambient", GetAmbient());
+	shader.SetVec3("material.diffuse", GetDiffuse());
+	shader.SetVec3("material.specular", GetSpecular());
+	shader.SetFloat("material.shininess", GetShininess());
 }
 
 void Material::SetAmbient(const glm::vec3& ambient)

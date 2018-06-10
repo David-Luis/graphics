@@ -16,17 +16,10 @@ void DirectionalLight::Use(const Shader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 
-	glm::vec3 position = m_position;
-	shader.SetVec3("directionalLights[" + countStr + "].direction", position);
-
-	glm::vec3 ambient = GetAmbient();
-	shader.SetVec3("directionalLights[" + countStr + "].ambient", ambient);
-
-	glm::vec3 diffuse = GetDiffuse();
-	shader.SetVec3("directionalLights[" + countStr + "].diffuse", diffuse);
-
-	glm::vec3 specular = GetSpecular();
-	shader.SetVec3("directionalLights[" + countStr + "].specular", specular);
+	shader.SetVec3("directionalLights[" + countStr + "].direction", GetDirection());
+	shader.SetVec3("directionalLights[" + countStr + "].ambient", GetAmbient());
+	shader.SetVec3("directionalLights[" + countStr + "].diffuse", GetDiffuse());
+	shader.SetVec3("directionalLights[" + countStr + "].specular", GetSpecular());
 }
 
 void DirectionalLight::SetDirection(const glm::vec3& position)

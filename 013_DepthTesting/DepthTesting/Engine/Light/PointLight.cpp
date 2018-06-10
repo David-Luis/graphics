@@ -30,17 +30,10 @@ void PointLight::Use(const Shader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 
-	glm::vec3 position = m_position;
-	shader.SetVec3("pointLights[" + countStr + "].position", position);
-
-	glm::vec3 ambient = GetAmbient();
-	shader.SetVec3("pointLights[" + countStr + "].ambient", ambient);
-
-	glm::vec3 diffuse = GetDiffuse();
-	shader.SetVec3("pointLights[" + countStr + "].diffuse", diffuse);
-
-	glm::vec3 specular = GetSpecular();
-	shader.SetVec3("pointLights[" + countStr + "].specular", specular);
+	shader.SetVec3("pointLights[" + countStr + "].position", GetPosition());
+	shader.SetVec3("pointLights[" + countStr + "].ambient", GetAmbient());
+	shader.SetVec3("pointLights[" + countStr + "].diffuse", GetDiffuse());
+	shader.SetVec3("pointLights[" + countStr + "].specular", GetSpecular());
 
 	shader.SetFloat("pointLights[" + countStr + "].constantAttenuation", m_constantAttenuation);
 	shader.SetFloat("pointLights[" + countStr + "].linearAttenuation", m_linearAttenuation);
@@ -89,17 +82,13 @@ void PointLight::CreateDebugDrawData()
 	std::vector<Texture*> textures = {};
 	m_debugMesh = new Mesh(vertices, indices, textures);
 
-	m_debugShader = new Shader("Data/Shaders/shader_debug_point_light.vert", "Data/Shaders/shader_debug_point_light.frag");
+	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
 void PointLight::BindUniformsDebug(const Shader& shader, const Camera& camera)
 {
-	GLuint transformLoc = glGetUniformLocation(shader.GetId(), "model");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(m_trans));
-
-	GLuint viewLoc = glGetUniformLocation(shader.GetId(), "view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
-
-	GLuint projecttionLoc = glGetUniformLocation(shader.GetId(), "projection");
-	glUniformMatrix4fv(projecttionLoc, 1, GL_FALSE, glm::value_ptr(camera.GetProjectionMatrix()));
+	shader.SetMat4("model", std::move(m_trans));
+	shader.SetMat4("view", camera.GetViewMatrix());
+	shader.SetMat4("projection", camera.GetProjectionMatrix());
+	shader.SetVec3("color", GetDiffuse());
 }
