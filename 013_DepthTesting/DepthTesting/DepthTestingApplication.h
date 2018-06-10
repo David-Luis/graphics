@@ -24,6 +24,7 @@ private:
 	void OnDraw() override;
 	void ProcessInput() override;
 
+	void LoadShaders();
 	void LoadLights();
 	void LoadMaterials();
 	void LoadModels();
@@ -37,4 +38,7 @@ private:
 	LightsSet m_lightsSet;
 
 	CameraController m_cameraController;
+
+	bool m_seeDepthBuffer;
+	bool m_seeDepthBufferPrevValue;
 };
