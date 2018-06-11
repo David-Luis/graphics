@@ -28,17 +28,15 @@ private:
 	void LoadLights();
 	void LoadMaterials();
 	void LoadModels();
-	void LoadModel(glm::vec3 position, std::string modelPath);
+	void LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath);
 
-	void DrawModels();
+	void DrawModels(Shader* shader);
 
 	Shader* m_shader;
+	Shader* m_silueteShader;
 	std::vector<Model*> m_models;
 	std::vector<Material> m_materials;
 	LightsSet m_lightsSet;
 
 	CameraController m_cameraController;
-
-	bool m_seeDepthBuffer;
-	bool m_seeDepthBufferPrevValue;
 };

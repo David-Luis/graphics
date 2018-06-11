@@ -44,3 +44,12 @@ void Model::BindUniforms(const Shader& shader)
 {
 	shader.SetMat4("model", std::move(m_trans));
 }
+
+void Model::SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle)
+{
+	glm::mat4 trans;
+	trans = glm::translate(trans, position);
+	trans = glm::scale(trans, scale);
+	trans = glm::rotate(trans, angle, rotation);
+	SetTransform(trans);
+}

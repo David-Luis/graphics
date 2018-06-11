@@ -30,6 +30,8 @@ public:
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }
 
+	void SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle);
+
 protected:
 	virtual void BindUniforms(const Shader& shader);
 

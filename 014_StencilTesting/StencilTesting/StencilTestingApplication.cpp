@@ -29,14 +29,14 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-StencilTestingApplication::StencilTestingApplication() : OpenGLApplication(1500, 720, "STENCIL TESTING"), m_seeDepthBuffer(false), m_seeDepthBufferPrevValue(false)
+StencilTestingApplication::StencilTestingApplication() : OpenGLApplication(1500, 720, "STENCIL TESTING")
 {
 
 }
 
 void StencilTestingApplication::OnInit()
 {
-	m_camera.Position = glm::vec3(0.0f, 0.0f, 5.0f);
+	m_camera.Position = glm::vec3(0.0f, 1.0f, 8.0f);
 	m_cameraController.SetCamera(&m_camera);
 
 	LoadShaders();
@@ -46,78 +46,23 @@ void StencilTestingApplication::OnInit()
 
 void StencilTestingApplication::OnDraw()
 {
-	if (m_seeDepthBuffer != m_seeDepthBufferPrevValue)
-	{
-		delete m_shader;
-		m_seeDepthBufferPrevValue = m_seeDepthBuffer;
-		if (m_seeDepthBuffer)
-		{
-			m_shader = new Shader("Data/Shaders/shader_depth_buffer.vert", "Data/Shaders/shader_depth_buffer.frag");
-		}
-		else
-		{
-			m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
-		}
-	}
+	glStencilFunc(GL_ALWAYS, 1, 0xFF);
+	glStencilMask(0xFF);
+	m_models[0]->SetTransformComponents({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, {1, 1, 1}, 10);
+	m_models[1]->SetTransformComponents({ -2.f, 0.f, -2.f }, { 1.f, 1.f, 1.f }, {1, 1, 1}, -10);
+	DrawModels(m_shader);
 
-	DrawModels();
+	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+	glStencilMask(0x00);
+	glDisable(GL_DEPTH_TEST);
+	m_models[0]->SetTransformComponents({ 0.f, 0.f, 0.f }, { 1.1f, 1.1f, 1.1f }, {1, 1, 1}, 10);
+	m_models[1]->SetTransformComponents({ -2.f, 0.f, -2.f }, { 1.1f, 1.1f, 1.1f }, {1, 1, 1}, -10);
+	DrawModels(m_silueteShader);
+
+	glStencilMask(0xFF);
+	glEnable(GL_DEPTH_TEST);
+
 	m_lightsSet.DebugDraw(m_camera);
-}
-
-void StencilTestingApplication::ProcessInput()
-{
-	OpenGLApplication::ProcessInput();
-	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
-}
-
-void StencilTestingApplication::LoadShaders()
-{
-	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
-}
-
-void StencilTestingApplication::LoadLights()
-{
-	DirectionalLight* directionalLight1 = new DirectionalLight();
-	directionalLight1->SetPosition({ -1.f, -1.f, -1.f});
-	directionalLight1->SetAmbient({ 0.2f, 0.2f, 0.2f });
-	directionalLight1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
-	directionalLight1->SetSpecular({ 1.0f, 1.0f, 1.0f });
-
-	m_lightsSet.AddDirectionalLight(directionalLight1);
-}
-
-void StencilTestingApplication::LoadMaterials()
-{
-	m_materials = {
-		Material({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
-	};
-}
-
-void StencilTestingApplication::LoadModels()
-{
-	LoadModel({ 0.f, 0.f, 0.f }, "Data/models/sponza/sponza.obj");
-}
-
-void StencilTestingApplication::LoadModel(glm::vec3 position, std::string modelPath)
-{
-	AssimpModel* model = new AssimpModel(modelPath);
-
-	glm::mat4 trans = model->GetTransform();
-	trans = glm::translate(model->GetTransform(), position);
-	float scale = 0.03f;
-	trans = glm::scale(trans, { scale, scale, scale });
-	model->SetTransform(trans);
-
-	m_models.push_back(model);
-}
-
-void StencilTestingApplication::DrawModels()
-{
-	for (const auto& model : m_models)
-	{
-		model->Update();
-		model->Draw(*m_shader, m_camera, m_lightsSet);
-	}	
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -129,4 +74,81 @@ void StencilTestingApplication::DrawModels()
 		ImGui::Text("STENCIL TESTING");
 		ImGui::End();
 	}
+}
+
+void StencilTestingApplication::ProcessInput()
+{
+	OpenGLApplication::ProcessInput();
+	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
+}
+
+void StencilTestingApplication::LoadShaders()
+{
+	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+	m_silueteShader = new Shader("Data/Shaders/siluete.vert", "Data/Shaders/siluete.frag");
+}
+
+void StencilTestingApplication::LoadLights()
+{
+	PointLight* light1 = new PointLight();
+	light1->SetPosition({ 1.f, 0.f, 10.f});
+	light1->SetAmbient({ 0.2f, 0.2f, 0.2f });
+	light1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
+	light1->SetSpecular({ 1.0f, 1.0f, 1.0f });
+
+	m_lightsSet.AddPointLight(light1);
+
+	DirectionalLight* light2 = new DirectionalLight();
+	light2->SetPosition({ 1.f, 1.f, 10.f });
+	light2->SetAmbient({ 0.2f, 0.2f, 0.2f });
+	light2->SetDiffuse({ 0.0f, 0.0f, 0.0f });
+	light2->SetSpecular({ 0.0f, 0.0f, 0.0f });
+
+	m_lightsSet.AddDirectionalLight(light2);
+}
+
+void StencilTestingApplication::LoadMaterials()
+{
+	m_materials = {
+		Material({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
+	};
+}
+
+void StencilTestingApplication::LoadModels()
+{
+	LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
+	LoadModel({ -2.f, 0.f, -2.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
+	//LoadModel({ 0.f, -0.5f, 0.f }, { 50.f, 0.01f, 50.f }, "Data/models/cube.obj");
+}
+
+void StencilTestingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
+{
+	AssimpModel* model = new AssimpModel(modelPath);
+
+	glm::mat4 trans;
+	trans = glm::translate(model->GetTransform(), position);
+	trans = glm::scale(trans, scale);
+	model->SetTransform(trans);
+
+	Engine::assetsManager->LoadTexture("Data/Textures/container.png");
+	Texture* textureDiffuse = Engine::assetsManager->GetTexture("Data/Textures/container.png");
+	textureDiffuse->SetType("texture_diffuse");
+
+	Engine::assetsManager->LoadTexture("Data/Textures/container_specular.png");
+	Texture* textureSpecular = Engine::assetsManager->GetTexture("Data/Textures/container_specular.png");
+	textureSpecular->SetType("texture_specular");
+
+	std::vector<Texture*> textures = { textureDiffuse, textureSpecular };
+	model->GetMeshes()[0]->SetTextures(textures);
+
+	m_models.push_back(model);
+}
+
+void StencilTestingApplication::DrawModels(Shader* shader)
+{
+	for (const auto& model : m_models)
+	{
+		model->Update();
+		model->Draw(*shader, m_camera, m_lightsSet);
+	}	
 }
