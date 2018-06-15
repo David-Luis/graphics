@@ -1,9 +1,9 @@
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 
 #include <Engine/Shader/Shader.h>
 
 // Constructor with vectors
-Camera::Camera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec3 up, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
+CCamera::CCamera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec3 up, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
 {
 	Position = position;
 	WorldUp = up;
@@ -12,7 +12,7 @@ Camera::Camera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec
 	UpdateCameraVectors();
 }
 // Constructor with scalar values
-Camera::Camera(int windowsWidth, int windowsHeight, float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
+CCamera::CCamera(int windowsWidth, int windowsHeight, float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
 {
 	Position = glm::vec3(posX, posY, posZ);
 	WorldUp = glm::vec3(upX, upY, upZ);
@@ -21,7 +21,7 @@ Camera::Camera(int windowsWidth, int windowsHeight, float posX, float posY, floa
 	UpdateCameraVectors();
 }
 
-void Camera::Use(Shader& shader) const
+void CCamera::Use(Shader& shader) const
 {
 	shader.SetMat4("view", GetViewMatrix());
 	shader.SetMat4("projection", GetProjectionMatrix());
@@ -29,27 +29,27 @@ void Camera::Use(Shader& shader) const
 	shader.SetVec3("viewPos", GetPosition());
 }
 
-glm::mat4 Camera::GetViewMatrix() const
+glm::mat4 CCamera::GetViewMatrix() const
 {
 	return glm::lookAt(Position, Position + Front, Up);
 }
 
-glm::mat4 Camera::GetProjectionMatrix() const
+glm::mat4 CCamera::GetProjectionMatrix() const
 {
 	return glm::perspective(glm::radians(Fov), (float)m_windowsWidth / (float)m_windowsHeight, 0.1f, 100.0f);
 }
 
-glm::vec3 Camera::GetPosition() const
+glm::vec3 CCamera::GetPosition() const
 {
 	return Position;
 }
 
-glm::vec3 Camera::GetFront() const
+glm::vec3 CCamera::GetFront() const
 {
 	return Front;
 }
 
-void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
+void CCamera::ProcessKeyboard(CameraMovement direction, float deltaTime)
 {
 	float velocity = MovementSpeed * deltaTime;
 	if (direction == CameraMovement::FORWARD)
@@ -66,7 +66,7 @@ void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
 		Position -= Up * velocity;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
+void CCamera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch)
 {
 	xoffset *= MouseSensitivity;
 	yoffset *= MouseSensitivity;
@@ -87,7 +87,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constr
 	UpdateCameraVectors();
 }
 
-void Camera::ProcessMouseScroll(float yoffset)
+void CCamera::ProcessMouseScroll(float yoffset)
 {
 	if (Fov >= 1.0f && Fov <= 45.0f)
 		Fov -= yoffset;
@@ -97,13 +97,13 @@ void Camera::ProcessMouseScroll(float yoffset)
 		Fov = 45.0f;
 }
 
-void Camera::UpdateWindowsSize(int windowsWidth, int windowsHeight)
+void CCamera::UpdateWindowsSize(int windowsWidth, int windowsHeight)
 {
 	m_windowsWidth = windowsWidth;
 	m_windowsHeight = windowsHeight;
 }
 
-void Camera::UpdateCameraVectors()
+void CCamera::UpdateCameraVectors()
 {
 	// Calculate the new Front vector
 	glm::vec3 front;

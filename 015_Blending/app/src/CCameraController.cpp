@@ -1,6 +1,6 @@
 #include <CameraController.h>
 
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -10,7 +10,7 @@ CameraController::CameraController() : m_mouseEnabled(false)
 
 }
 
-void CameraController::SetCamera(Camera* camera)
+void CameraController::SetCamera(CCamera* camera)
 {
 	m_camera = camera;
 }

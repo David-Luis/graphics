@@ -6,7 +6,7 @@
 
 class Mesh;
 class Shader;
-class Camera;
+class CCamera;
 
 class DirectionalLight : public Light
 {
@@ -19,7 +19,7 @@ public:
 	void SetDirection(const glm::vec3& position);
 	glm::vec3 GetDirection() const;
 
-	void DebugDraw(Camera& camera) override {}
+	void DebugDraw(CCamera& camera) override {}
 
 private:
 	void Use(const Shader& shader, int count) const override;

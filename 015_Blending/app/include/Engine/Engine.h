@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Engine/Assets/AssetsManager.h>
+#include <Engine/Assets/CAssetsManager.h>
 
 namespace Engine
 {
-	static AssetsManager* assetsManager = new AssetsManager();
+	static CAssetsManager* assetsManager = new CAssetsManager();
 };

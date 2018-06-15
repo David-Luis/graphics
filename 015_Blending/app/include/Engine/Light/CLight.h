@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 class Shader;
-class Camera;
+class CCamera;
 
 class Light
 {
@@ -14,7 +14,7 @@ public:
 	Light& operator=(Light const&) = delete;
 
 	virtual void Use(const Shader& shader, int count) const = 0;
-	virtual void DebugDraw(Camera& camera) = 0;
+	virtual void DebugDraw(CCamera& camera) = 0;
 
 	void SetPosition(const glm::vec3& position);
 	glm::vec3 GetPosition() const;

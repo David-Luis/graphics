@@ -9,7 +9,7 @@
 
 class Mesh;
 class Shader;
-class Camera;
+class CCamera;
 class LightsSet;
 
 class Model : public IModel
@@ -25,7 +25,7 @@ public:
 	std::vector<Mesh*>& GetMeshes() { return m_meshes; }
 
 	void Update() override {}
-	void Draw(Shader& shader, Camera& camera, LightsSet& lights) override;
+	void Draw(Shader& shader, CCamera& camera, LightsSet& lights) override;
 
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }

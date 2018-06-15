@@ -11,13 +11,13 @@
 class Model;
 class Shader;
 
-class BlendingApplication : public OpenGLApplication
+class CBlendingApplication : public OpenGLApplication
 {
 public:
-	BlendingApplication();
-	~BlendingApplication() override {}
-	BlendingApplication(const BlendingApplication&) = delete;
-	BlendingApplication& operator=(BlendingApplication const&) = delete;
+	CBlendingApplication();
+	~CBlendingApplication() override {}
+	CBlendingApplication(const CBlendingApplication&) = delete;
+	CBlendingApplication& operator=(CBlendingApplication const&) = delete;
 
 private:
 	void OnInit() override;

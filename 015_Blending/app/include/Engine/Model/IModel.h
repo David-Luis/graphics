@@ -2,15 +2,15 @@
 
 #include <vector>
 
-class Shader;
-class Camera;
-class LightsSet;
+class CShader;
+class CCamera;
+class CLightsSet;
 
 class IModel
 {
 public:
 
 	virtual void Update() = 0;
-	virtual void Draw(Shader& shader, Camera& camera, LightsSet& lights) = 0;
+	virtual void Draw(CShader& shader, CCamera& camera, CLightsSet& lights) = 0;
 };
 

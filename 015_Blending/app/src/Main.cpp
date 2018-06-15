@@ -1,7 +1,7 @@
-#include <BlendingApplication.h>
+#include <CBlendingApplication.h>
 
 int main()
 {
-	BlendingApplication* app = new BlendingApplication();
+	CBlendingApplication* app = new CBlendingApplication();
 	app->Init();
 }

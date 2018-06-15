@@ -1,8 +1,8 @@
-#include <Engine/Assets/AssetsManager.h>
+#include <Engine/Assets/CAssetsManager.h>
 
 #include <Engine/Texture/Texture.h>
 
-void AssetsManager::LoadTexture(std::string path)
+void CAssetsManager::LoadTexture(std::string path)
 {
 	if (m_textures.find(path) == m_textures.end())
 	{
@@ -12,7 +12,7 @@ void AssetsManager::LoadTexture(std::string path)
 	}
 }
 
-Texture* AssetsManager::GetTexture(std::string path)
+Texture* CAssetsManager::GetTexture(std::string path)
 {
 	if (m_textures.find(path) != m_textures.end())
 	{

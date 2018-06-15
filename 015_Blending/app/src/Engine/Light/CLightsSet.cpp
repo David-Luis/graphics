@@ -53,7 +53,7 @@ void LightsSet::AddSpotLight(SpotLight* spotLight)
 	m_spotLights.push_back(spotLight);
 }
 
-void LightsSet::DebugDraw(Camera& camera)
+void LightsSet::DebugDraw(CCamera& camera)
 {
 	for (const auto& directionalLight : m_directionalLights)
 	{

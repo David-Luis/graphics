@@ -2,7 +2,7 @@
 
 #include <Engine/Model/Mesh.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>

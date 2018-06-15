@@ -1,9 +1,9 @@
-#include <BlendingApplication.h>
+#include <CBlendingApplication.h>
 
 #include <Engine/Model/Mesh.h>
 #include <Engine/Texture/Texture.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Model/AssimpModel.h>
+#include <Engine/Model/CAssimpModel.h>
 #include <Engine/Engine.h>
 #include <Engine/Light/DirectionalLight.h>
 #include <Engine/Light/PointLight.h>
@@ -29,12 +29,12 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-BlendingApplication::BlendingApplication() : OpenGLApplication(1500, 720, "STENCIL TESTING")
+CBlendingApplication::CBlendingApplication() : OpenGLApplication(1500, 720, "STENCIL TESTING")
 {
 
 }
 
-void BlendingApplication::OnInit()
+void CBlendingApplication::OnInit()
 {
 	m_camera.Position = glm::vec3(0.0f, 1.0f, 8.0f);
 	m_cameraController.SetCamera(&m_camera);
@@ -44,7 +44,7 @@ void BlendingApplication::OnInit()
 	LoadModels();
 }
 
-void BlendingApplication::OnDraw()
+void CBlendingApplication::OnDraw()
 {
 	glStencilFunc(GL_ALWAYS, 1, 0xFF);
 	glStencilMask(0xFF);
@@ -76,19 +76,19 @@ void BlendingApplication::OnDraw()
 	}
 }
 
-void BlendingApplication::ProcessInput()
+void CBlendingApplication::ProcessInput()
 {
 	OpenGLApplication::ProcessInput();
 	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
 }
 
-void BlendingApplication::LoadShaders()
+void CBlendingApplication::LoadShaders()
 {
 	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
 	m_silueteShader = new Shader("Data/Shaders/siluete.vert", "Data/Shaders/siluete.frag");
 }
 
-void BlendingApplication::LoadLights()
+void CBlendingApplication::LoadLights()
 {
 	PointLight* light1 = new PointLight();
 	light1->SetPosition({ 1.f, 0.f, 10.f});
@@ -107,23 +107,23 @@ void BlendingApplication::LoadLights()
 	m_lightsSet.AddDirectionalLight(light2);
 }
 
-void BlendingApplication::LoadMaterials()
+void CBlendingApplication::LoadMaterials()
 {
 	m_materials = {
 		Material({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
 	};
 }
 
-void BlendingApplication::LoadModels()
+void CBlendingApplication::LoadModels()
 {
 	LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
 	LoadModel({ -2.f, 0.f, -2.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
 	//LoadModel({ 0.f, -0.5f, 0.f }, { 50.f, 0.01f, 50.f }, "Data/models/cube.obj");
 }
 
-void BlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
+void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
 {
-	AssimpModel* model = new AssimpModel(modelPath);
+	CAssimpModel* model = new CAssimpModel(modelPath);
 
 	glm::mat4 trans;
 	trans = glm::translate(model->GetTransform(), position);
@@ -144,7 +144,7 @@ void BlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::st
 	m_models.push_back(model);
 }
 
-void BlendingApplication::DrawModels(Shader* shader)
+void CBlendingApplication::DrawModels(Shader* shader)
 {
 	for (const auto& model : m_models)
 	{

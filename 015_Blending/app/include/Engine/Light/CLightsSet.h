@@ -21,7 +21,7 @@ public:
 	void AddPointLight(PointLight* pointLight);
 	void AddSpotLight(SpotLight* pointLight);
 
-	void DebugDraw(Camera& camera);
+	void DebugDraw(CCamera& camera);
 
 protected:
 	std::vector<Light*> m_directionalLights;

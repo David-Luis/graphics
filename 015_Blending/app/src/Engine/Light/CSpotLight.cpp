@@ -2,7 +2,7 @@
 
 #include <Engine/Model/Mesh.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -36,7 +36,7 @@ glm::vec3 SpotLight::GetDirection() const
 	return m_direction;
 }
 
-void SpotLight::DebugDraw(Camera& camera)
+void SpotLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
@@ -105,7 +105,7 @@ void SpotLight::CreateDebugDrawData()
 	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
-void SpotLight::BindUniformsDebug(const Shader& shader, const Camera& camera)
+void SpotLight::BindUniformsDebug(const Shader& shader, const CCamera& camera)
 {
 	GLuint transformLoc = glGetUniformLocation(shader.GetId(), "model");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(m_trans));

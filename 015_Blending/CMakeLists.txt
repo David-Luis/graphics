@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.6)
 project (Application)
 include_directories(../glad/include/)
 include_directories(../glfw/build/include/)
@@ -12,15 +12,18 @@ file(GLOB app_src
     "app/src/*.cpp"
 	"app/src/Engine/*.cpp"
 	"app/src/Engine/Assets/*.cpp"
-	"app/src/Engine/Camera/*.cpp"
+	"app/src/Engine/CCamera/*.cpp"
 	"app/src/Engine/Light/*.cpp"
 	"app/src/Engine/Model/*.cpp"
 	"app/src/Engine/Shader/*.cpp"
 	"app/src/Engine/Texture/*.cpp"
+	"app/src/Engine/Scene/*.cpp"
 	"app/src/imgui/*.cpp"
 	"app/src/Lib/glad.c"
 )
 add_executable(Application ${app_src})
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Application)
+
 target_link_libraries(Application opengl32)
 target_link_libraries(Application glfw3)
 target_link_libraries(Application assimp)

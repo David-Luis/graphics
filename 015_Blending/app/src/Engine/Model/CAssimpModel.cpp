@@ -1,23 +1,23 @@
-#include <Engine/Model/AssimpModel.h>
+#include <Engine/Model/CAssimpModel.h>
 
 #include <Engine/Texture/Texture.h>
 #include <Engine/Model/Mesh.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 #include <Engine/Engine.h>
-#include <Engine/Assets/AssetsManager.h>
+#include <Engine/Assets/CAssetsManager.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 
 #include <iostream>
 
-AssimpModel::AssimpModel(std::string path)
+CAssimpModel::CAssimpModel(std::string path)
 {
 	LoadModel(path);
 }
 
-AssimpModel::~AssimpModel()
+CAssimpModel::~CAssimpModel()
 {
 	for (size_t i = 0; i < m_meshes.size(); i++)
 		delete m_meshes[i];
@@ -25,7 +25,7 @@ AssimpModel::~AssimpModel()
 	m_meshes.clear();
 }
 
-void AssimpModel::LoadModel(std::string path)
+void CAssimpModel::LoadModel(std::string path)
 {
 	Assimp::Importer import;
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -41,7 +41,7 @@ void AssimpModel::LoadModel(std::string path)
 	ProcessNode(scene->mRootNode, scene);
 }
 
-void AssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
+void CAssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
 {
 	for (size_t i = 0; i < node->mNumMeshes; i++)
 	{
@@ -55,7 +55,7 @@ void AssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
 	}
 }
 
-Mesh* AssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
+Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
@@ -145,7 +145,7 @@ Mesh* AssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	return new Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture*> AssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<Texture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
 	std::vector<Texture*> textures;
 	for (size_t i = 0; i < mat->GetTextureCount(type); i++)

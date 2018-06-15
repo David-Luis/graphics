@@ -2,7 +2,7 @@
 
 #include <Engine/Model/Mesh.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -19,7 +19,7 @@ void PointLight::SetAttenuation(float constant, float linear, float quadratic)
 	m_quadraticAttenuation = quadratic;
 }
 
-void PointLight::DebugDraw(Camera& camera)
+void PointLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
@@ -85,7 +85,7 @@ void PointLight::CreateDebugDrawData()
 	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
-void PointLight::BindUniformsDebug(const Shader& shader, const Camera& camera)
+void PointLight::BindUniformsDebug(const Shader& shader, const CCamera& camera)
 {
 	shader.SetMat4("model", std::move(m_trans));
 	shader.SetMat4("view", camera.GetViewMatrix());

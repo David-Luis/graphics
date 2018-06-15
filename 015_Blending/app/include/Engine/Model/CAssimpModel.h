@@ -11,7 +11,7 @@
 
 class Mesh;
 class Shader;
-class Camera;
+class CCamera;
 class Texture;
 
 struct aiMaterial;
@@ -19,14 +19,14 @@ struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-class AssimpModel : public Model
+class CAssimpModel : public Model
 {
 public:
-	AssimpModel(std::string path);
+	CAssimpModel(std::string path);
 	
-	virtual ~AssimpModel();
-	AssimpModel(const AssimpModel&) = delete;
-	AssimpModel& operator=(AssimpModel const&) = delete;
+	virtual ~CAssimpModel();
+	CAssimpModel(const CAssimpModel&) = delete;
+	CAssimpModel& operator=(CAssimpModel const&) = delete;
 
 protected:
 	virtual void LoadModel(std::string path);

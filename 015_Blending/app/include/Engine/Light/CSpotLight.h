@@ -6,7 +6,7 @@
 
 class Mesh;
 class Shader;
-class Camera;
+class CCamera;
 
 class SpotLight : public Light
 {
@@ -22,11 +22,11 @@ public:
 	void SetDirection(const glm::vec3& direction);
 	glm::vec3 GetDirection() const;
 
-	void DebugDraw(Camera& camera) override;
+	void DebugDraw(CCamera& camera) override;
 
 private:
 	void Use(const Shader& shader, int count) const override;
-	void BindUniformsDebug(const Shader& shader, const Camera& camera);
+	void BindUniformsDebug(const Shader& shader, const CCamera& camera);
 
 	void CreateDebugDrawData();
 

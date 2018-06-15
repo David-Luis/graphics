@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -30,7 +30,7 @@ protected:
 
 	unsigned int m_windowsWidth;
 	unsigned int m_windowsHeight;
-	Camera m_camera;
+	CCamera m_camera;
 
 	//TODO: Move all the code to input the camera to another class
 	glm::vec3 m_mousePosition;

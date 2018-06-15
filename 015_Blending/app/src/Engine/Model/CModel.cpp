@@ -3,7 +3,7 @@
 #include <Engine/Texture/Texture.h>
 #include <Engine/Model/Mesh.h>
 #include <Engine/Shader/Shader.h>
-#include <Engine/Camera/Camera.h>
+#include <Engine/CCamera/CCamera.h>
 #include <Engine/Engine.h>
 #include <Engine/Light/LightsSet.h>
 
@@ -27,7 +27,7 @@ Model::~Model()
 	m_meshes.clear();
 }
 
-void Model::Draw(Shader& shader, Camera& m_camera, LightsSet& lights)
+void Model::Draw(Shader& shader, CCamera& m_camera, LightsSet& lights)
 {
 	shader.Use();
 	BindUniforms(shader);

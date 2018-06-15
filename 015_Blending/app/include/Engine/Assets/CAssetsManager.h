@@ -6,10 +6,10 @@
 
 class Texture;
 
-class AssetsManager {
+class CAssetsManager {
 
 public:
-	AssetsManager() {}
+	CAssetsManager() {}
 
 	void LoadTexture(std::string path);
 	Texture* GetTexture(std::string path);

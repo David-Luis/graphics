@@ -6,7 +6,7 @@
 
 class Mesh;
 class Shader;
-class Camera;
+class CCamera;
 
 class PointLight : public Light
 {
@@ -18,11 +18,11 @@ public:
 
 	void SetAttenuation(float constant, float linear, float quadratic);
 
-	void DebugDraw(Camera& camera) override;
+	void DebugDraw(CCamera& camera) override;
 
 private:
 	void Use(const Shader& shader, int count) const override;
-	void BindUniformsDebug(const Shader& shader, const Camera& camera);
+	void BindUniformsDebug(const Shader& shader, const CCamera& camera);
 
 	void CreateDebugDrawData();
 
