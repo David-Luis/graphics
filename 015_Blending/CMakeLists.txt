@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.6)
+cmake_minimum_required (VERSION 3.8)
 project (Application)
 include_directories(../glad/include/)
 include_directories(../glfw/build/include/)
@@ -21,8 +21,10 @@ file(GLOB app_src
 	"app/src/imgui/*.cpp"
 	"app/src/Lib/glad.c"
 )
+
 add_executable(Application ${app_src})
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Application)
+set_target_properties(Application PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 target_link_libraries(Application opengl32)
 target_link_libraries(Application glfw3)
