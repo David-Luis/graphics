@@ -1,21 +1,21 @@
-#include <CameraController.h>
+#include <CCameraController.h>
 
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Camera/CCamera.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 
-CameraController::CameraController() : m_mouseEnabled(false)
+CCameraController::CCameraController() : m_mouseEnabled(false)
 {
 
 }
 
-void CameraController::SetCamera(CCamera* camera)
+void CCameraController::SetCamera(CCamera* camera)
 {
 	m_camera = camera;
 }
 
-void CameraController::ProcessInput(GLFWwindow* window, glm::vec3 deltaMousePosition, float deltaTime)
+void CCameraController::ProcessInput(GLFWwindow* window, glm::vec3 deltaMousePosition, float deltaTime)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		m_camera->ProcessKeyboard(CameraMovement::FORWARD, deltaTime);

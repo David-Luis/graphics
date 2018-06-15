@@ -9,13 +9,13 @@
 
 struct GLFWwindow;
 
-class OpenGLApplication
+class COpenGLApplication
 {
 public:
-	OpenGLApplication(unsigned int windowsWidth, unsigned int windowsHeight, std::string windowTitle);
-	virtual ~OpenGLApplication() {}
-	OpenGLApplication(const OpenGLApplication&) = delete;
-	OpenGLApplication& operator=(OpenGLApplication const&) = delete;
+	COpenGLApplication(unsigned int windowsWidth, unsigned int windowsHeight, std::string windowTitle);
+	virtual ~COpenGLApplication() {}
+	COpenGLApplication(const COpenGLApplication&) = delete;
+	COpenGLApplication& operator=(COpenGLApplication const&) = delete;
 
 	void Init();
 

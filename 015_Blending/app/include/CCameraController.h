@@ -1,16 +1,16 @@
 #pragma once
 
-#include <Engine/OpenGLApplication.h>
+#include <Engine/COpenGLApplication.h>
 
 #include <vector>
 
 struct GLFWwindow;
 class CCamera;
 
-class CameraController 
+class CCameraController 
 {
 public:
-	CameraController();
+	CCameraController();
 	void SetCamera(CCamera* camera);
 	void ProcessInput(GLFWwindow* window, glm::vec3 deltaMousePosition, float deltaTime);
 

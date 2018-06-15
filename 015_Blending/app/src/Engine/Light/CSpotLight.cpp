@@ -1,49 +1,49 @@
-#include <Engine/Light/SpotLight.h>
+#include <Engine/Light/CSpotLight.h>
 
-#include <Engine/Model/Mesh.h>
-#include <Engine/Shader/Shader.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Shader/CShader.h>
 #include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
-SpotLight::SpotLight() : m_direction(0.f, 0.f, -1.f), m_constantAttenuation(0.01f), m_linearAttenuation(0.01f), m_quadraticAttenuation(0.01f)
+CSpotLight::CSpotLight() : m_direction(0.f, 0.f, -1.f), m_constantAttenuation(0.01f), m_linearAttenuation(0.01f), m_quadraticAttenuation(0.01f)
 {
 	CreateDebugDrawData();
 }
 
-void SpotLight::SetAttenuation(float constant, float linear, float quadratic)
+void CSpotLight::SetAttenuation(float constant, float linear, float quadratic)
 {
 	m_constantAttenuation = constant;
 	m_linearAttenuation = linear;
 	m_quadraticAttenuation = quadratic;
 }
 
-void SpotLight::SetCutoff(float cutOff, float outerCutOff)
+void CSpotLight::SetCutoff(float cutOff, float outerCutOff)
 {
 	m_cutOff = cutOff;
 	m_outerCutOff = outerCutOff;
 }
 
-void SpotLight::SetDirection(const glm::vec3& direction)
+void CSpotLight::SetDirection(const glm::vec3& direction)
 {
 	m_direction = direction;
 	m_trans = glm::inverse(glm::lookAt(m_position, m_position + m_direction, glm::vec3(0.f, 1.f, 0.f)));
 }
 
-glm::vec3 SpotLight::GetDirection() const
+glm::vec3 CSpotLight::GetDirection() const
 {
 	return m_direction;
 }
 
-void SpotLight::DebugDraw(CCamera& camera)
+void CSpotLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
 	m_debugMesh->Draw(*m_debugShader);
 }
 
-void SpotLight::Use(const Shader& shader, int count) const
+void CSpotLight::Use(const CShader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 	shader.SetVec3("spotLights[" + countStr + "].position", GetPosition());
@@ -60,13 +60,13 @@ void SpotLight::Use(const Shader& shader, int count) const
 	shader.SetFloat("spotLights[" + countStr + "].outerCutOff", glm::cos(glm::radians(m_outerCutOff)));
 }
 
-void SpotLight::CreateDebugDrawData()
+void CSpotLight::CreateDebugDrawData()
 {
 	float width = 0.25f;
 	float height = 0.25f;
 	float depth = 0.25f;
 
-	std::vector<Vertex> vertices = {
+	std::vector<SVertex> vertices = {
 		{ -width*0.1f, -height*0.1f,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ width*0.1f, -height*0.1f,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ width*0.1f,  height*0.1f,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
@@ -99,13 +99,13 @@ void SpotLight::CreateDebugDrawData()
 		6, 7, 3,
 	};
 
-	std::vector<Texture*> textures = {};
-	m_debugMesh = new Mesh(vertices, indices, textures);
+	std::vector<CTexture*> textures = {};
+	m_debugMesh = new CMesh(vertices, indices, textures);
 
-	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
+	m_debugShader = new CShader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
-void SpotLight::BindUniformsDebug(const Shader& shader, const CCamera& camera)
+void CSpotLight::BindUniformsDebug(const CShader& shader, const CCamera& camera)
 {
 	GLuint transformLoc = glGetUniformLocation(shader.GetId(), "model");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(m_trans));

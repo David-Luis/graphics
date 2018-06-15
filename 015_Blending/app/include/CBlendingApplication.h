@@ -1,17 +1,17 @@
 #pragma once
 
-#include <CameraController.h>
+#include <CCameraController.h>
 
-#include <Engine/OpenGLApplication.h>
-#include <Engine/Model/Material.h>
-#include <Engine/Light/LightsSet.h>
+#include <Engine/COpenGLApplication.h>
+#include <Engine/Model/CMaterial.h>
+#include <Engine/Light/CLightsSet.h>
 
 #include <vector>
 
 class Model;
 class Shader;
 
-class CBlendingApplication : public OpenGLApplication
+class CBlendingApplication : public COpenGLApplication
 {
 public:
 	CBlendingApplication();
@@ -32,11 +32,11 @@ private:
 
 	void DrawModels(Shader* shader);
 
-	Shader* m_shader;
-	Shader* m_silueteShader;
-	std::vector<Model*> m_models;
-	std::vector<Material> m_materials;
-	LightsSet m_lightsSet;
+	CShader* m_shader;
+	CShader* m_silueteShader;
+	std::vector<CModel*> m_models;
+	std::vector<CMaterial> m_materials;
+	CLightsSet m_lightsSet;
 
-	CameraController m_cameraController;
+	CCameraController m_cameraController;
 };

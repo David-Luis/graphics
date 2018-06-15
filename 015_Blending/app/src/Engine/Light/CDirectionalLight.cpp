@@ -1,18 +1,18 @@
-#include <Engine/Light/DirectionalLight.h>
+#include <Engine/Light/CDirectionalLight.h>
 
-#include <Engine/Model/Mesh.h>
-#include <Engine/Shader/Shader.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Shader/CShader.h>
 #include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
-DirectionalLight::DirectionalLight()
+CDirectionalLight::CDirectionalLight()
 {
 
 }
 
-void DirectionalLight::Use(const Shader& shader, int count) const
+void CDirectionalLight::Use(const CShader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 
@@ -22,12 +22,12 @@ void DirectionalLight::Use(const Shader& shader, int count) const
 	shader.SetVec3("directionalLights[" + countStr + "].specular", GetSpecular());
 }
 
-void DirectionalLight::SetDirection(const glm::vec3& position)
+void CDirectionalLight::SetDirection(const glm::vec3& position)
 {
 	SetPosition(position);
 }
 
-glm::vec3 DirectionalLight::GetDirection() const
+glm::vec3 CDirectionalLight::GetDirection() const
 {
 	return GetPosition();
 }

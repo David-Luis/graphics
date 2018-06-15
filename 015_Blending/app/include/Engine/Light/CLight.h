@@ -5,15 +5,15 @@
 class Shader;
 class CCamera;
 
-class Light
+class CLight
 {
 public:
-	Light();
-	virtual ~Light() {}
-	Light(const Light&) = delete;
-	Light& operator=(Light const&) = delete;
+	CLight();
+	virtual ~CLight() {}
+	CLight(const CLight&) = delete;
+	CLight& operator=(CLight const&) = delete;
 
-	virtual void Use(const Shader& shader, int count) const = 0;
+	virtual void Use(const CShader& shader, int count) const = 0;
 	virtual void DebugDraw(CCamera& camera) = 0;
 
 	void SetPosition(const glm::vec3& position);

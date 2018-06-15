@@ -1,11 +1,11 @@
-#include <Engine/Texture/Texture.h>
+#include <Engine/Texture/CTexture.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <Lib/stb_image.h>
 
 #include <iostream>
 
-void Texture::LoadFromFile(const std::string& filePath)
+void CTexture::LoadFromFile(const std::string& filePath)
 {
 	glGenTextures(1, &m_id);
 

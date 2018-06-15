@@ -1,18 +1,18 @@
 #include <Engine/Assets/CAssetsManager.h>
 
-#include <Engine/Texture/Texture.h>
+#include <Engine/Texture/CTexture.h>
 
 void CAssetsManager::LoadTexture(std::string path)
 {
 	if (m_textures.find(path) == m_textures.end())
 	{
-		Texture* texture = new Texture();
+		CTexture* texture = new CTexture();
 		texture->LoadFromFile(path);
 		m_textures.insert({ path, texture });
 	}
 }
 
-Texture* CAssetsManager::GetTexture(std::string path)
+CTexture* CAssetsManager::GetTexture(std::string path)
 {
 	if (m_textures.find(path) != m_textures.end())
 	{

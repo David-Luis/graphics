@@ -1,20 +1,20 @@
 #pragma once
 
-#include <Engine/Light/Light.h>
+#include <Engine/Light/CLight.h>
 
 #include <glm/glm.hpp>
 
-class Mesh;
-class Shader;
+class CMesh;
+class CShader;
 class CCamera;
 
-class SpotLight : public Light
+class SpotLight : public CLight
 {
 public:
-	SpotLight();
-	virtual ~SpotLight() {}
-	SpotLight(const SpotLight&) = delete;
-	SpotLight& operator=(SpotLight const&) = delete;
+	CSpotLight();
+	virtual ~CSpotLight() {}
+	CSpotLight(const CSpotLight&) = delete;
+	CSpotLight& operator=(CSpotLight const&) = delete;
 
 	void SetAttenuation(float constant, float linear, float quadratic);
 	void SetCutoff(float cutOff, float outerCutOff);
@@ -25,13 +25,13 @@ public:
 	void DebugDraw(CCamera& camera) override;
 
 private:
-	void Use(const Shader& shader, int count) const override;
-	void BindUniformsDebug(const Shader& shader, const CCamera& camera);
+	void Use(const CShader& shader, int count) const override;
+	void BindUniformsDebug(const CShader& shader, const CCamera& camera);
 
 	void CreateDebugDrawData();
 
-	Mesh* m_debugMesh;
-	Shader* m_debugShader;
+	CMesh* m_debugMesh;
+	CShader* m_debugShader;
 
 	glm::vec3 m_direction;
 

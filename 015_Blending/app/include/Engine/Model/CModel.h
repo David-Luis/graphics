@@ -7,25 +7,25 @@
 
 #include <vector>
 
-class Mesh;
-class Shader;
-class CCamera;
-class LightsSet;
+class CMesh;
+class CShader;
+class CCCamera;
+class CLightsSet;
 
-class Model : public IModel
+class CModel : public IModel
 {
 public:
-	Model();
-	Model(std::vector<Mesh*>& meshes);
+	CModel();
+	CModel(std::vector<CMesh*>& meshes);
 	
-	virtual ~Model();
-	Model(const Model&) = delete;
-	Model& operator=(Model const&) = delete;
+	virtual ~CModel();
+	CModel(const CModel&) = delete;
+	CModel& operator=(CModel const&) = delete;
 
-	std::vector<Mesh*>& GetMeshes() { return m_meshes; }
+	std::vector<CMesh*>& GetMeshes() { return m_meshes; }
 
 	void Update() override {}
-	void Draw(Shader& shader, CCamera& camera, LightsSet& lights) override;
+	void Draw(Shader& shader, CCamera& camera, CLightsSet& lights) override;
 
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }
@@ -33,9 +33,9 @@ public:
 	void SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle);
 
 protected:
-	virtual void BindUniforms(const Shader& shader);
+	virtual void BindUniforms(const CShader& shader);
 
-	std::vector<Mesh*> m_meshes; 
+	std::vector<CMesh*> m_meshes; 
 	
 	glm::mat4 m_trans;
 };

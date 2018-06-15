@@ -6,9 +6,9 @@
 
 #include <vector>
 
-class Shader;
+class CShader;
 
-enum class CameraMovement {
+enum class ECameraMovement {
 	FORWARD,
 	BACKWARD,
 	LEFT,

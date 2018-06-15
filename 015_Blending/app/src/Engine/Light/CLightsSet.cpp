@@ -1,16 +1,16 @@
-#include <Engine/Light/LightsSet.h>
+#include <Engine/Light/CLightsSet.h>
 
-#include <Engine/Light/DirectionalLight.h>
-#include <Engine/Light/PointLight.h>
-#include <Engine/Light/SpotLight.h>
-#include <Engine/Shader/Shader.h>
+#include <Engine/Light/CDirectionalLight.h>
+#include <Engine/Light/CPointLight.h>
+#include <Engine/Light/CSpotLight.h>
+#include <Engine/Shader/CShader.h>
 
-LightsSet::LightsSet()
+CLightsSet::CLightsSet()
 {
 
 }
 
-void LightsSet::Use(const Shader& shader) const
+void CLightsSet::Use(const CShader& shader) const
 {
 	shader.SetInt("numDirectionalLights", m_directionalLights.size());
 	shader.SetInt("numPointLights", m_pointLights.size());
@@ -38,22 +38,22 @@ void LightsSet::Use(const Shader& shader) const
 	}
 }
 
-void LightsSet::AddDirectionalLight(DirectionalLight* directionalLight)
+void CLightsSet::AddDirectionalLight(CDirectionalLight* directionalLight)
 {
 	m_directionalLights.push_back(directionalLight);
 }
 
-void LightsSet::AddPointLight(PointLight* pointLight)
+void CLightsSet::AddPointLight(CPointLight* pointLight)
 {
 	m_pointLights.push_back(pointLight);
 }
 
-void LightsSet::AddSpotLight(SpotLight* spotLight)
+void CLightsSet::AddSpotLight(CSpotLight* spotLight)
 {
 	m_spotLights.push_back(spotLight);
 }
 
-void LightsSet::DebugDraw(CCamera& camera)
+void CLightsSet::DebugDraw(CCamera& camera)
 {
 	for (const auto& directionalLight : m_directionalLights)
 	{

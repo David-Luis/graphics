@@ -5,14 +5,14 @@
 
 #include <string>
 
-class Shader
+class CShader
 {
 public:
-	Shader();
-	Shader(std::string vertexShaderPath, std::string fragmentShaderPath);
-	virtual ~Shader() {}
-	Shader(const Shader&) = delete;
-	Shader& operator=(Shader const&) = delete;
+	CShader();
+	CShader(std::string vertexShaderPath, std::string fragmentShaderPath);
+	virtual ~CShader() {}
+	CShader(const CShader&) = delete;
+	CShader& operator=(CShader const&) = delete;
 
 	GLuint GetId() const { return m_shaderProgram; }
 	void Use();

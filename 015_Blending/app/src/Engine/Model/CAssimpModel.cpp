@@ -1,9 +1,9 @@
 #include <Engine/Model/CAssimpModel.h>
 
-#include <Engine/Texture/Texture.h>
-#include <Engine/Model/Mesh.h>
-#include <Engine/Shader/Shader.h>
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Texture/CTexture.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Shader/CShader.h>
+#include <Engine/Camera/CCamera.h>
 #include <Engine/Engine.h>
 #include <Engine/Assets/CAssetsManager.h>
 
@@ -57,13 +57,13 @@ void CAssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
 
 Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
-	std::vector<Vertex> vertices;
+	std::vector<SVertex> vertices;
 	std::vector<GLuint> indices;
-	std::vector<Texture*> textures;
+	std::vector<CTexture*> textures;
 
 	for (size_t i = 0; i < mesh->mNumVertices; i++)
 	{
-		Vertex vertex;
+		SVertex vertex;
 		glm::vec3 vector; 
 
 		// positions
@@ -126,10 +126,10 @@ Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	// normal: texture_normalN
 
 	// 1. diffuse maps
-	std::vector<Texture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<CTexture*> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 	// 2. specular maps
-	std::vector<Texture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+	std::vector<CTexture*> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	
 	/*
@@ -147,7 +147,7 @@ Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 
 std::vector<Texture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
-	std::vector<Texture*> textures;
+	std::vector<CTexture*> textures;
 	for (size_t i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
@@ -155,7 +155,7 @@ std::vector<Texture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiText
 	
 		std::string filename = m_directory + '/' + std::string(str.C_Str());
 		Engine::assetsManager->LoadTexture(filename);
-		Texture* texture = Engine::assetsManager->GetTexture(filename);
+		CTexture* texture = Engine::assetsManager->GetTexture(filename);
 		texture->SetType(typeName);
 		textures.push_back(texture);
 	}

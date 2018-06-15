@@ -1,25 +1,25 @@
-#include <Engine/Model/Model.h>
+#include <Engine/Model/CModel.h>
 
-#include <Engine/Texture/Texture.h>
-#include <Engine/Model/Mesh.h>
-#include <Engine/Shader/Shader.h>
-#include <Engine/CCamera/CCamera.h>
-#include <Engine/Engine.h>
-#include <Engine/Light/LightsSet.h>
+#include <Engine/Texture/CTexture.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Shader/CShader.h>
+#include <Engine/CCamera/CCCamera.h>
+#include <Engine/CEngine.h>
+#include <Engine/Light/CLightsSet.h>
 
 #include <iostream>
 
-Model::Model()
+CModel::CModel()
 {
 
 }
 
-Model::Model(std::vector<Mesh*>& meshes) 
+CModel::CModel(std::vector<CMesh*>& meshes) 
 {
 	m_meshes = meshes;
 }
 
-Model::~Model()
+CModel::~CModel()
 {
 	for (size_t i = 0; i < m_meshes.size(); i++)
 		delete m_meshes[i];
@@ -27,7 +27,7 @@ Model::~Model()
 	m_meshes.clear();
 }
 
-void Model::Draw(Shader& shader, CCamera& m_camera, LightsSet& lights)
+void CModel::Draw(CShader& shader, CCamera& m_camera, CLightsSet& lights)
 {
 	shader.Use();
 	BindUniforms(shader);
@@ -40,12 +40,12 @@ void Model::Draw(Shader& shader, CCamera& m_camera, LightsSet& lights)
 	}
 }
 
-void Model::BindUniforms(const Shader& shader)
+void CModel::BindUniforms(const CShader& shader)
 {
 	shader.SetMat4("model", std::move(m_trans));
 }
 
-void Model::SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle)
+void CModel::SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle)
 {
 	glm::mat4 trans;
 	trans = glm::translate(trans, position);

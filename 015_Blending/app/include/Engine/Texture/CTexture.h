@@ -5,12 +5,12 @@
 
 #include <string>
 
-class Texture {
+class CTexture {
 
 public:
-	Texture() {}
-	Texture(const Texture&) = delete;
-	Texture& operator=(Texture const&) = delete;
+	CTexture() {}
+	CTexture(const CTexture&) = delete;
+	CTexture& operator=(CTexture const&) = delete;
 	
 	void LoadFromFile(const std::string &filePath);
 

@@ -2,31 +2,31 @@
 
 #include <vector>
 
-#include <Engine/Light/Light.h>
+#include <Engine/Light/CLight.h>
 
-class DirectionalLight;
-class PointLight;
-class SpotLight;
+class CDirectionalLight;
+class CPointLight;
+class CSpotLight;
 
-class LightsSet
+class CLightsSet
 {
 public:
-	LightsSet();
-	virtual ~LightsSet() {}
-	LightsSet(const LightsSet&) = delete;
-	LightsSet& operator=(LightsSet const&) = delete;
+	CLightsSet();
+	virtual ~CLightsSet() {}
+	CLightsSet(const CLightsSet&) = delete;
+	CLightsSet& operator=(CLightsSet const&) = delete;
 
-	void Use(const Shader& shader) const;
-	void AddDirectionalLight(DirectionalLight* directionalLight);
-	void AddPointLight(PointLight* pointLight);
-	void AddSpotLight(SpotLight* pointLight);
+	void Use(const CShader& shader) const;
+	void AddDirectionalLight(CDirectionalLight* directionalLight);
+	void AddPointLight(CPointLight* pointLight);
+	void AddSpotLight(CSpotLight* pointLight);
 
 	void DebugDraw(CCamera& camera);
 
 protected:
-	std::vector<Light*> m_directionalLights;
-	std::vector<Light*> m_pointLights;
-	std::vector<Light*> m_spotLights;
+	std::vector<CLight*> m_directionalLights;
+	std::vector<CLight*> m_pointLights;
+	std::vector<CLight*> m_spotLights;
 
 };
 

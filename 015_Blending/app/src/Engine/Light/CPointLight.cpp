@@ -1,32 +1,32 @@
-#include <Engine/Light/PointLight.h>
+#include <Engine/Light/CPointLight.h>
 
-#include <Engine/Model/Mesh.h>
-#include <Engine/Shader/Shader.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Shader/CShader.h>
 #include <Engine/CCamera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
-PointLight::PointLight() : m_constantAttenuation(0.01f), m_linearAttenuation(0.01f), m_quadraticAttenuation(0.01f)
+CPointLight::CPointLight() : m_constantAttenuation(0.01f), m_linearAttenuation(0.01f), m_quadraticAttenuation(0.01f)
 {
 	CreateDebugDrawData();
 }
 
-void PointLight::SetAttenuation(float constant, float linear, float quadratic)
+void CPointLight::SetAttenuation(float constant, float linear, float quadratic)
 {
 	m_constantAttenuation = constant;
 	m_linearAttenuation = linear;
 	m_quadraticAttenuation = quadratic;
 }
 
-void PointLight::DebugDraw(CCamera& camera)
+void CPointLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
 	m_debugMesh->Draw(*m_debugShader);
 }
 
-void PointLight::Use(const Shader& shader, int count) const
+void CPointLight::Use(const Shader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 
@@ -40,7 +40,7 @@ void PointLight::Use(const Shader& shader, int count) const
 	shader.SetFloat("pointLights[" + countStr + "].quadraticAttenuation", m_quadraticAttenuation);
 }
 
-void PointLight::CreateDebugDrawData()
+void CPointLight::CreateDebugDrawData()
 {
 	float width = 0.25f;
 	float height = 0.25f;
@@ -79,13 +79,13 @@ void PointLight::CreateDebugDrawData()
 		6, 7, 3,
 	};
 
-	std::vector<Texture*> textures = {};
-	m_debugMesh = new Mesh(vertices, indices, textures);
+	std::vector<CTexture*> textures = {};
+	m_debugMesh = new CMesh(vertices, indices, textures);
 
-	m_debugShader = new Shader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
+	m_debugShader = new CShader("Data/Shaders/shader_debug_light.vert", "Data/Shaders/shader_debug_light.frag");
 }
 
-void PointLight::BindUniformsDebug(const Shader& shader, const CCamera& camera)
+void CPointLight::BindUniformsDebug(const CShader& shader, const CCamera& camera)
 {
 	shader.SetMat4("model", std::move(m_trans));
 	shader.SetMat4("view", camera.GetViewMatrix());

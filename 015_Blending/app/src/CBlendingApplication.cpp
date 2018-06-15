@@ -1,13 +1,13 @@
 #include <CBlendingApplication.h>
 
-#include <Engine/Model/Mesh.h>
-#include <Engine/Texture/Texture.h>
-#include <Engine/Shader/Shader.h>
+#include <Engine/Model/CMesh.h>
+#include <Engine/Texture/CTexture.h>
+#include <Engine/Shader/CShader.h>
 #include <Engine/Model/CAssimpModel.h>
 #include <Engine/Engine.h>
-#include <Engine/Light/DirectionalLight.h>
-#include <Engine/Light/PointLight.h>
-#include <Engine/Light/SpotLight.h>
+#include <Engine/Light/CDirectionalLight.h>
+#include <Engine/Light/CPointLight.h>
+#include <Engine/Light/CSpotLight.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -29,7 +29,7 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-CBlendingApplication::CBlendingApplication() : OpenGLApplication(1500, 720, "STENCIL TESTING")
+CBlendingApplication::CBlendingApplication() : COpenGLApplication(1500, 720, "STENCIL TESTING")
 {
 
 }
@@ -78,7 +78,7 @@ void CBlendingApplication::OnDraw()
 
 void CBlendingApplication::ProcessInput()
 {
-	OpenGLApplication::ProcessInput();
+	COpenGLApplication::ProcessInput();
 	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
 }
 
@@ -90,7 +90,7 @@ void CBlendingApplication::LoadShaders()
 
 void CBlendingApplication::LoadLights()
 {
-	PointLight* light1 = new PointLight();
+	CPointLight* light1 = new CPointLight();
 	light1->SetPosition({ 1.f, 0.f, 10.f});
 	light1->SetAmbient({ 0.2f, 0.2f, 0.2f });
 	light1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
@@ -98,7 +98,7 @@ void CBlendingApplication::LoadLights()
 
 	m_lightsSet.AddPointLight(light1);
 
-	DirectionalLight* light2 = new DirectionalLight();
+	CDirectionalLight* light2 = new CDirectionalLight();
 	light2->SetPosition({ 1.f, 1.f, 10.f });
 	light2->SetAmbient({ 0.2f, 0.2f, 0.2f });
 	light2->SetDiffuse({ 0.0f, 0.0f, 0.0f });
@@ -131,11 +131,11 @@ void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::s
 	model->SetTransform(trans);
 
 	Engine::assetsManager->LoadTexture("Data/Textures/container.png");
-	Texture* textureDiffuse = Engine::assetsManager->GetTexture("Data/Textures/container.png");
+	CTexture* textureDiffuse = Engine::assetsManager->GetTexture("Data/Textures/container.png");
 	textureDiffuse->SetType("texture_diffuse");
 
 	Engine::assetsManager->LoadTexture("Data/Textures/container_specular.png");
-	Texture* textureSpecular = Engine::assetsManager->GetTexture("Data/Textures/container_specular.png");
+	CTexture* textureSpecular = Engine::assetsManager->GetTexture("Data/Textures/container_specular.png");
 	textureSpecular->SetType("texture_specular");
 
 	std::vector<Texture*> textures = { textureDiffuse, textureSpecular };
@@ -144,7 +144,7 @@ void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::s
 	m_models.push_back(model);
 }
 
-void CBlendingApplication::DrawModels(Shader* shader)
+void CBlendingApplication::DrawModels(CShader* shader)
 {
 	for (const auto& model : m_models)
 	{

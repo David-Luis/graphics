@@ -1,20 +1,20 @@
 #pragma once
 
-#include <Engine/Light/Light.h>
+#include <Engine/Light/CLight.h>
 
 #include <glm/glm.hpp>
 
-class Mesh;
-class Shader;
-class CCamera;
+class CMesh;
+class CShader;
+class CCCamera;
 
-class DirectionalLight : public Light
+class CDirectionalLight : public CLight
 {
 public:
-	DirectionalLight();
-	virtual ~DirectionalLight() {}
-	DirectionalLight(const DirectionalLight&) = delete;
-	DirectionalLight& operator=(DirectionalLight const&) = delete;
+	CDirectionalLight();
+	virtual ~CDirectionalLight() {}
+	CDirectionalLight(const CDirectionalLight&) = delete;
+	CDirectionalLight& operator=(CDirectionalLight const&) = delete;
 
 	void SetDirection(const glm::vec3& position);
 	glm::vec3 GetDirection() const;
@@ -22,7 +22,7 @@ public:
 	void DebugDraw(CCamera& camera) override {}
 
 private:
-	void Use(const Shader& shader, int count) const override;
+	void Use(const CShader& shader, int count) const override;
 };
 
 

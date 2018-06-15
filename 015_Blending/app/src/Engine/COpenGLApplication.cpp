@@ -1,4 +1,4 @@
-#include <Engine/OpenGLApplication.h>
+#include <Engine/COpenGLApplication.h>
 
 #include <Engine/Engine.h>
 
@@ -15,7 +15,7 @@ static void glfw_error_callback(int error, const char* description)
 	std::cerr << "ERROR " << description;
 }
 
-OpenGLApplication::OpenGLApplication(unsigned int windowsWidth, unsigned int windowsHeight, std::string windowTitle)
+COpenGLApplication::COpenGLApplication(unsigned int windowsWidth, unsigned int windowsHeight, std::string windowTitle)
 	: m_windowsWidth(windowsWidth)
 	, m_windowsHeight(windowsHeight)
 	, m_camera(windowsWidth, windowsHeight)
@@ -26,7 +26,7 @@ OpenGLApplication::OpenGLApplication(unsigned int windowsWidth, unsigned int win
 
 }
 
-void OpenGLApplication::Init()
+void COpenGLApplication::Init()
 {
 	// glfw: initialize and configure
 	// ------------------------------
@@ -49,12 +49,12 @@ void OpenGLApplication::Init()
 
 	glfwSetWindowUserPointer(m_window, this);
 	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* window, int width, int height) {
-		OpenGLApplication* pw = static_cast<OpenGLApplication*>(glfwGetWindowUserPointer(window));
+		COpenGLApplication* pw = static_cast<COpenGLApplication*>(glfwGetWindowUserPointer(window));
 		pw->OnWindowResize(width, height);
 	});
 
 	glfwSetCursorPosCallback(m_window, [](GLFWwindow* window, double x, double y) {
-		OpenGLApplication* pw = static_cast<OpenGLApplication*>(glfwGetWindowUserPointer(window));
+		COpenGLApplication* pw = static_cast<COpenGLApplication*>(glfwGetWindowUserPointer(window));
 		pw->OnMouseMove(x, y);
 	});
 
@@ -91,7 +91,7 @@ void OpenGLApplication::Init()
 	glfwTerminate();
 }
 
-void OpenGLApplication::InitImgui()
+void COpenGLApplication::InitImgui()
 {
 	//check https://github.com/ocornut/imgui/blob/master/examples/opengl3_example/main.cpp
 	IMGUI_CHECKVERSION();
@@ -106,7 +106,7 @@ void OpenGLApplication::InitImgui()
 	//ImGui::StyleColorsClassic();
 }
 
-void OpenGLApplication::Draw()
+void COpenGLApplication::Draw()
 {
 	float currentFrame = static_cast<float>(glfwGetTime());
 	m_deltaTime = currentFrame - m_lastTime;
@@ -124,7 +124,7 @@ void OpenGLApplication::Draw()
 	glfwPollEvents();
 }
 
-void OpenGLApplication::OnMouseMove(double xpos, double ypos)
+void COpenGLApplication::OnMouseMove(double xpos, double ypos)
 {
 	m_mousePosition.x = static_cast<float>(xpos);
 	m_mousePosition.y = static_cast<float>(ypos);
@@ -133,7 +133,7 @@ void OpenGLApplication::OnMouseMove(double xpos, double ypos)
 	m_lastMousePosition = m_mousePosition;
 }
 
-void OpenGLApplication::GameLoop()
+void COpenGLApplication::GameLoop()
 {
 	ProcessInput();
 	m_deltaMousePosition.x = m_mousePosition.x - m_lastMousePosition.x;
@@ -144,13 +144,13 @@ void OpenGLApplication::GameLoop()
 	Draw();	
 }
 
-void OpenGLApplication::ProcessInput()
+void COpenGLApplication::ProcessInput()
 {
 	if (glfwGetKey(m_window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(m_window, true);
 }
 
-void OpenGLApplication::OnWindowResize(int width, int height)
+void COpenGLApplication::OnWindowResize(int width, int height)
 {
 	glViewport(0, 0, width, height);
 	m_camera.UpdateWindowsSize(width, height);

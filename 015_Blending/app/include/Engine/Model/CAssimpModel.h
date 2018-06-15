@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/Model/Model.h>
+#include <Engine/Model/CModel.h>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -9,17 +9,17 @@
 #include <string>
 #include <vector>
 
-class Mesh;
-class Shader;
+class CMesh;
+class CShader;
 class CCamera;
-class Texture;
+class CTexture;
 
 struct aiMaterial;
 struct aiMesh;
 struct aiNode;
 struct aiScene;
 
-class CAssimpModel : public Model
+class CAssimpModel : public CModel
 {
 public:
 	CAssimpModel(std::string path);
@@ -33,8 +33,8 @@ protected:
 
 private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
-	Mesh* ProcessMesh(aiMesh *mesh, const aiScene *scene);
-	std::vector<Texture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	CMesh* ProcessMesh(aiMesh *mesh, const aiScene *scene);
+	std::vector<CTexture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 	std::string m_directory;
 };

@@ -1,23 +1,23 @@
 #pragma once
 
-#include <Engine/Model/Material.h>
+#include <Engine/Model/CMaterial.h>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
 #include <vector>
 
-class Shader;
-class Texture;
+class CShader;
+class CTexture;
 
-struct Vertex {
+struct SVertex {
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
 
-	Vertex() {}
+	SVertex() {}
 
-	Vertex(float positionX, float positionY, float positionZ, float normalX, float normalY, float normalZ, float textCoordX, float textCoordY)
+	SVertex(float positionX, float positionY, float positionZ, float normalX, float normalY, float normalZ, float textCoordX, float textCoordY)
 	{
 		Position = glm::vec3(positionX, positionY, positionZ);
 		Normal = glm::vec3(normalX, normalY, normalZ);
@@ -25,26 +25,26 @@ struct Vertex {
 	}
 };
 
-class Mesh
+class CMesh
 {
 public:
-	Mesh(std::vector<Vertex>& vertices, std::vector<GLuint>& indices, std::vector<Texture*>& textures);
-	virtual ~Mesh() {}
-	Mesh(const Mesh&) = delete;
-	Mesh& operator=(Mesh const&) = delete;
+	CMesh(std::vector<SVertex>& vertices, std::vector<GLuint>& indices, std::vector<CTexture*>& textures);
+	virtual ~CMesh() {}
+	CMesh(const CMesh&) = delete;
+	CMesh& operator=(CMesh const&) = delete;
 
-	void Draw(const Shader& shader);
+	void Draw(const CShader& shader);
 
-	void SetMaterial(const Material& material) { m_material = material; }
-	void SetTextures(std::vector<Texture*> textures) { m_textures = textures; }
+	void SetMaterial(const CMaterial& material) { m_material = material; }
+	void SetTextures(std::vector<CTexture*> textures) { m_textures = textures; }
 
 private:
 	void SetupMesh();
 
-	std::vector<Vertex> m_vertices;
+	std::vector<SVertex> m_vertices;
 	std::vector<GLuint> m_indices;
-	std::vector<Texture*> m_textures;
-	Material m_material;
+	std::vector<CTexture*> m_textures;
+	CMaterial m_material;
 
 	GLuint m_VAO;
 	GLuint m_VBO;

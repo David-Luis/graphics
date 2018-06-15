@@ -4,7 +4,7 @@
 
 #include <string>
 
-class Texture;
+class CTexture;
 
 class CAssetsManager {
 
@@ -12,8 +12,8 @@ public:
 	CAssetsManager() {}
 
 	void LoadTexture(std::string path);
-	Texture* GetTexture(std::string path);
+	CTexture* GetTexture(std::string path);
 
 private:
-	std::unordered_map<std::string, Texture*> m_textures;
+	std::unordered_map<std::string, CTexture*> m_textures;
 };
