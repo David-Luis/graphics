@@ -2,7 +2,7 @@
 
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Camera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>
@@ -26,7 +26,7 @@ void CPointLight::DebugDraw(CCamera& camera)
 	m_debugMesh->Draw(*m_debugShader);
 }
 
-void CPointLight::Use(const Shader& shader, int count) const
+void CPointLight::Use(const CShader& shader, int count) const
 {
 	std::string countStr = std::to_string(count);
 
@@ -46,7 +46,7 @@ void CPointLight::CreateDebugDrawData()
 	float height = 0.25f;
 	float depth = 0.25f;
 
-	std::vector<Vertex> vertices = {
+	std::vector<SVertex> vertices = {
 		{ -width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ width, -height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },
 	{ width,  height,  depth, 0.f, 0.f, 0.f, 0.f, 0.f },

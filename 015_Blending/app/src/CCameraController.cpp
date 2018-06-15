@@ -18,17 +18,17 @@ void CCameraController::SetCamera(CCamera* camera)
 void CCameraController::ProcessInput(GLFWwindow* window, glm::vec3 deltaMousePosition, float deltaTime)
 {
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::FORWARD, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::BACKWARD, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::BACKWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::LEFT, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::RIGHT, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::RIGHT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::UP, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::UP, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		m_camera->ProcessKeyboard(CameraMovement::DOWN, deltaTime);
+		m_camera->ProcessKeyboard(ECameraMovement::DOWN, deltaTime);
 
 	if (glfwGetMouseButton(window, 0) == GLFW_PRESS && !ImGui::GetIO().WantCaptureMouse)
 	{

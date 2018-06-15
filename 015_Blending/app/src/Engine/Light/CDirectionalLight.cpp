@@ -2,7 +2,7 @@
 
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Camera/CCamera.h>
 #include <Engine/Utils.h>
 
 #include <glm/gtc/type_ptr.hpp>

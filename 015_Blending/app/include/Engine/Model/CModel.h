@@ -25,7 +25,7 @@ public:
 	std::vector<CMesh*>& GetMeshes() { return m_meshes; }
 
 	void Update() override {}
-	void Draw(Shader& shader, CCamera& camera, CLightsSet& lights) override;
+	void Draw(CShader& shader, CCamera& camera, CLightsSet& lights) override;
 
 	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
 	glm::mat4 GetTransform() { return m_trans; }

@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-class Shader;
+class CShader;
 class CCamera;
 
 class CLight

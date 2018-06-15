@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Camera/CCamera.h>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>

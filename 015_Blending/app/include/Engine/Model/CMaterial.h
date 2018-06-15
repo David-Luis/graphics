@@ -2,17 +2,17 @@
 
 #include <glm/glm.hpp>
 
-class Shader;
+class CShader;
 
-class Material
+class CMaterial
 {
 public:
-	Material();
-	Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
+	CMaterial();
+	CMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float shininess);
 
-	virtual ~Material() {}
+	virtual ~CMaterial() {}
 
-	void Use(const Shader& shader);
+	void Use(const CShader& shader);
 
 	void SetAmbient(const glm::vec3& ambient);
 	glm::vec3 GetAmbient() const;

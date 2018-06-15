@@ -3,8 +3,8 @@
 #include <Engine/Texture/CTexture.h>
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
-#include <Engine/CCamera/CCCamera.h>
-#include <Engine/CEngine.h>
+#include <Engine/Camera/CCamera.h>
+#include <Engine/Engine.h>
 #include <Engine/Light/CLightsSet.h>
 
 #include <iostream>

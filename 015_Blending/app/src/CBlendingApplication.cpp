@@ -84,8 +84,8 @@ void CBlendingApplication::ProcessInput()
 
 void CBlendingApplication::LoadShaders()
 {
-	m_shader = new Shader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
-	m_silueteShader = new Shader("Data/Shaders/siluete.vert", "Data/Shaders/siluete.frag");
+	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+	m_silueteShader = new CShader("Data/Shaders/siluete.vert", "Data/Shaders/siluete.frag");
 }
 
 void CBlendingApplication::LoadLights()
@@ -110,7 +110,7 @@ void CBlendingApplication::LoadLights()
 void CBlendingApplication::LoadMaterials()
 {
 	m_materials = {
-		Material({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
+		CMaterial({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
 	};
 }
 
@@ -138,7 +138,7 @@ void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::s
 	CTexture* textureSpecular = Engine::assetsManager->GetTexture("Data/Textures/container_specular.png");
 	textureSpecular->SetType("texture_specular");
 
-	std::vector<Texture*> textures = { textureDiffuse, textureSpecular };
+	std::vector<CTexture*> textures = { textureDiffuse, textureSpecular };
 	model->GetMeshes()[0]->SetTextures(textures);
 
 	m_models.push_back(model);

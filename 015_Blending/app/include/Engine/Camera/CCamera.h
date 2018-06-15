@@ -45,13 +45,13 @@ public:
 	CCamera(int windowsWidth, int windowsHeight, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 	CCamera(int windowsWidth, int windowsHeight, float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
-	void Use(Shader& shader) const;
+	void Use(CShader& shader) const;
 
 	glm::mat4 GetViewMatrix() const;
 	glm::mat4 GetProjectionMatrix() const;
 	glm::vec3 GetPosition() const;
 	glm::vec3 GetFront() const;
-	void ProcessKeyboard(CameraMovement direction, float deltaTime);
+	void ProcessKeyboard(ECameraMovement direction, float deltaTime);
 	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
 	void ProcessMouseScroll(float yoffset);
 	void UpdateWindowsSize(int windowsWidth, int windowsHeight);

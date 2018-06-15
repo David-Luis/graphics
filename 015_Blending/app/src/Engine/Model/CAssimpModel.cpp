@@ -55,7 +55,7 @@ void CAssimpModel::ProcessNode(aiNode *node, const aiScene *scene)
 	}
 }
 
-Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
+CMesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 {
 	std::vector<SVertex> vertices;
 	std::vector<GLuint> indices;
@@ -142,10 +142,10 @@ Mesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	*/
 
 	// return a mesh object created from the extracted mesh data
-	return new Mesh(vertices, indices, textures);
+	return new CMesh(vertices, indices, textures);
 }
 
-std::vector<Texture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+std::vector<CTexture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
 	std::vector<CTexture*> textures;
 	for (size_t i = 0; i < mat->GetTextureCount(type); i++)

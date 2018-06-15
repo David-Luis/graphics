@@ -8,8 +8,8 @@
 
 #include <vector>
 
-class Model;
-class Shader;
+class CModel;
+class CShader;
 
 class CBlendingApplication : public COpenGLApplication
 {
@@ -30,7 +30,7 @@ private:
 	void LoadModels();
 	void LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath);
 
-	void DrawModels(Shader* shader);
+	void DrawModels(CShader* shader);
 
 	CShader* m_shader;
 	CShader* m_silueteShader;

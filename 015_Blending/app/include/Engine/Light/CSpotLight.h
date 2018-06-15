@@ -8,7 +8,7 @@ class CMesh;
 class CShader;
 class CCamera;
 
-class SpotLight : public CLight
+class CSpotLight : public CLight
 {
 public:
 	CSpotLight();
