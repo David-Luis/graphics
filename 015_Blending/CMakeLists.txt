@@ -12,7 +12,7 @@ file(GLOB app_src
     "app/src/*.cpp"
 	"app/src/Engine/*.cpp"
 	"app/src/Engine/Assets/*.cpp"
-	"app/src/Engine/CCamera/*.cpp"
+	"app/src/Engine/Camera/*.cpp"
 	"app/src/Engine/Light/*.cpp"
 	"app/src/Engine/Model/*.cpp"
 	"app/src/Engine/Shader/*.cpp"

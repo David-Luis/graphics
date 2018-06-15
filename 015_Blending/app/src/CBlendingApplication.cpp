@@ -29,7 +29,7 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
-CBlendingApplication::CBlendingApplication() : COpenGLApplication(1500, 720, "STENCIL TESTING")
+CBlendingApplication::CBlendingApplication() : COpenGLApplication(1500, 720, "BLENDING")
 {
 
 }
@@ -71,7 +71,7 @@ void CBlendingApplication::OnDraw()
 		ImGui::SetNextWindowPos({ 5,5 });
 		ImGui::SetNextWindowSize({ 300, 100 });
 		ImGui::Begin("Example Title", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoResize);
-		ImGui::Text("STENCIL TESTING");
+		ImGui::Text("BLENDING");
 		ImGui::End();
 	}
 }

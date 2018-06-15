@@ -1,6 +1,6 @@
-#include <Engine/CCamera/CCamera.h>
+#include <Engine/Camera/CCamera.h>
 
-#include <Engine/Shader/Shader.h>
+#include <Engine/Shader/CShader.h>
 
 // Constructor with vectors
 CCamera::CCamera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec3 up, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
@@ -21,7 +21,7 @@ CCamera::CCamera(int windowsWidth, int windowsHeight, float posX, float posY, fl
 	UpdateCameraVectors();
 }
 
-void CCamera::Use(Shader& shader) const
+void CCamera::Use(CShader& shader) const
 {
 	shader.SetMat4("view", GetViewMatrix());
 	shader.SetMat4("projection", GetProjectionMatrix());
@@ -49,20 +49,20 @@ glm::vec3 CCamera::GetFront() const
 	return Front;
 }
 
-void CCamera::ProcessKeyboard(CameraMovement direction, float deltaTime)
+void CCamera::ProcessKeyboard(ECameraMovement direction, float deltaTime)
 {
 	float velocity = MovementSpeed * deltaTime;
-	if (direction == CameraMovement::FORWARD)
+	if (direction == ECameraMovement::FORWARD)
 		Position += Front * velocity;
-	if (direction == CameraMovement::BACKWARD)
+	if (direction == ECameraMovement::BACKWARD)
 		Position -= Front * velocity;
-	if (direction == CameraMovement::LEFT)
+	if (direction == ECameraMovement::LEFT)
 		Position -= Right * velocity;
-	if (direction == CameraMovement::RIGHT)
+	if (direction == ECameraMovement::RIGHT)
 		Position += Right * velocity;
-	if (direction == CameraMovement::UP)
+	if (direction == ECameraMovement::UP)
 		Position += Up * velocity;
-	if (direction == CameraMovement::DOWN)
+	if (direction == ECameraMovement::DOWN)
 		Position -= Up * velocity;
 }
 
