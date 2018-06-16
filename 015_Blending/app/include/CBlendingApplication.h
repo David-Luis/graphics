@@ -4,6 +4,7 @@
 
 #include <Engine/COpenGLApplication.h>
 #include <Engine/Model/CMaterial.h>
+#include <Engine/Scene/CScene.h>
 #include <Engine/Light/CLightsSet.h>
 
 #include <vector>
@@ -26,17 +27,11 @@ private:
 
 	void LoadShaders();
 	void LoadLights();
-	void LoadMaterials();
 	void LoadModels();
 	void LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath);
 
-	void DrawModels(CShader* shader);
-
 	CShader* m_shader;
-	CShader* m_silueteShader;
-	std::vector<CModel*> m_models;
-	std::vector<CMaterial> m_materials;
-	CLightsSet m_lightsSet;
+	CScene m_scene;
 
 	CCameraController m_cameraController;
 };

@@ -27,22 +27,24 @@ CModel::~CModel()
 	m_meshes.clear();
 }
 
-void CModel::Draw(CShader& shader, CCamera& m_camera, CLightsSet& lights)
+void CModel::Draw(CCamera& m_camera, CLightsSet& lights)
 {
-	shader.Use();
-	BindUniforms(shader);
-	m_camera.Use(shader);
-	lights.Use(shader);
+	assert(m_shader);
+
+	m_shader->Use();
+	BindUniforms();
+	m_camera.Use(*m_shader);
+	lights.Use(*m_shader);
 
 	for (const auto& mesh : m_meshes)
 	{
-		mesh->Draw(shader);
+		mesh->Draw(*m_shader);
 	}
 }
 
-void CModel::BindUniforms(const CShader& shader)
+void CModel::BindUniforms()
 {
-	shader.SetMat4("model", std::move(m_trans));
+	m_shader->SetMat4("model", std::move(m_trans));
 }
 
 void CModel::SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle)

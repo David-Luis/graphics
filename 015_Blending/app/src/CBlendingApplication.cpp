@@ -38,6 +38,7 @@ void CBlendingApplication::OnInit()
 {
 	m_camera.Position = glm::vec3(0.0f, 1.0f, 8.0f);
 	m_cameraController.SetCamera(&m_camera);
+	m_scene.SetCamera(&m_camera);
 
 	LoadShaders();
 	LoadLights();
@@ -46,23 +47,7 @@ void CBlendingApplication::OnInit()
 
 void CBlendingApplication::OnDraw()
 {
-	glStencilFunc(GL_ALWAYS, 1, 0xFF);
-	glStencilMask(0xFF);
-	m_models[0]->SetTransformComponents({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, {1, 1, 1}, 10);
-	m_models[1]->SetTransformComponents({ -2.f, 0.f, -2.f }, { 1.f, 1.f, 1.f }, {1, 1, 1}, -10);
-	DrawModels(m_shader);
-
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-	glStencilMask(0x00);
-	glDisable(GL_DEPTH_TEST);
-	m_models[0]->SetTransformComponents({ 0.f, 0.f, 0.f }, { 1.1f, 1.1f, 1.1f }, {1, 1, 1}, 10);
-	m_models[1]->SetTransformComponents({ -2.f, 0.f, -2.f }, { 1.1f, 1.1f, 1.1f }, {1, 1, 1}, -10);
-	DrawModels(m_silueteShader);
-
-	glStencilMask(0xFF);
-	glEnable(GL_DEPTH_TEST);
-
-	m_lightsSet.DebugDraw(m_camera);
+	m_scene.Draw();
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -85,18 +70,19 @@ void CBlendingApplication::ProcessInput()
 void CBlendingApplication::LoadShaders()
 {
 	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
-	m_silueteShader = new CShader("Data/Shaders/siluete.vert", "Data/Shaders/siluete.frag");
 }
 
 void CBlendingApplication::LoadLights()
 {
+	CLightsSet* lightsSet = new CLightsSet();
+
 	CPointLight* light1 = new CPointLight();
 	light1->SetPosition({ 1.f, 0.f, 10.f});
 	light1->SetAmbient({ 0.2f, 0.2f, 0.2f });
 	light1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
 	light1->SetSpecular({ 1.0f, 1.0f, 1.0f });
 
-	m_lightsSet.AddPointLight(light1);
+	lightsSet->AddPointLight(light1);
 
 	CDirectionalLight* light2 = new CDirectionalLight();
 	light2->SetPosition({ 1.f, 1.f, 10.f });
@@ -104,14 +90,9 @@ void CBlendingApplication::LoadLights()
 	light2->SetDiffuse({ 0.0f, 0.0f, 0.0f });
 	light2->SetSpecular({ 0.0f, 0.0f, 0.0f });
 
-	m_lightsSet.AddDirectionalLight(light2);
-}
+	lightsSet->AddDirectionalLight(light2);
 
-void CBlendingApplication::LoadMaterials()
-{
-	m_materials = {
-		CMaterial({ 0.1f, 0.1f, 0.1f}, { 0.6f, 0.6f, 0.6f}, { 1.0f, 1.0f, 1.0f}, 0.3f*128.f)
-	};
+	m_scene.SetLightsSet(lightsSet);
 }
 
 void CBlendingApplication::LoadModels()
@@ -141,14 +122,9 @@ void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::s
 	std::vector<CTexture*> textures = { textureDiffuse, textureSpecular };
 	model->GetMeshes()[0]->SetTextures(textures);
 
-	m_models.push_back(model);
-}
+	model->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
 
-void CBlendingApplication::DrawModels(CShader* shader)
-{
-	for (const auto& model : m_models)
-	{
-		model->Update();
-		model->Draw(*shader, m_camera, m_lightsSet);
-	}	
+	model->SetShader(m_shader);
+
+	m_scene.AddModel(model);
 }
