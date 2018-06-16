@@ -5,7 +5,7 @@
 
 class CCamera;
 class CLightsSet;
-class IModel;
+class CModel;
 
 class CScene
 {
@@ -25,13 +25,14 @@ public:
 	void SetLightsSet(CLightsSet* lightsSet) { m_lightsSet = lightsSet; }
 	CLightsSet* GetLightsSet() { return m_lightsSet; }
 
-	void SetModels(const std::vector<IModel*>& models) { m_models = models; }
-	void AddModel(IModel* model) { m_models.push_back(model); }
-	void RemoveModel(IModel* model) { m_models.erase(std::remove(m_models.begin(), m_models.end(), model), m_models.end()); }
+	void SetModels(const std::vector<CModel*>& models) { m_models = models; }
+	void AddModel(CModel* model) { m_models.push_back(model); }
+	void RemoveModel(CModel* model) { m_models.erase(std::remove(m_models.begin(), m_models.end(), model), m_models.end()); }
+	std::vector<CModel*> GetModels() { return m_models; }
 
 private:
 	CCamera* m_camera;
 	CLightsSet* m_lightsSet;
-	std::vector<IModel*> m_models;
+	std::vector<CModel*> m_models;
 };
 

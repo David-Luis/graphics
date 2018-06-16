@@ -30,6 +30,11 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 }
 
 CBlendingApplication::CBlendingApplication() : COpenGLApplication(1500, 720, "BLENDING")
+	, m_shader(nullptr)
+	, m_selectedModel(nullptr)
+	, m_controlPressed(false)
+	, m_altPressed(false)
+	, m_enterPressed(false)
 {
 
 }
@@ -65,6 +70,186 @@ void CBlendingApplication::ProcessInput()
 {
 	COpenGLApplication::ProcessInput();
 	m_cameraController.ProcessInput(m_window, m_deltaMousePosition, m_deltaTime);
+
+	ProcessInputEditorCreateModel();
+	ProcessInputIterateModel();
+	ProcessInputEditorMoveModel();
+	ProcessInputEditorRotateModel();
+	ProcessInputEditorScaleModel();
+}
+
+void CBlendingApplication::ProcessInputEditorCreateModel()
+{
+	if ((glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_PRESS) && !m_spacePressed)
+	{
+		m_spacePressed = true;
+		if (m_selectedModel)
+		{
+			m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
+		}
+
+		m_selectedModel = LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
+		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
+	}
+
+	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+	{
+		m_spacePressed = false;
+	}
+}
+
+void CBlendingApplication::ProcessInputIterateModel()
+{
+	if ((glfwGetKey(m_window, GLFW_KEY_ENTER) == GLFW_PRESS) && !m_enterPressed && m_selectedModel)
+	{
+		m_enterPressed = true;
+
+		if (m_selectedModel)
+		{
+			m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
+		}
+
+		auto models = m_scene.GetModels();
+		int i;
+		for (i = 0; i < models.size(); i++)
+		{
+			if (models[i] == m_selectedModel)
+			{
+				i++;
+				break;
+			}
+		}
+
+		m_selectedModel = models[i%models.size()];
+		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
+	}
+
+	if (glfwGetKey(m_window, GLFW_KEY_ENTER) == GLFW_RELEASE)
+	{
+		m_enterPressed = false;
+	}
+}
+
+void CBlendingApplication::ProcessInputEditorMoveModel()
+{
+	if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	{
+		m_controlPressed = true;
+	}
+	else if (glfwGetKey(m_window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+	{
+		m_controlPressed = false;
+	}
+
+	if (m_controlPressed && !m_altPressed && m_selectedModel)
+	{
+		const float speed = 0.075f;
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { -speed, 0.f, 0.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { speed, 0.f, 0.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, 0.f, -speed }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, 0.f, speed }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, speed, 0.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, -speed, 0.f }));
+		}
+	}
+}
+
+void CBlendingApplication::ProcessInputEditorRotateModel()
+{
+	if (glfwGetKey(m_window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS)
+	{
+		m_altPressed = true;
+	}
+	else if (glfwGetKey(m_window, GLFW_KEY_LEFT_ALT) == GLFW_RELEASE)
+	{
+		m_altPressed = false;
+	}
+
+	if (m_altPressed && !m_controlPressed && m_selectedModel)
+	{
+		const float speed = 0.02f;
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 1.f, 0.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, -1.f, 0.f }));
+		}																						
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))								
+		{																						
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 1.f, 0.f, 0.f }));
+		}																						
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))								
+		{																						
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { -1.f, 0.f, 0.f }));
+		}																						
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))								
+		{																						
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 0.f, 1.f }));
+		}																						
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))								
+		{																						
+			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 0.f, -1.f }));
+		}
+	}
+}
+
+void CBlendingApplication::ProcessInputEditorScaleModel()
+{
+	if (m_altPressed && m_controlPressed && m_selectedModel)
+	{
+		const float speed = 1.01f;
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f / speed, 1.f, 1.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { speed, 1.f, 1.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f, 1.f, speed }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1., 1.f, 1.f/speed }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f, speed, 1.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1., 1.f / speed, 1.f }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_1) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f / speed, 1.f / speed, 1.f / speed }));
+		}
+		if ((glfwGetKey(m_window, GLFW_KEY_KP_3) == GLFW_PRESS))
+		{
+			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { speed, speed, speed }));
+		}
+	}
 }
 
 void CBlendingApplication::LoadShaders()
@@ -97,12 +282,11 @@ void CBlendingApplication::LoadLights()
 
 void CBlendingApplication::LoadModels()
 {
-	LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
-	LoadModel({ -2.f, 0.f, -2.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
-	//LoadModel({ 0.f, -0.5f, 0.f }, { 50.f, 0.01f, 50.f }, "Data/models/cube.obj");
+	m_selectedModel = LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
+	m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
 }
 
-void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
+CModel* CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
 {
 	CAssimpModel* model = new CAssimpModel(modelPath);
 
@@ -127,4 +311,6 @@ void CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::s
 	model->SetShader(m_shader);
 
 	m_scene.AddModel(model);
+
+	return model;
 }

@@ -62,7 +62,6 @@ StyleCopReport.xml
 *_i.h
 *.ilk
 *.meta
-*.obj
 *.iobj
 *.pch
 *.pdb
@@ -327,3 +326,10 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+*.vcxproj
+*.filters
+*.sln
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+imgui.ini

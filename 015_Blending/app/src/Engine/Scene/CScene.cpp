@@ -1,6 +1,6 @@
 #include <Engine/Scene/CScene.h>
 
-#include <Engine/Model/IModel.h>
+#include <Engine/Model/CModel.h>
 #include <Engine/Light/CLightsSet.h>
 #include <Engine/Camera/CCamera.h>
 
