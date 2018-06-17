@@ -5,7 +5,9 @@
 #include <Engine/SUniqueId.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 #include <vector>
 
@@ -37,19 +39,36 @@ public:
 	void SetShader(CShader* shader) { m_shader = shader; }
 	CShader* GetShader() const { return m_shader; }
 	
-	void SetTransform(const glm::mat4& trans) { m_trans = trans; }
-	glm::mat4 GetTransform() const { return m_trans; }
+	void SetTransform(const glm::mat4& trans) { m_transform = trans; }
+	glm::mat4 GetTransform() const { return m_transform; }
 
-	void SetTransformComponents(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float angle);
+	void SetTranslation(glm::vec3 translation);
+	void Translate(glm::vec3 translation);
+	glm::vec3 GetTranslation() { return m_translation; }
+
+	void SetRotation(glm::quat rotation);
+	void SetRotation(float angle, glm::vec3 axis);
+	void Rotate(glm::quat rotation);
+	void Rotate(float angle, glm::vec3 axis);
+	glm::quat GetRotation() { return m_rotation; }
+
+	void SetScale(glm::vec3 scale);
+	void Scale(glm::vec3 scale);
+	glm::vec3 GetScale() { return m_scale; }
 
 	long long GetId() const { return m_id.GetId(); }
 
 protected:
+	virtual void CalculateTransformation();
 	virtual void BindUniforms();
 
 	CShader* m_shader;
 	std::vector<CMesh*> m_meshes; 
-	glm::mat4 m_trans;
+
+	glm::vec3 m_translation;
+	glm::mat4 m_rotation;
+	glm::vec3 m_scale;
+	glm::mat4 m_transform;
 
 private:
 	SUniqueId m_id;

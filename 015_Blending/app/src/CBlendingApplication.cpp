@@ -111,7 +111,7 @@ void CBlendingApplication::ProcessInputIterateModel()
 
 		auto models = m_scene.GetModels();
 		int i;
-		for (i = 0; i < models.size(); i++)
+		for (i = 0; i < static_cast<int>(models.size()); i++)
 		{
 			if (models[i] == m_selectedModel)
 			{
@@ -146,27 +146,27 @@ void CBlendingApplication::ProcessInputEditorMoveModel()
 		const float speed = 0.075f;
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { -speed, 0.f, 0.f }));
+			m_selectedModel->Translate({ -speed, 0.f, 0.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { speed, 0.f, 0.f }));
+			m_selectedModel->Translate({ speed, 0.f, 0.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, 0.f, -speed }));
+			m_selectedModel->Translate({ 0.f, 0.f, -speed });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, 0.f, speed }));
+			m_selectedModel->Translate({ 0.f, 0.f, speed });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, speed, 0.f }));
+			m_selectedModel->Translate({ 0.f, speed, 0.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::translate(m_selectedModel->GetTransform(), { 0.f, -speed, 0.f }));
+			m_selectedModel->Translate({ 0.f, -speed, 0.f });
 		}
 	}
 }
@@ -187,27 +187,27 @@ void CBlendingApplication::ProcessInputEditorRotateModel()
 		const float speed = 0.02f;
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 1.f, 0.f }));
+			m_selectedModel->Rotate(speed, { 0.f, 1.f, 0.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, -1.f, 0.f }));
+			m_selectedModel->Rotate(speed, { 0.f, -1.f, 0.f });
 		}																						
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))								
-		{																						
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 1.f, 0.f, 0.f }));
+		{			
+			m_selectedModel->Rotate(speed, { 1.f, 0.f, 0.f });
 		}																						
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))								
-		{																						
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { -1.f, 0.f, 0.f }));
+		{		
+			m_selectedModel->Rotate(speed, { -1.f, 0.f, 0.f });
 		}																						
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))								
-		{																						
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 0.f, 1.f }));
+		{		
+			m_selectedModel->Rotate(speed, { 0.f, 0.f, 1.f });
 		}																						
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))								
-		{																						
-			m_selectedModel->SetTransform(glm::rotate(m_selectedModel->GetTransform(), speed, { 0.f, 0.f, -1.f }));
+		{		
+			m_selectedModel->Rotate(speed, { 0.f, 0.f, -1.f });
 		}
 	}
 }
@@ -219,35 +219,35 @@ void CBlendingApplication::ProcessInputEditorScaleModel()
 		const float speed = 1.01f;
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_4) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f / speed, 1.f, 1.f }));
+			m_selectedModel->Scale({ 1.f / speed, 1.f, 1.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_6) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { speed, 1.f, 1.f }));
+			m_selectedModel->Scale({ speed, 1.f, 1.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_8) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f, 1.f, speed }));
+			m_selectedModel->Scale({ 1.f, 1.f, speed });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_5) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1., 1.f, 1.f/speed }));
+			m_selectedModel->Scale({ 1., 1.f, 1.f / speed });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_7) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f, speed, 1.f }));
+			m_selectedModel->Scale({ 1.f, speed, 1.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_9) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1., 1.f / speed, 1.f }));
+			m_selectedModel->Scale({ 1., 1.f / speed, 1.f });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_1) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { 1.f / speed, 1.f / speed, 1.f / speed }));
+			m_selectedModel->Scale({ 1.f / speed, 1.f / speed, 1.f / speed });
 		}
 		if ((glfwGetKey(m_window, GLFW_KEY_KP_3) == GLFW_PRESS))
 		{
-			m_selectedModel->SetTransform(glm::scale(m_selectedModel->GetTransform(), { speed, speed, speed }));
+			m_selectedModel->Scale({ speed, speed, speed });
 		}
 	}
 }
