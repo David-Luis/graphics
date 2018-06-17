@@ -30,6 +30,7 @@ private:
 	void ProcessInputEditorMoveModel();
 	void ProcessInputEditorRotateModel();
 	void ProcessInputEditorScaleModel();
+	void ProcessInputSaveLoadScene();
 
 	void LoadShaders();
 	void LoadLights();
@@ -44,6 +45,8 @@ private:
 	bool m_controlPressed;
 	bool m_altPressed;
 	bool m_enterPressed;
+	bool m_savePressed;
+	bool m_loadPressed;
 
 	CCameraController m_cameraController;
 };

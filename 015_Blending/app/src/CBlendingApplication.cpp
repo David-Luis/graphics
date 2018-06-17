@@ -16,6 +16,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <fstream>
 
 static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 {
@@ -76,6 +77,7 @@ void CBlendingApplication::ProcessInput()
 	ProcessInputEditorMoveModel();
 	ProcessInputEditorRotateModel();
 	ProcessInputEditorScaleModel();
+	ProcessInputSaveLoadScene();
 }
 
 void CBlendingApplication::ProcessInputEditorCreateModel()
@@ -249,6 +251,24 @@ void CBlendingApplication::ProcessInputEditorScaleModel()
 		{
 			m_selectedModel->Scale({ speed, speed, speed });
 		}
+	}
+}
+
+void CBlendingApplication::ProcessInputSaveLoadScene()
+{
+	if ((glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_PRESS) && !m_savePressed)
+	{
+		m_savePressed = true;
+
+		std::ofstream sceneFile;
+		sceneFile.open("Data/scene1");
+		sceneFile << m_scene << std::endl;
+		sceneFile.close();
+	}
+
+	if (glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_RELEASE)
+	{
+		m_savePressed = false;
 	}
 }
 

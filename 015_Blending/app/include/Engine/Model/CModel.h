@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <Lib/json.hpp>
+
 #include <vector>
 
 class CMesh;
@@ -19,6 +21,8 @@ class CLightsSet;
 class CModel : public IModel
 {
 public:
+	friend std::ostream &operator<<(std::ostream&, const CModel&);
+
 	CModel();
 	CModel(std::vector<CMesh*>& meshes);
 	
@@ -57,6 +61,8 @@ public:
 	glm::vec3 GetScale() { return m_scale; }
 
 	long long GetId() const { return m_id.GetId(); }
+
+	virtual nlohmann::json ToJson() const;
 
 protected:
 	virtual void CalculateTransformation();

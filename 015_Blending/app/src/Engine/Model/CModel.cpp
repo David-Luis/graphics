@@ -6,8 +6,19 @@
 #include <Engine/Camera/CCamera.h>
 #include <Engine/Engine.h>
 #include <Engine/Light/CLightsSet.h>
+#include <Engine/Serialization/SerializationUtils.h>
 
 #include <iostream>
+
+std::ostream &operator<<(std::ostream& stream, const CModel& model)
+{
+	using json = nlohmann::json;
+	json j = model.ToJson();
+
+	stream << j.dump(4);
+
+	return stream;
+}
 
 CModel::CModel() 
 	: m_translation(0.f, 0.f, 0.f)
@@ -107,4 +118,17 @@ void CModel::CalculateTransformation()
 void CModel::BindUniforms()
 {
 	m_shader->SetMat4("model", std::move(m_transform));
+}
+
+nlohmann::json CModel::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j;
+
+	j["model"]["translation"] = SerializationUtils::Serialize(m_translation);
+	j["model"]["rotation"] = SerializationUtils::Serialize(m_rotation);
+	j["model"]["scale"] = SerializationUtils::Serialize(m_scale);
+
+	return j;
 }

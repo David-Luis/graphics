@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Lib/json.hpp>
+
 #include <vector>
 #include <algorithm>
 
@@ -10,6 +12,7 @@ class CModel;
 class CScene
 {
 public:
+	friend std::ostream &operator<<(std::ostream&, const CScene&);
 	CScene();
 
 	virtual ~CScene();
@@ -29,6 +32,8 @@ public:
 	void AddModel(CModel* model) { m_models.push_back(model); }
 	void RemoveModel(CModel* model) { m_models.erase(std::remove(m_models.begin(), m_models.end(), model), m_models.end()); }
 	std::vector<CModel*> GetModels() { return m_models; }
+	
+	virtual nlohmann::json ToJson() const;
 
 private:
 	CCamera* m_camera;
