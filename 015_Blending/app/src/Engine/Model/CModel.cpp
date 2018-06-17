@@ -126,9 +126,16 @@ nlohmann::json CModel::ToJson() const
 
 	json j;
 
-	j["model"]["translation"] = SerializationUtils::Serialize(m_translation);
-	j["model"]["rotation"] = SerializationUtils::Serialize(m_rotation);
-	j["model"]["scale"] = SerializationUtils::Serialize(m_scale);
+	j["model"]["translation"] = SerializationUtils::SerializeVec3(m_translation);
+	j["model"]["rotation"] = SerializationUtils::SerializeMat4(m_rotation);
+	j["model"]["scale"] = SerializationUtils::SerializeVec3(m_scale);
 
 	return j;
+}
+
+void CModel::FromJson(nlohmann::json j)
+{
+	SetTranslation(SerializationUtils::DeserializeVec3(j["model"]["translation"]));
+	SetRotation(SerializationUtils::DeserializeMat4(j["model"]["rotation"]));
+	SetScale(SerializationUtils::DeserializeVec3(j["model"]["scale"]));
 }

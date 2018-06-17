@@ -7,7 +7,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-CPointLight::CPointLight() : m_constantAttenuation(0.01f), m_linearAttenuation(0.01f), m_quadraticAttenuation(0.01f)
+CPointLight::CPointLight() : m_constantAttenuation(0.001f), m_linearAttenuation(0.001f), m_quadraticAttenuation(0.001f)
 {
 	CreateDebugDrawData();
 }

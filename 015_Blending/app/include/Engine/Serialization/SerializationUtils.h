@@ -1,21 +1,44 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include <Lib/json.hpp>
 
 #include <string>
 
 namespace SerializationUtils
 {
-	static std::string Serialize(const glm::vec3 vec3)
+	static std::string SerializeVec3(const glm::vec3 vec3)
 	{
-		return std::to_string(vec3.x) + ", " + std::to_string(vec3.y) + ", " + std::to_string(vec3.z);
+		std::vector<float> vector = { vec3.x, vec3.y, vec3.z };
+		return nlohmann::json(vector).dump();
 	}
 
-	static std::string Serialize(const glm::mat4 mat)
+	static std::string SerializeMat4(const glm::mat4 mat)
 	{
-		return std::to_string(mat[0][0]) + ", " + std::to_string(mat[0][1]) + ", " + std::to_string(mat[0][2]) + ", " + std::to_string(mat[0][3]) + ", " +
-			   std::to_string(mat[1][0]) + ", " + std::to_string(mat[1][1]) + ", " + std::to_string(mat[1][2]) + ", " + std::to_string(mat[1][3]) + ", " +
-			   std::to_string(mat[2][0]) + ", " + std::to_string(mat[2][1]) + ", " + std::to_string(mat[2][2]) + ", " + std::to_string(mat[2][3]) + ", " +
-			   std::to_string(mat[3][0]) + ", " + std::to_string(mat[3][1]) + ", " + std::to_string(mat[3][2]) + ", " + std::to_string(mat[3][3]);
+		const float* arr = glm::value_ptr(mat);
+
+		std::vector<float> vector(arr, arr + 16);
+		return nlohmann::json(vector).dump();
+	}
+
+	static glm::vec3 DeserializeVec3(const std::string s)
+	{
+		nlohmann::json j = nlohmann::json::parse(s);
+		std::vector<float> vector = j;
+
+		return glm::vec3(vector[0], vector[1], vector[2]);
+	}
+
+	static glm::mat4 DeserializeMat4(const std::string s)
+	{
+		nlohmann::json j = nlohmann::json::parse(s);
+		std::vector<float> vector = j;
+
+		return glm::mat4(vector[0], vector[1], vector[2], vector[3],
+						 vector[4], vector[5], vector[6], vector[7], 
+						 vector[8], vector[9], vector[10], vector[11], 
+						 vector[12], vector[13], vector[14], vector[15]);
 	}
 };

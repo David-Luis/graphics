@@ -20,6 +20,8 @@ public:
 	CBlendingApplication(const CBlendingApplication&) = delete;
 	CBlendingApplication& operator=(CBlendingApplication const&) = delete;
 
+	static CModel* LoadModel(std::string modelPath);
+
 private:
 	void OnInit() override;
 	void OnDraw() override;
@@ -32,13 +34,16 @@ private:
 	void ProcessInputEditorScaleModel();
 	void ProcessInputSaveLoadScene();
 
-	void LoadShaders();
-	void LoadLights();
-	void LoadModels();
-	CModel* LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath);
+	void SaveScene();
+	void LoadScene();
+	void SelectNextModel();
 
-	CShader* m_shader;
-	CScene m_scene;
+	void CreateShaders();
+	void CreateLights();
+	void CreateScene();
+
+	static CShader* m_shader;
+	static CScene m_scene;
 	CModel* m_selectedModel;
 
 	bool m_spacePressed;

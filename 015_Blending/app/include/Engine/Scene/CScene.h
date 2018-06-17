@@ -13,6 +13,7 @@ class CScene
 {
 public:
 	friend std::ostream &operator<<(std::ostream&, const CScene&);
+	friend std::istream &operator>>(std::istream &stream, CScene &t);
 	CScene();
 
 	virtual ~CScene();
@@ -34,6 +35,7 @@ public:
 	std::vector<CModel*> GetModels() { return m_models; }
 	
 	virtual nlohmann::json ToJson() const;
+	virtual void FromJson(nlohmann::json);
 
 private:
 	CCamera* m_camera;

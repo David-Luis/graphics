@@ -63,6 +63,7 @@ public:
 	long long GetId() const { return m_id.GetId(); }
 
 	virtual nlohmann::json ToJson() const;
+	virtual void FromJson(nlohmann::json);
 
 protected:
 	virtual void CalculateTransformation();

@@ -18,6 +18,9 @@
 #include <iostream>
 #include <fstream>
 
+CShader* CBlendingApplication::m_shader = nullptr;
+CScene CBlendingApplication::m_scene;
+
 static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 {
 	glm::vec3 scale;
@@ -31,7 +34,6 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 }
 
 CBlendingApplication::CBlendingApplication() : COpenGLApplication(1500, 720, "BLENDING")
-	, m_shader(nullptr)
 	, m_selectedModel(nullptr)
 	, m_controlPressed(false)
 	, m_altPressed(false)
@@ -46,9 +48,9 @@ void CBlendingApplication::OnInit()
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
 
-	LoadShaders();
-	LoadLights();
-	LoadModels();
+	CreateShaders();
+	CreateLights();
+	CreateScene();
 }
 
 void CBlendingApplication::OnDraw()
@@ -90,7 +92,7 @@ void CBlendingApplication::ProcessInputEditorCreateModel()
 			m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
 		}
 
-		m_selectedModel = LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
+		m_selectedModel = LoadModel("Data/models/cube.obj");
 		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
 	}
 
@@ -106,24 +108,7 @@ void CBlendingApplication::ProcessInputIterateModel()
 	{
 		m_enterPressed = true;
 
-		if (m_selectedModel)
-		{
-			m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
-		}
-
-		auto models = m_scene.GetModels();
-		int i;
-		for (i = 0; i < static_cast<int>(models.size()); i++)
-		{
-			if (models[i] == m_selectedModel)
-			{
-				i++;
-				break;
-			}
-		}
-
-		m_selectedModel = models[i%models.size()];
-		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
+		SelectNextModel();
 	}
 
 	if (glfwGetKey(m_window, GLFW_KEY_ENTER) == GLFW_RELEASE)
@@ -260,54 +245,100 @@ void CBlendingApplication::ProcessInputSaveLoadScene()
 	{
 		m_savePressed = true;
 
-		std::ofstream sceneFile;
-		sceneFile.open("Data/scene1");
-		sceneFile << m_scene << std::endl;
-		sceneFile.close();
+		SaveScene();
+	}
+
+	if ((glfwGetKey(m_window, GLFW_KEY_F5) == GLFW_PRESS) && !m_loadPressed)
+	{
+		m_loadPressed = true;
+
+		LoadScene();
+		SelectNextModel();
 	}
 
 	if (glfwGetKey(m_window, GLFW_KEY_F1) == GLFW_RELEASE)
 	{
 		m_savePressed = false;
 	}
+
+	if (glfwGetKey(m_window, GLFW_KEY_F5) == GLFW_RELEASE)
+	{
+		m_loadPressed = false;
+	}
 }
 
-void CBlendingApplication::LoadShaders()
+void CBlendingApplication::SaveScene()
+{
+	std::ofstream sceneFile;
+	sceneFile.open("Data/scene1");
+	sceneFile << m_scene << std::endl;
+	sceneFile.close();
+}
+
+void CBlendingApplication::LoadScene()
+{
+	std::ifstream sceneFile;
+	sceneFile.open("Data/scene1");
+	if (sceneFile.is_open())
+	{
+		sceneFile >> m_scene;
+		sceneFile.close();
+	}
+}
+
+void CBlendingApplication::SelectNextModel()
+{
+	if (m_selectedModel)
+	{
+		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
+	}
+
+	auto models = m_scene.GetModels();
+	int i;
+	for (i = 0; i < static_cast<int>(models.size()); i++)
+	{
+		if (models[i] == m_selectedModel)
+		{
+			i++;
+			break;
+		}
+	}
+
+	m_selectedModel = models[i%models.size()];
+	m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
+}
+
+void CBlendingApplication::CreateShaders()
 {
 	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
 }
 
-void CBlendingApplication::LoadLights()
+void CBlendingApplication::CreateLights()
 {
 	CLightsSet* lightsSet = new CLightsSet();
 
 	CPointLight* light1 = new CPointLight();
-	light1->SetPosition({ 1.f, 0.f, 10.f});
-	light1->SetAmbient({ 0.2f, 0.2f, 0.2f });
+	light1->SetPosition({ 0.f, 2.5f, -4.f});
+	light1->SetAmbient({ 0.4f, 0.4f, 0.4f });
 	light1->SetDiffuse({ 0.5f, 0.5f, 0.5f });
 	light1->SetSpecular({ 1.0f, 1.0f, 1.0f });
 
 	lightsSet->AddPointLight(light1);
 
-	CDirectionalLight* light2 = new CDirectionalLight();
-	light2->SetPosition({ 1.f, 1.f, 10.f });
-	light2->SetAmbient({ 0.2f, 0.2f, 0.2f });
-	light2->SetDiffuse({ 0.0f, 0.0f, 0.0f });
-	light2->SetSpecular({ 0.0f, 0.0f, 0.0f });
-
-	lightsSet->AddDirectionalLight(light2);
-
 	m_scene.SetLightsSet(lightsSet);
 }
 
-void CBlendingApplication::LoadModels()
+void CBlendingApplication::CreateScene()
 {
-	m_selectedModel = LoadModel({ 0.f, 0.f, 0.f }, { 1.f, 1.f, 1.f }, "Data/models/cube.obj");
-	m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
+	LoadScene();
+	SelectNextModel();
 }
 
-CModel* CBlendingApplication::LoadModel(glm::vec3 position, glm::vec3 scale, std::string modelPath)
+CModel* CBlendingApplication::LoadModel(std::string modelPath)
 {
+	glm::vec3 position = { 0.f, 0.f, 0.f };
+	glm::vec3 scale = { 1.f, 1.f, 1.f };
+
 	CAssimpModel* model = new CAssimpModel(modelPath);
 
 	glm::mat4 trans;

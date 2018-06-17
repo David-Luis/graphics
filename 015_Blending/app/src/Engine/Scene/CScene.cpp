@@ -4,6 +4,8 @@
 #include <Engine/Light/CLightsSet.h>
 #include <Engine/Camera/CCamera.h>
 
+#include <CBlendingApplication.h> //TODO: remove this, use a factory to load models
+
 #include <assert.h>
 
 std::ostream &operator<<(std::ostream& stream, const CScene& scene)
@@ -12,6 +14,25 @@ std::ostream &operator<<(std::ostream& stream, const CScene& scene)
 	json j = scene.ToJson();
 
 	stream << j.dump(4);
+
+	return stream;
+}
+
+std::istream &operator>>(std::istream &stream, CScene& scene)
+{
+	using json = nlohmann::json;
+
+	std::string str(std::istreambuf_iterator<char>(stream), {}); 
+	json j = json::parse(str);
+
+	if (!j["models"].empty())
+	{
+		for (auto& node : j["models"])
+		{
+			CModel* model = CBlendingApplication::LoadModel("Data/models/cube.obj");
+			model->FromJson(node);
+		}
+	}
 
 	return stream;
 }
@@ -54,4 +75,9 @@ nlohmann::json CScene::ToJson() const
 	j["models"] = models;
 
 	return j;
+}
+
+void CScene::FromJson(nlohmann::json j)
+{
+
 }
