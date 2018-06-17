@@ -6,6 +6,7 @@
 #include <Engine/Camera/CCamera.h>
 #include <Engine/Engine.h>
 #include <Engine/Assets/CAssetsManager.h>
+#include <Engine/Serialization/SerializationUtils.h>
 
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -27,6 +28,8 @@ CAssimpModel::~CAssimpModel()
 
 void CAssimpModel::LoadModel(std::string path)
 {
+	m_filePath = path;
+
 	Assimp::Importer import;
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
 
@@ -36,7 +39,7 @@ void CAssimpModel::LoadModel(std::string path)
 		assert(false);
 		return;
 	}
-	m_directory = path.substr(0, path.find_last_of('/'));
+	m_folderPath = path.substr(0, path.find_last_of('/'));
 
 	ProcessNode(scene->mRootNode, scene);
 }
@@ -153,11 +156,28 @@ std::vector<CTexture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTex
 		aiString str;
 		mat->GetTexture(type, i, &str);
 	
-		std::string filename = m_directory + '/' + std::string(str.C_Str());
+		std::string filename = m_folderPath + '/' + std::string(str.C_Str());
 		Engine::assetsManager->LoadTexture(filename);
 		CTexture* texture = Engine::assetsManager->GetTexture(filename);
 		texture->SetType(typeName);
 		textures.push_back(texture);
 	}
 	return textures;
+}
+
+nlohmann::json CAssimpModel::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j = CModel::ToJson();
+
+	j["model"]["filePath"] = m_filePath;
+
+	return j;
+}
+
+void CAssimpModel::FromJson(nlohmann::json j)
+{
+	CModel::FromJson(j);
+	LoadModel(j["model"]["filePath"]);
 }

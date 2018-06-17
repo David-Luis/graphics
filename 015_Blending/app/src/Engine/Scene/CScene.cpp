@@ -29,8 +29,10 @@ std::istream &operator>>(std::istream &stream, CScene& scene)
 	{
 		for (auto& node : j["models"])
 		{
-			CModel* model = CBlendingApplication::LoadModel("Data/models/cube.obj");
+			//TODO: remove this, use a factory to load models
+			CModel* model = CBlendingApplication::CreateAndAddModel();
 			model->FromJson(node);
+			CBlendingApplication::ConfigureModel(model);
 		}
 	}
 

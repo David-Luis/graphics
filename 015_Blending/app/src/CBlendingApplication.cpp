@@ -92,7 +92,8 @@ void CBlendingApplication::ProcessInputEditorCreateModel()
 			m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
 		}
 
-		m_selectedModel = LoadModel("Data/models/cube.obj");
+		m_selectedModel = CreateAndAddModel();
+		LoadDefaultModel(m_selectedModel);
 		m_selectedModel->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f));
 	}
 
@@ -334,18 +335,30 @@ void CBlendingApplication::CreateScene()
 	SelectNextModel();
 }
 
-CModel* CBlendingApplication::LoadModel(std::string modelPath)
+CModel* CBlendingApplication::CreateAndAddModel()
 {
 	glm::vec3 position = { 0.f, 0.f, 0.f };
 	glm::vec3 scale = { 1.f, 1.f, 1.f };
 
-	CAssimpModel* model = new CAssimpModel(modelPath);
+	CAssimpModel* model = new CAssimpModel();
 
 	glm::mat4 trans;
 	trans = glm::translate(model->GetTransform(), position);
 	trans = glm::scale(trans, scale);
 	model->SetTransform(trans);
 
+	m_scene.AddModel(model);
+
+	return model;
+}
+
+void CBlendingApplication::LoadDefaultModel(CModel* model)
+{
+	dynamic_cast<CAssimpModel*>(model)->LoadModel("Data/models/cube.obj");
+}
+
+void CBlendingApplication::ConfigureModel(CModel* model)
+{
 	Engine::assetsManager->LoadTexture("Data/Textures/container.png");
 	CTexture* textureDiffuse = Engine::assetsManager->GetTexture("Data/Textures/container.png");
 	textureDiffuse->SetType("texture_diffuse");
@@ -360,8 +373,4 @@ CModel* CBlendingApplication::LoadModel(std::string modelPath)
 	model->GetMeshes()[0]->SetMaterial(CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f));
 
 	model->SetShader(m_shader);
-
-	m_scene.AddModel(model);
-
-	return model;
 }

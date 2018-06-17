@@ -22,20 +22,26 @@ struct aiScene;
 class CAssimpModel : public CModel
 {
 public:
+	CAssimpModel() {}
 	CAssimpModel(std::string path);
 	
 	virtual ~CAssimpModel();
 	CAssimpModel(const CAssimpModel&) = delete;
 	CAssimpModel& operator=(CAssimpModel const&) = delete;
 
-protected:
 	virtual void LoadModel(std::string path);
+
+protected:
+
+	nlohmann::json ToJson() const override;
+	void FromJson(nlohmann::json) override;
 
 private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	CMesh* ProcessMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<CTexture*> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
-	std::string m_directory;
+	std::string m_filePath;
+	std::string m_folderPath;
 };
 

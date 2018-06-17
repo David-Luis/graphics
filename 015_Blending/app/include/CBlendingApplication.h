@@ -20,7 +20,9 @@ public:
 	CBlendingApplication(const CBlendingApplication&) = delete;
 	CBlendingApplication& operator=(CBlendingApplication const&) = delete;
 
-	static CModel* LoadModel(std::string modelPath);
+	static CModel* CreateAndAddModel();
+	static void LoadDefaultModel(CModel* model);
+	static void ConfigureModel(CModel* model);
 
 private:
 	void OnInit() override;
