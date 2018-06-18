@@ -20,10 +20,6 @@ public:
 	CBlendingApplication(const CBlendingApplication&) = delete;
 	CBlendingApplication& operator=(CBlendingApplication const&) = delete;
 
-	static CModel* CreateAndAddModel();
-	static void LoadDefaultModel(CModel* model);
-	static void ConfigureModel(CModel* model);
-
 private:
 	void OnInit() override;
 	void OnDraw() override;
@@ -35,6 +31,9 @@ private:
 	void ProcessInputEditorRotateModel();
 	void ProcessInputEditorScaleModel();
 	void ProcessInputSaveLoadScene();
+
+	void LoadDefaultModel(CModel* model);
+	void ConfigureModel(CModel* model);
 
 	void SaveScene();
 	void LoadScene();

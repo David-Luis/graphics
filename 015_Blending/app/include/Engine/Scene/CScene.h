@@ -32,10 +32,14 @@ public:
 	void SetModels(const std::vector<CModel*>& models) { m_models = models; }
 	void AddModel(CModel* model) { m_models.push_back(model); }
 	void RemoveModel(CModel* model) { m_models.erase(std::remove(m_models.begin(), m_models.end(), model), m_models.end()); }
+	void Clear();
 	std::vector<CModel*> GetModels() { return m_models; }
 	
 	virtual nlohmann::json ToJson() const;
 	virtual void FromJson(nlohmann::json);
+
+protected:
+	virtual std::vector<CModel*> GetModelsForDraw();
 
 private:
 	CCamera* m_camera;

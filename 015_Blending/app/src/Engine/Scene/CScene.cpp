@@ -1,10 +1,9 @@
 #include <Engine/Scene/CScene.h>
 
 #include <Engine/Model/CModel.h>
+#include <Engine/Model/CModelFactory.h>
 #include <Engine/Light/CLightsSet.h>
 #include <Engine/Camera/CCamera.h>
-
-#include <CBlendingApplication.h> //TODO: remove this, use a factory to load models
 
 #include <assert.h>
 
@@ -25,16 +24,7 @@ std::istream &operator>>(std::istream &stream, CScene& scene)
 	std::string str(std::istreambuf_iterator<char>(stream), {}); 
 	json j = json::parse(str);
 
-	if (!j["models"].empty())
-	{
-		for (auto& node : j["models"])
-		{
-			//TODO: remove this, use a factory to load models
-			CModel* model = CBlendingApplication::CreateAndAddModel();
-			model->FromJson(node);
-			CBlendingApplication::ConfigureModel(model);
-		}
-	}
+	scene.FromJson(j);
 
 	return stream;
 }
@@ -54,13 +44,21 @@ void CScene::Draw()
 	assert(m_camera);
 	assert(m_lightsSet);
 
-	for (const auto& model : m_models)
+	auto models = GetModelsForDraw();
+	for (const auto& model : models)
 	{
 		model->Update();
 		model->Draw(*m_camera, *m_lightsSet);
 	}
 
 	m_lightsSet->DebugDraw(*m_camera);
+}
+
+void CScene::Clear() 
+{
+	m_models.clear(); 
+
+	//TODO: Remove also lights and set camera to null
 }
 
 nlohmann::json CScene::ToJson() const
@@ -81,5 +79,18 @@ nlohmann::json CScene::ToJson() const
 
 void CScene::FromJson(nlohmann::json j)
 {
+	if (!j["models"].empty())
+	{
+		for (auto& node : j["models"])
+		{
+			CModel* model = CModelFactory::CreateModelFromJson(node);
+			AddModel(model);
+			model->FromJson(node);
+		}
+	}
+}
 
+std::vector<CModel*> CScene::GetModelsForDraw()
+{
+	return m_models;
 }
