@@ -46,19 +46,19 @@ public:
 	void SetTransform(const glm::mat4& trans) { m_transform = trans; }
 	glm::mat4 GetTransform() const { return m_transform; }
 
-	void SetTranslation(glm::vec3 translation);
+	void SetPosition(glm::vec3 position);
 	void Translate(glm::vec3 translation);
-	glm::vec3 GetTranslation() { return m_translation; }
+	glm::vec3 GetPosition() const { return m_translation; }
 
 	void SetRotation(glm::quat rotation);
 	void SetRotation(float angle, glm::vec3 axis);
 	void Rotate(glm::quat rotation);
 	void Rotate(float angle, glm::vec3 axis);
-	glm::quat GetRotation() { return m_rotation; }
+	glm::quat GetRotation() const { return m_rotation; }
 
 	void SetScale(glm::vec3 scale);
 	void Scale(glm::vec3 scale);
-	glm::vec3 GetScale() { return m_scale; }
+	glm::vec3 GetScale() const { return m_scale; }
 
 	long long GetId() const { return m_id.GetId(); }
 

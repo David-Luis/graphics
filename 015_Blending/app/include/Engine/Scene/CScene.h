@@ -41,7 +41,6 @@ public:
 protected:
 	virtual std::vector<CModel*> GetModelsForDraw();
 
-private:
 	CCamera* m_camera;
 	CLightsSet* m_lightsSet;
 	std::vector<CModel*> m_models;

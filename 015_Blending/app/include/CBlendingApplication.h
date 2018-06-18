@@ -4,7 +4,7 @@
 
 #include <Engine/COpenGLApplication.h>
 #include <Engine/Model/CMaterial.h>
-#include <Engine/Scene/CScene.h>
+#include <Engine/Scene/CBlendingScene.h>
 #include <Engine/Light/CLightsSet.h>
 
 #include <vector>
@@ -43,8 +43,8 @@ private:
 	void CreateLights();
 	void CreateScene();
 
-	static CShader* m_shader;
-	static CScene m_scene;
+	CShader* m_shader;
+	CBlendingScene m_scene;
 	CModel* m_selectedModel;
 
 	bool m_spacePressed;

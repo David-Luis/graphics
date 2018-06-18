@@ -56,9 +56,9 @@ void CModel::Draw(CCamera& m_camera, CLightsSet& lights)
 	}
 }
 
-void CModel::SetTranslation(glm::vec3 translation)
+void CModel::SetPosition(glm::vec3 position)
 {
-	m_translation = translation;
+	m_translation = position;
 	CalculateTransformation();
 }
 
@@ -135,7 +135,7 @@ nlohmann::json CModel::ToJson() const
 
 void CModel::FromJson(nlohmann::json j)
 {
-	SetTranslation(SerializationUtils::DeserializeVec3(j["model"]["translation"]));
+	SetPosition(SerializationUtils::DeserializeVec3(j["model"]["translation"]));
 	SetRotation(SerializationUtils::DeserializeMat4(j["model"]["rotation"]));
 	SetScale(SerializationUtils::DeserializeVec3(j["model"]["scale"]));
 }

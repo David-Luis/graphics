@@ -19,9 +19,6 @@
 #include <iostream>
 #include <fstream>
 
-CShader* CBlendingApplication::m_shader = nullptr;
-CScene CBlendingApplication::m_scene;
-
 static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 {
 	glm::vec3 scale;
