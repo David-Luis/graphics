@@ -334,3 +334,4 @@ CMakeFiles
 cmake_install.cmake
 imgui.ini
 /emsdk-master
+/Tests_Emscripten/hello_triangle_emscripten/build
