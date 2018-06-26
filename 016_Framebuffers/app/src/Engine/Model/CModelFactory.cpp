@@ -9,7 +9,7 @@ CModel* CModelFactory::CreateModel()
 	return model;
 }
 
-CModel* CModelFactory::CreateModelFromJson(nlohmann::json j)
+CModel* CModelFactory::CreateModelFromJson(const nlohmann::json& j)
 {
 	CAssimpModel* model = new CAssimpModel();
 	model->LoadModel(j["model"]["filePath"]);

@@ -9,6 +9,7 @@
 #include <Engine/Light/CDirectionalLight.h>
 #include <Engine/Light/CPointLight.h>
 #include <Engine/Light/CSpotLight.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -42,18 +43,20 @@ CFramebuffersApplication::CFramebuffersApplication() : COpenGLApplication(1500, 
 
 void CFramebuffersApplication::OnInit()
 {
-	m_camera.Position = glm::vec3(0.0f, 1.0f, 8.0f);
+	m_camera.SetPosition(glm::vec3(0.0f, 1.0f, 8.0f));
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
 
 	CreateShaders();
-	CreateLights();
+	//CreateLights();
 	CreateScene();
 }
 
 void CFramebuffersApplication::OnDraw()
 {
 	m_scene.Draw();
+
+	RenderSystem::GetRender()->Draw2DQuad({ 0, 0, 100, 100 }, { 1.f, 0.f, 0.f, 1.f });
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -347,7 +350,7 @@ void CFramebuffersApplication::CreateScene()
 
 void CFramebuffersApplication::LoadDefaultModel(CModel* model)
 {
-	dynamic_cast<CAssimpModel*>(model)->LoadModel("Data/models/plane.obj");
+	dynamic_cast<CAssimpModel*>(model)->LoadModel("Data/models/box.obj");
 }
 
 void CFramebuffersApplication::ConfigureModel(CModel* model)

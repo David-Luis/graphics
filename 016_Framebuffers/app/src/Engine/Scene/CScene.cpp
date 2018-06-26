@@ -29,7 +29,7 @@ std::istream &operator>>(std::istream &stream, CScene& scene)
 	return stream;
 }
 
-CScene::CScene()
+CScene::CScene() : m_lightsSet(nullptr)
 {
 
 }
@@ -57,31 +57,54 @@ void CScene::Draw()
 void CScene::Clear() 
 {
 	m_models.clear(); 
-
-	//TODO: Remove also lights and set camera to null
+	if (m_lightsSet)
+	{
+		m_lightsSet->Clear();
+	}
 }
 
 nlohmann::json CScene::ToJson() const
 {
 	using json = nlohmann::json;
-	json j;
+	json outputJson;
 
-	std::vector<json> models;
+	std::vector<json> modelsJson;
+	json cameraJson;
+	json lightSetJson;
 
+	cameraJson = m_camera->ToJson();
+	lightSetJson = m_lightsSet->ToJson();
 	for (const auto& model : m_models)
 	{
-		models.push_back(model->ToJson());
+		modelsJson.push_back(model->ToJson());
 	}
-	j["models"] = models;
 
-	return j;
+	outputJson["camera"] = cameraJson;
+	outputJson["lights"] = lightSetJson;
+	outputJson["models"] = modelsJson;
+
+	return outputJson;
 }
 
-void CScene::FromJson(nlohmann::json j)
+void CScene::FromJson(const nlohmann::json& j)
 {
-	if (!j["models"].empty())
+	using json = nlohmann::json;
+
+	json cameraJson = j["camera"];
+	json lightsJson = j["lights"];
+	json modelsJson = j["models"];
+
+	m_camera->FromJson(cameraJson);
+
+	if (!m_lightsSet)
 	{
-		for (auto& node : j["models"])
+		m_lightsSet = new CLightsSet();
+	}
+	m_lightsSet->FromJson(lightsJson);
+
+	if (!modelsJson.empty())
+	{
+		for (auto& node : modelsJson)
 		{
 			CModel* model = CModelFactory::CreateModelFromJson(node);
 			AddModel(model);

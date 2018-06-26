@@ -1,6 +1,7 @@
 #include <Engine/COpenGLApplication.h>
 
 #include <Engine/Engine.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -78,6 +79,9 @@ void COpenGLApplication::Init()
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_FRONT);
 	*/
+
+	RenderSystem::Init();
+	RenderSystem::GetRender()->SetWindowSize(m_windowsWidth, m_windowsHeight);
 
 	InitImgui();
 
@@ -159,6 +163,10 @@ void COpenGLApplication::ProcessInput()
 
 void COpenGLApplication::OnWindowResize(int width, int height)
 {
-	glViewport(0, 0, width, height);
-	m_camera.UpdateWindowsSize(width, height);
+	m_windowsWidth = width;
+	m_windowsHeight = height;
+
+	glViewport(0, 0, m_windowsWidth, m_windowsHeight);
+	m_camera.UpdateWindowsSize(m_windowsWidth, m_windowsHeight);
+	RenderSystem::GetRender()->SetWindowSize(m_windowsWidth, m_windowsHeight);
 }

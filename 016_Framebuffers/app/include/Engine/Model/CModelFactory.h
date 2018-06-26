@@ -10,5 +10,5 @@ class CModelFactory
 {
 public:
 	static CModel* CreateModel();
-	static CModel* CreateModelFromJson(nlohmann::json j);
+	static CModel* CreateModelFromJson(const nlohmann::json& j);
 };

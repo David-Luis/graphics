@@ -4,6 +4,8 @@
 #include <Engine/Shader/CShader.h>
 #include <Engine/Camera/CCamera.h>
 #include <Engine/Utils.h>
+#include <Engine/Serialization/SerializationUtils.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -40,7 +42,7 @@ void CSpotLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
-	m_debugMesh->Draw(*m_debugShader);
+	RenderSystem::GetRender()->DrawMesh(m_debugMesh, *m_debugShader);
 }
 
 void CSpotLight::Use(const CShader& shader, int count) const
@@ -115,4 +117,33 @@ void CSpotLight::BindUniformsDebug(const CShader& shader, const CCamera& camera)
 
 	GLuint projecttionLoc = glGetUniformLocation(shader.GetId(), "projection");
 	glUniformMatrix4fv(projecttionLoc, 1, GL_FALSE, glm::value_ptr(camera.GetProjectionMatrix()));
+}
+
+nlohmann::json CSpotLight::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j;
+
+	j = CLight::ToJson();
+	
+	j["light"]["direction"] = SerializationUtils::SerializeVec3(m_direction);
+	j["light"]["constantAttenuation"] = m_constantAttenuation;
+	j["light"]["linearAttenuation"] = m_linearAttenuation;
+	j["light"]["quadraticAttenuation"] = m_quadraticAttenuation;
+	j["light"]["cutOff"] = m_cutOff;
+	j["light"]["outerCutOff"] = m_outerCutOff;
+
+	return j;
+}
+
+void CSpotLight::FromJson(const nlohmann::json& j)
+{
+	CLight::FromJson(j);
+	m_direction = SerializationUtils::DeserializeVec3(j["light"]["direction"]);
+	m_constantAttenuation = j["light"]["constantAttenuation"];
+	m_linearAttenuation = j["light"]["linearAttenuation"];
+	m_quadraticAttenuation = j["light"]["quadraticAttenuation"];
+	m_cutOff = j["light"]["cutOff"];
+	m_outerCutOff = j["light"]["outerCutOff"];
 }

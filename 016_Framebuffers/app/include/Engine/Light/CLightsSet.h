@@ -4,6 +4,8 @@
 
 #include <Engine/Light/CLight.h>
 
+#include <Lib/json.hpp>
+
 class CDirectionalLight;
 class CPointLight;
 class CSpotLight;
@@ -16,12 +18,17 @@ public:
 	CLightsSet(const CLightsSet&) = delete;
 	CLightsSet& operator=(CLightsSet const&) = delete;
 
+	void Clear();
+
 	void Use(const CShader& shader) const;
 	void AddDirectionalLight(CDirectionalLight* directionalLight);
 	void AddPointLight(CPointLight* pointLight);
 	void AddSpotLight(CSpotLight* pointLight);
 
 	void DebugDraw(CCamera& camera);
+
+	virtual nlohmann::json ToJson() const;
+	virtual void FromJson(const nlohmann::json&);
 
 protected:
 	std::vector<CLight*> m_directionalLights;

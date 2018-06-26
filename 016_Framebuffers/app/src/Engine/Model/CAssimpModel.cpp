@@ -1,5 +1,6 @@
 #include <Engine/Model/CAssimpModel.h>
 
+#include <Engine/Texture/CTextureSet.h>
 #include <Engine/Texture/CTexture.h>
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
@@ -145,7 +146,7 @@ CMesh* CAssimpModel::ProcessMesh(aiMesh *mesh, const aiScene *scene)
 	*/
 
 	// return a mesh object created from the extracted mesh data
-	return new CMesh(vertices, indices, textures);
+	return new CMesh(vertices, indices, CTextureSet(textures));
 }
 
 std::vector<CTexture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
@@ -176,7 +177,7 @@ nlohmann::json CAssimpModel::ToJson() const
 	return j;
 }
 
-void CAssimpModel::FromJson(nlohmann::json j)
+void CAssimpModel::FromJson(const nlohmann::json& j)
 {
 	CModel::FromJson(j);
 	LoadModel(j["model"]["filePath"]);

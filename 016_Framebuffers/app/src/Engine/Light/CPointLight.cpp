@@ -4,6 +4,8 @@
 #include <Engine/Shader/CShader.h>
 #include <Engine/Camera/CCamera.h>
 #include <Engine/Utils.h>
+#include <Engine/Serialization/SerializationUtils.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -23,7 +25,8 @@ void CPointLight::DebugDraw(CCamera& camera)
 {
 	m_debugShader->Use();
 	BindUniformsDebug(*m_debugShader, camera);
-	m_debugMesh->Draw(*m_debugShader);
+
+	RenderSystem::GetRender()->DrawMesh(m_debugMesh, *m_debugShader);
 }
 
 void CPointLight::Use(const CShader& shader, int count) const
@@ -91,4 +94,26 @@ void CPointLight::BindUniformsDebug(const CShader& shader, const CCamera& camera
 	shader.SetMat4("view", camera.GetViewMatrix());
 	shader.SetMat4("projection", camera.GetProjectionMatrix());
 	shader.SetVec3("color", GetDiffuse());
+}
+
+nlohmann::json CPointLight::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j;
+
+	j = CLight::ToJson();
+	j["light"]["constantAttenuation"] = m_constantAttenuation;
+	j["light"]["linearAttenuation"] = m_linearAttenuation;
+	j["light"]["quadraticAttenuation"] = m_quadraticAttenuation;
+
+	return j;
+}
+
+void CPointLight::FromJson(const nlohmann::json& j)
+{
+	CLight::FromJson(j);
+	m_constantAttenuation = j["light"]["constantAttenuation"];
+	m_linearAttenuation = j["light"]["linearAttenuation"];
+	m_quadraticAttenuation = j["light"]["quadraticAttenuation"];
 }

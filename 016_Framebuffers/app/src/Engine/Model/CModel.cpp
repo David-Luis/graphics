@@ -7,6 +7,7 @@
 #include <Engine/Engine.h>
 #include <Engine/Light/CLightsSet.h>
 #include <Engine/Serialization/SerializationUtils.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <iostream>
 
@@ -52,7 +53,7 @@ void CModel::Draw(CCamera& m_camera, CLightsSet& lights)
 
 	for (const auto& mesh : m_meshes)
 	{
-		mesh->Draw(*m_shader);
+		RenderSystem::GetRender()->DrawMesh(mesh, *m_shader);
 	}
 }
 
@@ -133,7 +134,7 @@ nlohmann::json CModel::ToJson() const
 	return j;
 }
 
-void CModel::FromJson(nlohmann::json j)
+void CModel::FromJson(const nlohmann::json& j)
 {
 	SetPosition(SerializationUtils::DeserializeVec3(j["model"]["translation"]));
 	SetRotation(SerializationUtils::DeserializeMat4(j["model"]["rotation"]));

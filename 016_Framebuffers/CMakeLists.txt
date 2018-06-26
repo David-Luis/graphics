@@ -18,6 +18,7 @@ file(GLOB app_src
 	"app/src/Engine/Shader/*.cpp"
 	"app/src/Engine/Texture/*.cpp"
 	"app/src/Engine/Scene/*.cpp"
+	"app/src/Engine/Render/*.cpp"
 	"app/src/imgui/*.cpp"
 	"app/src/Lib/glad.c"
 )

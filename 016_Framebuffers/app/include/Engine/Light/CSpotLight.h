@@ -24,6 +24,9 @@ public:
 
 	void DebugDraw(CCamera& camera) override;
 
+	nlohmann::json ToJson() const override;
+	void FromJson(const nlohmann::json&) override;
+
 private:
 	void Use(const CShader& shader, int count) const override;
 	void BindUniformsDebug(const CShader& shader, const CCamera& camera);

@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <Lib/json.hpp>
+
 class CShader;
 class CCamera;
 
@@ -27,6 +29,9 @@ public:
 
 	void SetSpecular(const glm::vec3& specular);
 	glm::vec3 GetSpecular() const;
+
+	virtual nlohmann::json ToJson() const;
+	virtual void FromJson(const nlohmann::json&);
 
 protected:
 	glm::mat4 m_trans;

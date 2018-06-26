@@ -12,7 +12,7 @@ public:
 
 	virtual ~CMaterial() {}
 
-	void Use(const CShader& shader);
+	void Use(const CShader& shader) const;
 
 	void SetAmbient(const glm::vec3& ambient);
 	glm::vec3 GetAmbient() const;

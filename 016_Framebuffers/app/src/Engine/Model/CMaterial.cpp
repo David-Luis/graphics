@@ -12,7 +12,7 @@ CMaterial::CMaterial(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, f
 
 }
 
-void CMaterial::Use(const CShader& shader)
+void CMaterial::Use(const CShader& shader) const
 {
 	shader.SetVec3("material.ambient", GetAmbient());
 	shader.SetVec3("material.diffuse", GetDiffuse());

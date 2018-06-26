@@ -1,6 +1,7 @@
 #include <Engine/Camera/CCamera.h>
 
 #include <Engine/Shader/CShader.h>
+#include <Engine/Serialization/SerializationUtils.h>
 
 // Constructor with vectors
 CCamera::CCamera(int windowsWidth, int windowsHeight, glm::vec3 position, glm::vec3 up, float yaw, float pitch) : m_windowsWidth(windowsWidth), m_windowsHeight(windowsHeight), Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Fov(FOV)
@@ -37,16 +38,6 @@ glm::mat4 CCamera::GetViewMatrix() const
 glm::mat4 CCamera::GetProjectionMatrix() const
 {
 	return glm::perspective(glm::radians(Fov), (float)m_windowsWidth / (float)m_windowsHeight, 0.1f, 100.0f);
-}
-
-glm::vec3 CCamera::GetPosition() const
-{
-	return Position;
-}
-
-glm::vec3 CCamera::GetFront() const
-{
-	return Front;
 }
 
 void CCamera::ProcessKeyboard(ECameraMovement direction, float deltaTime)
@@ -114,4 +105,99 @@ void CCamera::UpdateCameraVectors()
 	// Also re-calculate the Right and Up vector
 	Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	Up = glm::normalize(glm::cross(Right, Front));
+}
+
+void CCamera::SetPosition(glm::vec3 position)
+{
+	Position = position;
+}
+
+glm::vec3 CCamera::GetPosition() const
+{
+	return Position;
+}
+
+void CCamera::SetFront(glm::vec3 front)
+{
+	Front = front;
+	UpdateCameraVectors();
+}
+
+glm::vec3 CCamera::GetFront() const
+{
+	return Front;
+}
+
+void CCamera::SetUp(glm::vec3 up)
+{
+	Up = up;
+	UpdateCameraVectors();
+}
+
+glm::vec3 CCamera::GetUp() const
+{
+	return Up;
+}
+
+void CCamera::SetRight(glm::vec3 right)
+{
+	Right = right;
+	UpdateCameraVectors();
+}
+
+glm::vec3 CCamera::GetRight() const
+{
+	return Right;
+}
+
+void CCamera::SetMovementSpeed(float movementSpeed)
+{
+	MovementSpeed = movementSpeed;
+}
+
+float CCamera::GetMovementSpeed() const
+{
+	return MovementSpeed;
+}
+
+void CCamera::SetMouseSensitivity(float mouseSensivity)
+{
+	MouseSensitivity = mouseSensivity;
+}
+
+float CCamera::GetMouseSensivity() const
+{
+	return MouseSensitivity;
+}
+
+void CCamera::SetFov(float fov)
+{
+	Fov = fov;
+}
+
+float CCamera::GetFov() const
+{
+	return Fov;
+}
+
+nlohmann::json CCamera::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j;
+
+	j["position"] = SerializationUtils::SerializeVec3(Position);
+	j["yaw"] = Yaw;
+	j["pitch"] = Pitch;
+	j["up"] = SerializationUtils::SerializeVec3(Up);
+
+	return j;
+}
+
+void CCamera::FromJson(const nlohmann::json& j)
+{
+	SetPosition(SerializationUtils::DeserializeVec3(j["position"]));
+	Yaw = j["yaw"];
+	Pitch = j["pitch"];
+	SetUp(SerializationUtils::DeserializeVec3(j["up"]));
 }

@@ -1,3 +1,5 @@
+mtllib cube.mtl
+
 # Vertices
 v -0.5 0.5 -0.5
 v -0.5 0.5 0.5
@@ -24,7 +26,7 @@ vn 0 0 1
 
 
 g cube
-usemtl default
+usemtl Material.001
 
 # Faces (vertex/texcoord/normal)
 # -X face

@@ -1,39 +1,11 @@
 #include <Engine/Model/CMesh.h>
 #include <Engine/Texture/CTexture.h>
 #include <Engine/Shader/CShader.h>
+#include <Engine/Render/RenderSystem.h>
 
-CMesh::CMesh(std::vector<SVertex>& vertices, std::vector<GLuint>& indices, std::vector<CTexture*>& textures) : m_vertices(vertices), m_indices(indices), m_textures(textures), m_VAO(0), m_VBO(0), m_EBO(0)
+CMesh::CMesh(std::vector<SVertex>& vertices, std::vector<GLuint>& indices, CTextureSet textures) : m_vertices(vertices), m_indices(indices), m_textures(textures), m_VAO(0), m_VBO(0), m_EBO(0)
 {
 	SetupMesh();
-}
-
-void CMesh::Draw(const CShader& shader)
-{
-	m_material.Use(shader);
-
-	GLuint diffuseNr = 1;
-	GLuint specularNr = 1;
-	for (size_t i = 0; i < m_textures.size(); i++)
-	{
-		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-										  // retrieve texture number (the N in diffuse_textureN)
-		std::string number;
-		std::string name = m_textures[i]->GetType();
-		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
-		else if (name == "texture_specular")
-			number = std::to_string(specularNr++);
-
-		name = "material." + name + "_" + number;
-		shader.SetInt(name, static_cast<int>(i));
-		glBindTexture(GL_TEXTURE_2D, m_textures[i]->GetId());
-	}
-
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glActiveTexture(GL_TEXTURE0);
 }
 
 void CMesh::SetupMesh()

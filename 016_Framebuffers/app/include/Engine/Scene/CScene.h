@@ -36,7 +36,7 @@ public:
 	std::vector<CModel*> GetModels() { return m_models; }
 	
 	virtual nlohmann::json ToJson() const;
-	virtual void FromJson(nlohmann::json);
+	virtual void FromJson(const nlohmann::json&);
 
 protected:
 	virtual std::vector<CModel*> GetModelsForDraw();

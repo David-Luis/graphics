@@ -1,6 +1,7 @@
 #include <Engine/Light/CLight.h>
 
 #include <Engine/Shader/CShader.h>
+#include <Engine/Serialization/SerializationUtils.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -49,4 +50,26 @@ void CLight::SetSpecular(const glm::vec3& specular)
 glm::vec3 CLight::GetSpecular() const
 {
 	return m_specular; 
+}
+
+nlohmann::json CLight::ToJson() const
+{
+	using json = nlohmann::json;
+
+	json j;
+	
+	j["light"]["position"] = SerializationUtils::SerializeVec3(GetPosition());
+	j["light"]["ambient"] = SerializationUtils::SerializeVec3(GetAmbient());
+	j["light"]["diffuse"] = SerializationUtils::SerializeVec3(GetDiffuse());
+	j["light"]["specular"] = SerializationUtils::SerializeVec3(GetSpecular());
+
+	return j;
+}
+
+void CLight::FromJson(const nlohmann::json& j)
+{
+	SetPosition(SerializationUtils::DeserializeVec3(j["light"]["position"]));
+	SetAmbient(SerializationUtils::DeserializeVec3(j["light"]["ambient"]));
+	SetDiffuse(SerializationUtils::DeserializeVec3(j["light"]["diffuse"]));
+	SetSpecular(SerializationUtils::DeserializeVec3(j["light"]["specular"]));
 }

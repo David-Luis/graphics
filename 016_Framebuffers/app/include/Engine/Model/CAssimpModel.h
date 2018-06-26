@@ -34,7 +34,7 @@ public:
 protected:
 
 	nlohmann::json ToJson() const override;
-	void FromJson(nlohmann::json) override;
+	void FromJson(const nlohmann::json&) override;
 
 private:
 	void ProcessNode(aiNode* node, const aiScene* scene);
