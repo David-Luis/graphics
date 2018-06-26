@@ -13,7 +13,8 @@ public:
 	
 	void LoadFromFile(const std::string &filePath);
 
-	GLuint GetId() { return m_id; }
+	void SetId(GLuint id) { m_id = id; }
+	GLuint GetId() const { return m_id; }
 	void SetType(std::string type) { m_type = type; }
 	const std::string& GetType() const { return m_type; }
 

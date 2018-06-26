@@ -43,6 +43,8 @@ CFramebuffersApplication::CFramebuffersApplication() : COpenGLApplication(1500, 
 
 void CFramebuffersApplication::OnInit()
 {
+	m_framebuffer.Init(m_windowsWidth, m_windowsHeight);
+
 	m_camera.SetPosition(glm::vec3(0.0f, 1.0f, 8.0f));
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
@@ -56,10 +58,17 @@ void CFramebuffersApplication::OnInit()
 
 void CFramebuffersApplication::OnDraw()
 {
+	m_framebuffer.Use();
+
 	m_scene.Draw();
 
 	RenderSystem::GetRender()->Draw2DQuad({ 100, 100, 200, 200 }, { 1.f, 0.f, 0.f, 0.5f });
 	RenderSystem::GetRender()->Draw2DQuad({ 900, 100, 200, 200 }, CTextureSet({ m_texture2D }), { 1.f, 1.f, 1.f, 0.5f });
+
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -328,6 +337,7 @@ void CFramebuffersApplication::SelectNextModel()
 void CFramebuffersApplication::CreateShaders()
 {
 	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+	m_shaderTexture2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
 }
 
 void CFramebuffersApplication::CreateLights()

@@ -2,6 +2,7 @@
 
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
+#include <Engine/Render/CFramebuffer.h>
 
 #include <glm/glm.hpp>
 
@@ -91,7 +92,12 @@ void COpenGLRender::Draw2DQuad(glm::vec4 rect, glm::vec4 color) const
 
 void COpenGLRender::Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color) const
 {
-	m_textureShader2D->Use();
+	Draw2DQuad(rect, textureSet, color, *m_textureShader2D);
+}
+
+void COpenGLRender::Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color, const CShader& shader) const
+{
+	shader.Use();
 	textureSet.Use(*m_textureShader2D);
 
 	glm::vec4 screenRect =
@@ -130,6 +136,15 @@ void COpenGLRender::Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, gl
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void COpenGLRender::DrawFramebuffer(const CFramebuffer& framebuffer, glm::vec4 rect, const CShader& shader) const
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+							  // clear all relevant buffer
+
+	Draw2DQuad(rect, framebuffer.GetAsTextureSet(), glm::vec4(1.f), *m_textureShader2D);
 }
 
 

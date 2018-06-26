@@ -6,8 +6,6 @@
 
 #include <vector>
 
-class CShader;
-
 class COpenGLRender : public IRender
 {
 public:
@@ -21,6 +19,9 @@ public:
 
 	void Draw2DQuad(glm::vec4 rect, glm::vec4 color) const override;
 	void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color) const override;
+	void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color, const CShader& shader) const override;
+
+	void DrawFramebuffer(const CFramebuffer& framebuffer, glm::vec4 rect, const CShader& shader) const override;
 
 private:
 	void DrawVAO(GLuint VAO, std::size_t indexCount) const;

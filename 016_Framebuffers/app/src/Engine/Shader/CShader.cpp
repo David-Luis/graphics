@@ -18,7 +18,7 @@ CShader::CShader(std::string vertexShaderPath, std::string fragmentShaderPath) :
 	m_shaderProgram = LinkShaders(m_vertexShader, m_fragmentShader);
 }
 
-void CShader::Use()
+void CShader::Use() const
 {
 	glUseProgram(m_shaderProgram);
 }

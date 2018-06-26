@@ -6,6 +6,7 @@
 #include <Engine/Model/CMaterial.h>
 #include <Engine/Scene/CBlendingScene.h>
 #include <Engine/Light/CLightsSet.h>
+#include <Engine/Render/CFramebuffer.h>
 
 #include <vector>
 
@@ -44,7 +45,9 @@ private:
 	void CreateLights();
 	void CreateScene();
 
+	CFramebuffer m_framebuffer;
 	CShader* m_shader;
+	CShader* m_shaderTexture2D;
 	CBlendingScene m_scene;
 	CModel* m_selectedModel;
 	CTexture* m_texture2D;
