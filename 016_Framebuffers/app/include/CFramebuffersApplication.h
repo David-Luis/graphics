@@ -11,6 +11,7 @@
 
 class CModel;
 class CShader;
+class CTexture;
 
 class CFramebuffersApplication : public COpenGLApplication
 {
@@ -46,6 +47,7 @@ private:
 	CShader* m_shader;
 	CBlendingScene m_scene;
 	CModel* m_selectedModel;
+	CTexture* m_texture2D;
 
 	bool m_spacePressed;
 	bool m_controlPressed;

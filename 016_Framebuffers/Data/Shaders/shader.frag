@@ -5,8 +5,6 @@ in vec3 Normal;
 in vec2 TexCoord; 
 in vec3 FragPos;  
 
-uniform sampler2D ourTexture;
-
 #define MAX_DIRECTIONAL_LIGHTS 4
 struct DirLight {
     vec3 direction;
@@ -58,7 +56,6 @@ struct Material {
     vec3 specular;
     float shininess;
 }; 
-
 uniform Material material;
 
 uniform vec3 viewPos; 

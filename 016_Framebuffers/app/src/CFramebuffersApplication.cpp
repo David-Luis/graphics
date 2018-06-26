@@ -47,6 +47,8 @@ void CFramebuffersApplication::OnInit()
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
 
+	m_texture2D = Engine::assetsManager->LoadTexture("Data/Models/container.png");
+
 	CreateShaders();
 	//CreateLights();
 	CreateScene();
@@ -57,6 +59,7 @@ void CFramebuffersApplication::OnDraw()
 	m_scene.Draw();
 
 	RenderSystem::GetRender()->Draw2DQuad({ 100, 100, 200, 200 }, { 1.f, 0.f, 0.f, 0.5f });
+	RenderSystem::GetRender()->Draw2DQuad({ 900, 100, 200, 200 }, CTextureSet({ m_texture2D }), { 1.f, 1.f, 1.f, 0.5f });
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();

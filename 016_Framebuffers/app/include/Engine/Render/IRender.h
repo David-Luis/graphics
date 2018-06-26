@@ -18,4 +18,5 @@ public:
 	virtual void DrawMesh(const CMesh* mesh, const CShader& shader, const CTextureSet& textureSet, const CMaterial& material) const = 0;
 
 	virtual void Draw2DQuad(glm::vec4 rect, glm::vec4 color) const = 0;
+	virtual void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color) const = 0;
 };

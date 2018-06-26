@@ -20,11 +20,14 @@ public:
 	void DrawMesh(const CMesh* mesh, const CShader& shader, const CTextureSet& textureSet, const CMaterial& material) const override;
 
 	void Draw2DQuad(glm::vec4 rect, glm::vec4 color) const override;
+	void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color) const override;
 
 private:
 	void DrawVAO(GLuint VAO, std::size_t indexCount) const;
 
 	GLuint m_windowWidth;
 	GLuint m_windowHeight;
-	CShader* m_colorShader;
+
+	CShader* m_colorShader2D;
+	CShader* m_textureShader2D;
 };

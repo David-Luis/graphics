@@ -11,9 +11,10 @@ class CAssetsManager {
 public:
 	CAssetsManager() {}
 
-	void LoadTexture(std::string path);
-	CTexture* GetTexture(std::string path);
+	CTexture* LoadTexture(std::string path);
 
 private:
+	CTexture* GetTexture(std::string path);
+
 	std::unordered_map<std::string, CTexture*> m_textures;
 };

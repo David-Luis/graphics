@@ -158,8 +158,7 @@ std::vector<CTexture*> CAssimpModel::LoadMaterialTextures(aiMaterial *mat, aiTex
 		mat->GetTexture(type, i, &str);
 	
 		std::string filename = m_folderPath + '/' + std::string(str.C_Str());
-		Engine::assetsManager->LoadTexture(filename);
-		CTexture* texture = Engine::assetsManager->GetTexture(filename);
+		CTexture* texture = Engine::assetsManager->LoadTexture(filename);
 		texture->SetType(typeName);
 		textures.push_back(texture);
 	}
