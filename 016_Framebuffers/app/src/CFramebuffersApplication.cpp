@@ -65,10 +65,10 @@ void CFramebuffersApplication::OnDraw()
 	RenderSystem::GetRender()->Draw2DQuad({ 100, 100, 200, 200 }, { 1.f, 0.f, 0.f, 0.5f });
 	RenderSystem::GetRender()->Draw2DQuad({ 900, 100, 200, 200 }, CTextureSet({ m_texture2D }), { 1.f, 1.f, 1.f, 0.5f });
 
-	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
-	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostGreyscale);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostBlur);
 	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
-	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostInverted);
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -338,6 +338,9 @@ void CFramebuffersApplication::CreateShaders()
 {
 	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
 	m_shaderTexture2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
+	m_shaderPostInverted = new CShader("Data/Shaders/post_invert.vert", "Data/Shaders/post_invert.frag");
+	m_shaderPostGreyscale = new CShader("Data/Shaders/post_greyscale.vert", "Data/Shaders/post_greyscale.frag");
+	m_shaderPostBlur = new CShader("Data/Shaders/post_blur.vert", "Data/Shaders/post_blur.frag");
 }
 
 void CFramebuffersApplication::CreateLights()

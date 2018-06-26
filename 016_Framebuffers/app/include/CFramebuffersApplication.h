@@ -48,6 +48,9 @@ private:
 	CFramebuffer m_framebuffer;
 	CShader* m_shader;
 	CShader* m_shaderTexture2D;
+	CShader* m_shaderPostInverted;
+	CShader* m_shaderPostGreyscale;
+	CShader* m_shaderPostBlur;
 	CBlendingScene m_scene;
 	CModel* m_selectedModel;
 	CTexture* m_texture2D;

@@ -144,7 +144,7 @@ void COpenGLRender::DrawFramebuffer(const CFramebuffer& framebuffer, glm::vec4 r
 	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 							  // clear all relevant buffer
 
-	Draw2DQuad(rect, framebuffer.GetAsTextureSet(), glm::vec4(1.f), *m_textureShader2D);
+	Draw2DQuad(rect, framebuffer.GetAsTextureSet(), glm::vec4(1.f), shader);
 }
 
 
