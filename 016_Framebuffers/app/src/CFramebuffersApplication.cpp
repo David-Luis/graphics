@@ -56,7 +56,7 @@ void CFramebuffersApplication::OnDraw()
 {
 	m_scene.Draw();
 
-	RenderSystem::GetRender()->Draw2DQuad({ 0, 0, 100, 100 }, { 1.f, 0.f, 0.f, 1.f });
+	RenderSystem::GetRender()->Draw2DQuad({ 100, 100, 200, 200 }, { 1.f, 0.f, 0.f, 0.5f });
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();

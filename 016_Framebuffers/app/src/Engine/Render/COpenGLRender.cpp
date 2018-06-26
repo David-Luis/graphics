@@ -63,29 +63,29 @@ void COpenGLRender::Draw2DQuad(glm::vec4 rect, glm::vec4 color) const
 
 	float vertices[] = {
 		// positions														//colors
-		screenRect[0] + screenRect[2], screenRect[1],				  0.0f,	1.0f, 0.0f, 0.0f,	 // bottom right
-		screenRect[0],				   screenRect[1],				  0.0f,	1.0f, 0.0f, 0.0f,	 // bottom left
-		screenRect[0],				   screenRect[1] + screenRect[3], 0.0f,   1.0f, 0.0f, 0.0f   // top 
+		screenRect[0] + screenRect[2], screenRect[1],				  0.0f,	color.r, color.g, color.b, color.a, // bottom right
+		screenRect[0],				   screenRect[1],				  0.0f,	color.r, color.g, color.b, color.a, // bottom left
+		screenRect[0],				   screenRect[1] + screenRect[3], 0.0f, color.r, color.g, color.b, color.a, // top left
+		screenRect[0] + screenRect[2], screenRect[1],				  0.0f,	color.r, color.g, color.b, color.a, // bottom right
+		screenRect[0],				   screenRect[1] + screenRect[3], 0.0f, color.r, color.g, color.b, color.a, // top left
+		screenRect[0] + screenRect[2], screenRect[1] + screenRect[3], 0.0f, color.r, color.g, color.b,  color.a  // top right
 	};
 
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
 
