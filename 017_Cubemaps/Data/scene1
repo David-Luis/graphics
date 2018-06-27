@@ -1,0 +1,43 @@
+{
+    "camera": {
+        "pitch": 0.0,
+        "position": "[0.0,1.0,8.0]",
+        "up": "[0.0,1.0,0.0]",
+        "yaw": -90.0
+    },
+    "lights": {
+        "directionalLights": [],
+        "pointLights": [
+            {
+                "light": {
+                    "ambient": "[0.4000000059604645,0.4000000059604645,0.4000000059604645]",
+                    "constantAttenuation": 0.0010000000474974513,
+                    "diffuse": "[0.5,0.5,0.5]",
+                    "linearAttenuation": 0.0010000000474974513,
+                    "position": "[0.0,2.5,-4.0]",
+                    "quadraticAttenuation": 0.0010000000474974513,
+                    "specular": "[1.0,1.0,1.0]"
+                }
+            }
+        ],
+        "spotLights": []
+    },
+    "models": [
+        {
+            "model": {
+                "filePath": "Data/models/box.obj",
+                "rotation": "[1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0]",
+                "scale": "[1.0,1.0,1.0]",
+                "translation": "[6.674994945526123,0.0,-4.724999904632568]"
+            }
+        },
+        {
+            "model": {
+                "filePath": "Data/models/box.obj",
+                "rotation": "[1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0]",
+                "scale": "[1.0,1.0,1.0]",
+                "translation": "[0.0,0.0,0.0]"
+            }
+        }
+    ]
+}
