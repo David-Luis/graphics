@@ -354,6 +354,9 @@ void CCubemapsApplication::CreateShaders()
 {
 	m_shader = new CShader("Data/Shaders/environmental_mapping.vert", "Data/Shaders/environmental_mapping.frag");
 	m_shaderTexture2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
+
+	m_shader->Use();
+	m_shader->SetInt("refraction", 1);
 }
 
 void CCubemapsApplication::CreateLights()
