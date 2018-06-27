@@ -41,6 +41,14 @@ static void SetMaterialToModel(CModel& model, CMaterial material)
 	}
 }
 
+static void SetTextureToModel(CModel& model, CTextureCubemap* skybox)
+{
+	for (const auto& mesh : model.GetMeshes())
+	{
+		mesh->SetTextures({ skybox });
+	}
+}
+
 CCubemapsApplication::CCubemapsApplication() : COpenGLApplication(1500, 720, "CUBEMAPS")
 	, m_selectedModel(nullptr)
 	, m_controlPressed(false)
@@ -344,7 +352,7 @@ void CCubemapsApplication::SelectNextModel()
 
 void CCubemapsApplication::CreateShaders()
 {
-	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+	m_shader = new CShader("Data/Shaders/environmental_mapping.vert", "Data/Shaders/environmental_mapping.frag");
 	m_shaderTexture2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
 }
 
@@ -377,5 +385,6 @@ void CCubemapsApplication::LoadDefaultModel(CModel* model)
 void CCubemapsApplication::ConfigureModel(CModel* model)
 {
 	model->SetShader(m_shader);
+	SetTextureToModel(*model, m_skybox);
 	SetMaterialToModel(*model, m_objectMaterial);
 }
