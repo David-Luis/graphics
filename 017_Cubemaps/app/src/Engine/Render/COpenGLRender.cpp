@@ -3,11 +3,14 @@
 #include <Engine/Model/CMesh.h>
 #include <Engine/Shader/CShader.h>
 #include <Engine/Render/CFramebuffer.h>
+#include <Engine/Texture/CTextureCubemap.h>
+#include <Engine/Camera/CCamera.h>
 
 #include <glm/glm.hpp>
 
 COpenGLRender::COpenGLRender()
 {
+	m_skyboxShader = new CShader("Data/Shaders/skybox.vert", "Data/Shaders/skybox.frag");
 	m_colorShader2D = new CShader("Data/Shaders/color2D.vert", "Data/Shaders/color2D.frag");
 	m_textureShader2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
 }
@@ -138,13 +141,79 @@ void COpenGLRender::Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, gl
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+void COpenGLRender::DrawSkybox(const CTextureCubemap& cubemap, const CCamera& camera) const
+{
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f, -1.0f,
+		1.0f,  1.0f,  1.0f,
+		1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f, -1.0f,
+		1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		1.0f, -1.0f,  1.0f
+	};
+
+	glDepthMask(GL_FALSE);
+	m_skyboxShader->Use();
+	camera.UseForSkybox(*m_skyboxShader);
+
+	// skybox VAO
+	unsigned int skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	glBindVertexArray(skyboxVAO);
+	cubemap.Use(*m_skyboxShader, 0);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+	glDepthMask(GL_TRUE);
+}
+
 void COpenGLRender::DrawFramebuffer(const CFramebuffer& framebuffer, glm::vec4 rect, const CShader& shader) const
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
-							  // clear all relevant buffer
-
-	Draw2DQuad(rect, framebuffer.GetAsTextureSet(), glm::vec4(1.f), shader);
+	glDisable(GL_DEPTH_TEST); 
+	Draw2DQuad(rect, CTextureSet({framebuffer.GetAsTexture()}), glm::vec4(1.f), shader);
 }
 
 

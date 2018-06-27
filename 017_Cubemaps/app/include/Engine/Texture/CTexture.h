@@ -13,15 +13,15 @@ public:
 	CTexture(const CTexture&) = delete;
 	CTexture& operator=(CTexture const&) = delete;
 	
-	void LoadFromFile(const std::string &filePath);
-	void Use(const CShader& shader, GLuint index);
+	virtual void LoadFromFile(const std::string &filePath);
+	virtual void Use(const CShader& shader, GLuint index) const;
 
 	void SetId(GLuint id) { m_id = id; }
 	GLuint GetId() const { return m_id; }
 	void SetType(std::string type) { m_type = type; }
 	const std::string& GetType() const { return m_type; }
 
-private:
+protected:
 	GLuint m_id;
 	std::string m_type;
 	int m_width;

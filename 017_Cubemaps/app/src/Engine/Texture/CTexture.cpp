@@ -40,7 +40,7 @@ void CTexture::LoadFromFile(const std::string& filePath)
 	}
 }
 
-void CTexture::Use(const CShader& shader, GLuint index)
+void CTexture::Use(const CShader& shader, GLuint index) const
 {
 	glActiveTexture(GL_TEXTURE0 + index);
 

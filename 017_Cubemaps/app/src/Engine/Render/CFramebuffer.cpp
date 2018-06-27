@@ -31,10 +31,9 @@ void CFramebuffer::Init(GLuint width, GLuint height)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	CTexture* texture = new CTexture();
-	texture->SetId(m_textureColorbuffer);
-
-	m_textureSet.AddTexture(texture);
+	m_texture = new CTexture();
+	m_texture->SetId(m_textureColorbuffer);
+	m_texture->SetType("diffuse");
 }
 
 void CFramebuffer::Use()
@@ -47,7 +46,7 @@ void CFramebuffer::Use()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-CTextureSet CFramebuffer::GetAsTextureSet() const
+CTexture* CFramebuffer::GetAsTexture() const
 {
-	return m_textureSet;
+	return m_texture;
 }

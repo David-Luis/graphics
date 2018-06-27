@@ -13,6 +13,7 @@
 class CModel;
 class CShader;
 class CTexture;
+class CTextureCubemap;
 
 class CCubemapsApplication : public COpenGLApplication
 {
@@ -52,6 +53,7 @@ private:
 	CShader* m_shaderTexture2D;
 	CBlendingScene m_scene;
 	CModel* m_selectedModel;
+	CTextureCubemap* m_skybox;
 
 	bool m_spacePressed;
 	bool m_controlPressed;

@@ -2,6 +2,7 @@
 
 #include <Engine/Model/CMesh.h>
 #include <Engine/Texture/CTexture.h>
+#include <Engine/Texture/CTextureCubemap.h>
 #include <Engine/Shader/CShader.h>
 #include <Engine/Model/CAssimpModel.h>
 #include <Engine/Model/CModelFactory.h>
@@ -32,6 +33,14 @@ static glm::vec3 GetTranslationFromMat4(glm::mat4& mat)
 	return translation;
 }
 
+static void SetMaterialToModel(CModel& model, CMaterial material)
+{
+	for (const auto& mesh : model.GetMeshes())
+	{
+		mesh->SetMaterial(material);
+	}
+}
+
 CCubemapsApplication::CCubemapsApplication() : COpenGLApplication(1500, 720, "CUBEMAPS")
 	, m_selectedModel(nullptr)
 	, m_controlPressed(false)
@@ -49,6 +58,8 @@ void CCubemapsApplication::OnInit()
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
 
+	m_skybox = Engine::assetsManager->LoadCubemap("Data/Textures/skybox");
+
 	m_objectMaterial = CMaterial({ 0.1f, 0.1f, 0.1f }, { 0.6f, 0.6f, 0.6f }, { 1.0f, 1.0f, 1.0f }, 0.3f*128.f);
 	m_selectedMaterial = CMaterial({ 0.1f, 0.0f, 0.0f }, { 0.6f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, 0.3f*128.f);
 
@@ -61,6 +72,7 @@ void CCubemapsApplication::OnDraw()
 {
 	m_framebuffer.Use();
 
+	RenderSystem::GetRender()->DrawSkybox(*m_skybox, m_camera);
 	m_scene.Draw();
 
 	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, 0, m_windowsWidth, m_windowsHeight}, *m_shaderTexture2D);
@@ -97,14 +109,15 @@ void CCubemapsApplication::ProcessInputEditorCreateModel()
 		m_spacePressed = true;
 		if (m_selectedModel)
 		{
-			m_selectedModel->GetMeshes()[0]->SetMaterial(m_objectMaterial);
+			SetMaterialToModel(*m_selectedModel, m_objectMaterial);
 		}
 
 		m_selectedModel = CModelFactory::CreateModel();
 		LoadDefaultModel(m_selectedModel);
 		ConfigureModel(m_selectedModel);
 		m_scene.AddModel(m_selectedModel);
-		m_selectedModel->GetMeshes()[0]->SetMaterial(m_selectedMaterial);
+
+		SetMaterialToModel(*m_selectedModel, m_selectedMaterial);
 	}
 
 	if (glfwGetKey(m_window, GLFW_KEY_SPACE) == GLFW_RELEASE)
@@ -308,7 +321,7 @@ void CCubemapsApplication::SelectNextModel()
 {
 	if (m_selectedModel)
 	{
-		m_selectedModel->GetMeshes()[0]->SetMaterial(m_objectMaterial);
+		SetMaterialToModel(*m_selectedModel, m_objectMaterial);
 	}
 
 	auto models = m_scene.GetModels();
@@ -325,7 +338,7 @@ void CCubemapsApplication::SelectNextModel()
 	if (models.size() > 0)
 	{
 		m_selectedModel = models[i%models.size()];
-		m_selectedModel->GetMeshes()[0]->SetMaterial(m_selectedMaterial);
+		SetMaterialToModel(*m_selectedModel, m_selectedMaterial);
 	}
 }
 
@@ -364,5 +377,5 @@ void CCubemapsApplication::LoadDefaultModel(CModel* model)
 void CCubemapsApplication::ConfigureModel(CModel* model)
 {
 	model->SetShader(m_shader);
-	model->GetMeshes()[0]->SetMaterial(m_objectMaterial);
+	SetMaterialToModel(*model, m_objectMaterial);
 }

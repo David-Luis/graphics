@@ -6,6 +6,8 @@
 
 #include <vector>
 
+class CTextureSet;
+
 class COpenGLRender : public IRender
 {
 public:
@@ -21,6 +23,8 @@ public:
 	void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color) const override;
 	void Draw2DQuad(glm::vec4 rect, const CTextureSet& textureSet, glm::vec4 color, const CShader& shader) const override;
 
+	void DrawSkybox(const CTextureCubemap& cubemap, const CCamera& camera) const override;
+
 	void DrawFramebuffer(const CFramebuffer& framebuffer, glm::vec4 rect, const CShader& shader) const override;
 
 private:
@@ -29,6 +33,7 @@ private:
 	GLuint m_windowWidth;
 	GLuint m_windowHeight;
 
+	CShader* m_skyboxShader;
 	CShader* m_colorShader2D;
 	CShader* m_textureShader2D;
 };

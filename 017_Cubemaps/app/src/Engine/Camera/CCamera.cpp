@@ -26,8 +26,13 @@ void CCamera::Use(CShader& shader) const
 {
 	shader.SetMat4("view", GetViewMatrix());
 	shader.SetMat4("projection", GetProjectionMatrix());
-
 	shader.SetVec3("viewPos", GetPosition());
+}
+
+void CCamera::UseForSkybox(CShader& shader) const
+{
+	shader.SetMat4("view", glm::mat4(glm::mat3(GetViewMatrix())));
+	shader.SetMat4("projection", GetProjectionMatrix());
 }
 
 glm::mat4 CCamera::GetViewMatrix() const

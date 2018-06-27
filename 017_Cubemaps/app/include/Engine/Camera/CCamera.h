@@ -34,6 +34,7 @@ public:
 	CCamera(int windowsWidth, int windowsHeight, float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
 	void Use(CShader& shader) const;
+	void UseForSkybox(CShader& shader) const;
 
 	glm::mat4 GetViewMatrix() const;
 	glm::mat4 GetProjectionMatrix() const;

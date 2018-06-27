@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Engine/Texture/CTextureSet.h>
+#include <Engine/Texture/CTexture.h>
 
 #include <glad/glad.h>
 
@@ -12,11 +12,11 @@ public:
 	void Init(GLuint width, GLuint height);
 	void Use();
 
-	CTextureSet GetAsTextureSet() const;
+	CTexture* GetAsTexture() const;
 
 private:
 	GLuint m_id;
 	GLuint m_textureColorbuffer;
 
-	CTextureSet m_textureSet;
+	CTexture* m_texture;
 };

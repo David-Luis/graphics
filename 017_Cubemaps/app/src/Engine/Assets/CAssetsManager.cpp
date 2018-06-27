@@ -1,6 +1,7 @@
 #include <Engine/Assets/CAssetsManager.h>
 
 #include <Engine/Texture/CTexture.h>
+#include <Engine/Texture/CTextureCubemap.h>
 
 CTexture* CAssetsManager::LoadTexture(std::string path)
 {
@@ -14,6 +15,23 @@ CTexture* CAssetsManager::LoadTexture(std::string path)
 	else
 	{
 		texture = GetTexture(path);
+	}
+
+	return texture;
+}
+
+CTextureCubemap* CAssetsManager::LoadCubemap(std::string pathFolder)
+{
+	CTextureCubemap* texture;
+	if (m_textures.find(pathFolder) == m_textures.end())
+	{
+		texture = new CTextureCubemap();
+		texture->LoadFromFile(pathFolder);
+		m_textures.insert({ pathFolder, texture });
+	}
+	else
+	{
+		texture = dynamic_cast<CTextureCubemap*>(GetTexture(pathFolder));
 	}
 
 	return texture;
