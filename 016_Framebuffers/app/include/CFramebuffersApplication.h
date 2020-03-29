@@ -6,11 +6,13 @@
 #include <Engine/Model/CMaterial.h>
 #include <Engine/Scene/CBlendingScene.h>
 #include <Engine/Light/CLightsSet.h>
+#include <Engine/Render/CFramebuffer.h>
 
 #include <vector>
 
 class CModel;
 class CShader;
+class CTexture;
 
 class CFramebuffersApplication : public COpenGLApplication
 {
@@ -43,9 +45,15 @@ private:
 	void CreateLights();
 	void CreateScene();
 
+	CFramebuffer m_framebuffer;
 	CShader* m_shader;
+	CShader* m_shaderTexture2D;
+	CShader* m_shaderPostInverted;
+	CShader* m_shaderPostGreyscale;
+	CShader* m_shaderPostBlur;
 	CBlendingScene m_scene;
 	CModel* m_selectedModel;
+	CTexture* m_texture2D;
 
 	bool m_spacePressed;
 	bool m_controlPressed;

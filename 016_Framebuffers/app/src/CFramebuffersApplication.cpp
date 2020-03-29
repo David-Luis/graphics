@@ -9,6 +9,7 @@
 #include <Engine/Light/CDirectionalLight.h>
 #include <Engine/Light/CPointLight.h>
 #include <Engine/Light/CSpotLight.h>
+#include <Engine/Render/RenderSystem.h>
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -42,18 +43,32 @@ CFramebuffersApplication::CFramebuffersApplication() : COpenGLApplication(1500, 
 
 void CFramebuffersApplication::OnInit()
 {
-	m_camera.Position = glm::vec3(0.0f, 1.0f, 8.0f);
+	m_framebuffer.Init(m_windowsWidth, m_windowsHeight);
+
+	m_camera.SetPosition(glm::vec3(0.0f, 1.0f, 8.0f));
 	m_cameraController.SetCamera(&m_camera);
 	m_scene.SetCamera(&m_camera);
 
+	m_texture2D = Engine::assetsManager->LoadTexture("Data/Models/container.png");
+
 	CreateShaders();
-	CreateLights();
+	//CreateLights();
 	CreateScene();
 }
 
 void CFramebuffersApplication::OnDraw()
 {
+	m_framebuffer.Use();
+
 	m_scene.Draw();
+
+	RenderSystem::GetRender()->Draw2DQuad({ 100, 100, 200, 200 }, { 1.f, 0.f, 0.f, 0.5f });
+	RenderSystem::GetRender()->Draw2DQuad({ 900, 100, 200, 200 }, CTextureSet({ m_texture2D }), { 1.f, 1.f, 1.f, 0.5f });
+
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostGreyscale);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, 0, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostBlur);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { 0, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderTexture2D);
+	RenderSystem::GetRender()->DrawFramebuffer(m_framebuffer, { m_windowsWidth * 0.5f, m_windowsHeight * 0.5f, m_windowsWidth * 0.5f, m_windowsHeight * 0.5f }, *m_shaderPostInverted);
 
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -322,6 +337,10 @@ void CFramebuffersApplication::SelectNextModel()
 void CFramebuffersApplication::CreateShaders()
 {
 	m_shader = new CShader("Data/Shaders/shader.vert", "Data/Shaders/shader.frag");
+	m_shaderTexture2D = new CShader("Data/Shaders/texture2D.vert", "Data/Shaders/texture2D.frag");
+	m_shaderPostInverted = new CShader("Data/Shaders/post_invert.vert", "Data/Shaders/post_invert.frag");
+	m_shaderPostGreyscale = new CShader("Data/Shaders/post_greyscale.vert", "Data/Shaders/post_greyscale.frag");
+	m_shaderPostBlur = new CShader("Data/Shaders/post_blur.vert", "Data/Shaders/post_blur.frag");
 }
 
 void CFramebuffersApplication::CreateLights()
@@ -347,7 +366,7 @@ void CFramebuffersApplication::CreateScene()
 
 void CFramebuffersApplication::LoadDefaultModel(CModel* model)
 {
-	dynamic_cast<CAssimpModel*>(model)->LoadModel("Data/models/plane.obj");
+	dynamic_cast<CAssimpModel*>(model)->LoadModel("Data/models/box.obj");
 }
 
 void CFramebuffersApplication::ConfigureModel(CModel* model)
